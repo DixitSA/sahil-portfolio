@@ -6,7 +6,7 @@ import { motion, useInView } from "framer-motion";
 // ── Proficiency tiers ─────────────────────────────────────────────────────────
 const tiers: { label: string; tier: "DAILY" | "WORKING" | "LEARNING"; detail: string }[] = [
   { label: "ANALYTICS",   tier: "DAILY",    detail: "SQL · Tableau · Excel · Power BI · SPSS" },
-  { label: "AI",          tier: "DAILY",    detail: "LLM APIs · Compliance · Automation pipelines" },
+  { label: "AI",          tier: "DAILY",    detail: "LLM APIs · Compliance tooling · Workflow automation" },
   { label: "PRODUCT",     tier: "DAILY",    detail: "4 shipped products — fintech & consumer" },
   { label: "ENGINEERING", tier: "WORKING",  detail: "Next.js · Node.js · Prisma · TypeScript" },
 ];

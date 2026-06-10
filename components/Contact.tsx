@@ -65,7 +65,7 @@ export default function Contact() {
           className="text-sm max-w-md mt-6 mb-12"
           style={{ fontFamily: "'Inter', sans-serif", color: "#777" }}
         >
-          Open to consulting projects, collaborations, and founder conversations.
+          Open to consulting work, product collabs, and interesting conversations.
         </motion.p>
 
         {/* Terminal prompt block */}

@@ -67,10 +67,10 @@ export default function About() {
               className="text-sm leading-7"
               style={{ fontFamily: "'Inter', sans-serif", color: "#9a9a9a" }}
             >
-              Strategy &amp; Management Consultant at Bank of America coordinating AI
-              regulatory compliance and consumer strategy. I studied Financial Technology
-              with a Statistics minor at VCU. Outside of work, I build and ship products
-              across fintech, automation, and consumer software.
+              Strategy &amp; Management Consultant at Bank of America, focused on AI
+              regulatory compliance and consumer bank strategy. I studied Financial Technology
+              with a Statistics minor at VCU. Outside of work, I build and ship fintech and
+              consumer products.
             </p>
 
             {/* Dashed divider */}

@@ -24,7 +24,7 @@ const products: { index: string; name: string; desc: string; tags: string[]; sta
   {
     index: "P03",
     name:  "Kaal",
-    desc:  "Deterministic Vedic astrology API. Processes birth charts and returns structured life-guidance across preset decision categories.",
+    desc:  "Deterministic Vedic astrology API. Give it a birth chart, get structured guidance across career, health, and relationships.",
     tags:  ["Next.js", "TypeScript", "Capacitor"],
     status: "LIVE",
     href:  "https://github.com/DixitSA/kaal",
@@ -32,7 +32,7 @@ const products: { index: string; name: string; desc: string; tags: string[]; sta
   {
     index: "P04",
     name:  "MANIFEST",
-    desc:  "Fleet management platform with real-time vehicle tracking, driver compliance monitoring, and operational analytics.",
+    desc:  "Fleet management platform with real-time vehicle tracking and driver compliance monitoring.",
     tags:  ["Next.js", "Fastify", "PostgreSQL", "WebSocket"],
     status: "LIVE",
     href:  "https://github.com/DixitSA/MANIFEST",
@@ -50,14 +50,14 @@ const consulting: { index: string; name: string; desc: string; tags: string[]; s
   {
     index: "C01",
     name:  "SCRIBE",
-    desc:  "AI-assisted complaint summarization supporting ~30 model-level submissions.",
+    desc:  "AI tool that summarizes consumer complaints for regulatory filings — supported ~30 model submissions.",
     tags:  ["AI", "LLM", "Compliance"],
     status: "ACTIVE",
   },
   {
     index: "C02",
     name:  "TRACE",
-    desc:  "LLM-powered audit trail generation for ~8 regulatory responses.",
+    desc:  "LLM tool that generates audit trails for regulatory filings — used in ~8 formal responses.",
     tags:  ["AI", "Audit", "Regulatory"],
     status: "ACTIVE",
   },

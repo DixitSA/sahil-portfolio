@@ -14,8 +14,8 @@ const experiences = [
     bullets: [
       "Coordinated AI integration across 3 initiatives (SCRIBE, TRACE, CRU), managing ~8 regulatory responses and ~30 model-level submissions",
       "Completed ~80% of audit and regulatory submissions ahead of deadline during active model risk reviews",
-      "Analyzed Consumer Bank performance and market trends to support a 3-year strategic plan identifying growth opportunities and risks",
-      "Synthesized cross-functional inputs into executive-ready materials for long-range planning and Investor Day messaging",
+      "Analyzed Consumer Bank performance and market trends to support a 3-year strategic plan — revenue trajectory, competitive gaps, risk scenarios",
+      "Pulled together analysis from across the org into planning decks and Investor Day messaging",
     ],
   },
   {
@@ -37,7 +37,7 @@ const experiences = [
     accent:  false,
     bullets: [
       "Analyzed healthcare claims for 7 employer clients using Excel-based actuarial models, contributing to ~10% average premium reduction",
-      "Evaluated pricing data and vendor disruption scenarios to support annual valuations and renewal decisions",
+      "Modeled pricing data and vendor alternatives to inform annual plan valuations and carrier renewals",
     ],
   },
 ];
