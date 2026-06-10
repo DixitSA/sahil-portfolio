@@ -1,86 +1,163 @@
 "use client";
 
-import { useRef } from "react";
+import { Fragment, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 
-const stats = [
-  { num: "3 AI Initiatives", sub: "SCRIBE, TRACE, CRU @ BofA" },
-  { num: "4 Products Shipped", sub: "Across fintech, consumer & nightlife" },
-  { num: "3.7 GPA", sub: "B.S. Financial Technology, VCU" },
-  { num: "~80%", sub: "Regulatory submissions ahead of deadline" },
+// ── Left panel data ───────────────────────────────────────────────────────────
+const kvPairs = [
+  { key: "INSTITUTION", value: "Bank of America"               },
+  { key: "DEGREE",      value: "B.S. Financial Technology"     },
+  { key: "UNIVERSITY",  value: "Virginia Commonwealth Univ."   },
+  { key: "LANGUAGES",   value: "Hindi · Gujarati · English"    },
 ];
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
+// ── Right panel stats (3 items — first spans full width) ─────────────────────
+const stats = [
+  { label: "AI_INITIATIVES",   num: "03",   sub: "AI COMPLIANCE TOOLS",        wide: true  },
+  { label: "PRODUCTS_SHIPPED", num: "05",   sub: "FINTECH & CONSUMER",         wide: false },
+  { label: "ON_TIME_RATE",     num: "~80%", sub: "REGULATORY SUBMISSIONS",     wide: false },
+];
+
+// ── Animations ────────────────────────────────────────────────────────────────
+const panelAnim = {
+  hidden: { opacity: 0, y: 20 },
   show: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.55, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] as const },
   }),
 };
 
 export default function About() {
-  const ref = useRef(null);
+  const ref    = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section id="about" ref={ref} className="py-24 px-6">
+    <section
+      id="about"
+      ref={ref}
+      className="py-20 md:py-32 px-6 border-t border-white/[0.04]"
+    >
       <div className="max-w-6xl mx-auto">
-        <div className="grid md:grid-cols-2 gap-16 items-start">
-          {/* Left: bio */}
-          <div>
-            <motion.h2
-              custom={0}
-              variants={fadeUp}
-              initial="hidden"
-              animate={inView ? "show" : "hidden"}
-              className="text-4xl md:text-5xl font-normal text-white mb-6"
-              style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic" }}
-            >
-              About
-            </motion.h2>
-            <motion.p
-              custom={1}
-              variants={fadeUp}
-              initial="hidden"
-              animate={inView ? "show" : "hidden"}
-              className="text-gray-400 text-base leading-8"
-              style={{ fontFamily: "'DM Sans', sans-serif" }}
-            >
-              I&apos;m a Strategy &amp; Management Consultant at Bank of America working on AI
-              regulatory compliance and consumer strategy. I studied Financial Technology
-              with a Statistics minor at VCU, graduating with a 3.7 GPA. Outside of work,
-              I build and ship my own products at the intersection of fintech, automation,
-              and consumer software.
-            </motion.p>
-          </div>
 
-          {/* Right: stats — editorial divider list */}
-          <div className="border-t border-white/[0.06]">
+        {/* Section label */}
+        <p
+          className="text-xs mb-12 tracking-widest"
+          style={{ fontFamily: "'JetBrains Mono', monospace", color: "#f0b429" }}
+        >
+          {">"} PROFILE_DATA
+        </p>
+
+        <div className="grid md:grid-cols-[1.15fr_1fr] gap-6 items-start">
+
+          {/* ── LEFT PANEL ───────────────────────────────────────────────── */}
+          <motion.div
+            custom={0}
+            variants={panelAnim}
+            initial="hidden"
+            animate={inView ? "show" : "hidden"}
+            style={{
+              background: "#111",
+              border:     "1px solid rgba(255,255,255,0.07)",
+              padding:    "2rem",
+            }}
+          >
+            {/* Bio */}
+            <p
+              className="text-sm leading-7"
+              style={{ fontFamily: "'Inter', sans-serif", color: "#9a9a9a" }}
+            >
+              Strategy &amp; Management Consultant at Bank of America coordinating AI
+              regulatory compliance and consumer strategy. I studied Financial Technology
+              with a Statistics minor at VCU. Outside of work, I build and ship products
+              across fintech, automation, and consumer software.
+            </p>
+
+            {/* Dashed divider */}
+            <div
+              style={{
+                borderTop: "1px dashed rgba(255,255,255,0.05)",
+                margin:    "1.5rem 0",
+              }}
+            />
+
+            {/* Key / value pairs — Fragment key on outer element, not inner spans */}
+            <div
+              className="grid gap-x-3 gap-y-2.5"
+              style={{ gridTemplateColumns: "max-content auto 1fr" }}
+            >
+              {kvPairs.map(({ key, value }) => (
+                <Fragment key={key}>
+                  <span
+                    className="text-xs"
+                    style={{ fontFamily: "'JetBrains Mono', monospace", color: "#666" }}
+                  >
+                    {key}
+                  </span>
+                  <span
+                    className="text-xs"
+                    style={{ fontFamily: "'JetBrains Mono', monospace", color: "#444" }}
+                  >
+                    →
+                  </span>
+                  <span
+                    className="text-xs"
+                    style={{ fontFamily: "'JetBrains Mono', monospace", color: "#9a9a9a" }}
+                  >
+                    {value}
+                  </span>
+                </Fragment>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* ── RIGHT PANEL — asymmetric stat layout ─────────────────────── */}
+          <div className="grid grid-cols-2 gap-3">
             {stats.map((s, i) => (
               <motion.div
-                key={s.num}
-                custom={i + 2}
-                variants={fadeUp}
+                key={s.label}
+                custom={i + 1}
+                variants={panelAnim}
                 initial="hidden"
                 animate={inView ? "show" : "hidden"}
-                className="py-5 border-b border-white/[0.06]"
+                whileHover={{ boxShadow: "inset 0 -2px 0 #00ff41" }}
+                transition={{ duration: 0.15 }}
+                className={`flex flex-col justify-between ${s.wide ? "col-span-2" : ""}`}
+                style={{
+                  background:  "#111",
+                  border:      "1px solid rgba(255,255,255,0.07)",
+                  padding:     "1.5rem",
+                  minHeight:   "120px",
+                  boxShadow:   "inset 0 0 0 transparent",
+                }}
               >
+                {/* Label */}
                 <p
-                  className="text-white font-medium text-lg mb-1"
-                  style={{ fontFamily: "'DM Sans', sans-serif" }}
+                  className="text-[10px] uppercase tracking-widest mb-2"
+                  style={{ fontFamily: "'JetBrains Mono', monospace", color: "#f0b429" }}
+                >
+                  {s.label}
+                </p>
+
+                {/* Big number */}
+                <p
+                  className="text-5xl md:text-7xl leading-none my-1"
+                  style={{ fontFamily: "'Bebas Neue', sans-serif", color: "#00ff41" }}
                 >
                   {s.num}
                 </p>
+
+                {/* Subtext */}
                 <p
-                  className="text-gray-500 text-sm"
-                  style={{ fontFamily: "'DM Sans', sans-serif" }}
+                  className="text-[10px] uppercase tracking-wider mt-2"
+                  style={{ fontFamily: "'JetBrains Mono', monospace", color: "#666" }}
                 >
                   {s.sub}
                 </p>
               </motion.div>
             ))}
           </div>
+
         </div>
       </div>
     </section>

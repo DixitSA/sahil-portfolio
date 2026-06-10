@@ -3,34 +3,38 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 
+// ── Data ──────────────────────────────────────────────────────────────────────
 const experiences = [
   {
-    company: "Bank of America",
-    role: "Strategy & Management Consultant, Consumer and Small Business",
-    date: "July 2025 – Present",
-    location: "Charlotte, NC",
+    id:      "bofa",
+    company: "BANK OF AMERICA",
+    role:    "Strategy & Management Consultant",
+    period:  "2025–PRESENT",
+    accent:  true,
     bullets: [
-      "Analyzed Consumer Bank performance and market trends to support a 3-year strategic plan identifying growth opportunities and risks",
-      "Synthesized cross-functional inputs into executive-ready materials for long-range planning and Investor Day messaging",
       "Coordinated AI integration across 3 initiatives (SCRIBE, TRACE, CRU), managing ~8 regulatory responses and ~30 model-level submissions",
       "Completed ~80% of audit and regulatory submissions ahead of deadline during active model risk reviews",
+      "Analyzed Consumer Bank performance and market trends to support a 3-year strategic plan identifying growth opportunities and risks",
+      "Synthesized cross-functional inputs into executive-ready materials for long-range planning and Investor Day messaging",
     ],
   },
   {
-    company: "Capital One",
-    role: "Business Analyst Intern, Retail Banking",
-    date: "July 2024 – August 2024",
-    location: "McLean, VA",
+    id:      "capital-one",
+    company: "CAPITAL ONE",
+    role:    "Business Analyst Intern, Retail Banking",
+    period:  "2024",
+    accent:  false,
     bullets: [
-      "Analyzed customer complaint logs and call data across 5-figure interaction volumes using SQL and Excel",
       "Designed and evaluated A/B tests comparing bank account linking strategies for the Retail Bank Fraud team",
+      "Analyzed customer complaint logs and call data across 5-figure interaction volumes using SQL and Excel",
     ],
   },
   {
-    company: "Alliant Insurance Services",
-    role: "Benefits Analyst (Actuarial Sciences)",
-    date: "June 2023 – December 2023",
-    location: "McLean, VA",
+    id:      "alliant",
+    company: "ALLIANT INSURANCE",
+    role:    "Benefits Analyst, Actuarial Sciences",
+    period:  "2023",
+    accent:  false,
     bullets: [
       "Analyzed healthcare claims for 7 employer clients using Excel-based actuarial models, contributing to ~10% average premium reduction",
       "Evaluated pricing data and vendor disruption scenarios to support annual valuations and renewal decisions",
@@ -38,113 +42,105 @@ const experiences = [
   },
 ];
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
+// ── Animation ─────────────────────────────────────────────────────────────────
+const entryAnim = {
+  hidden: { opacity: 0, x: -8 },
   show: (i: number) => ({
     opacity: 1,
-    y: 0,
-    transition: { duration: 0.65, delay: i * 0.15, ease: [0.22, 1, 0.36, 1] },
+    x: 0,
+    transition: { duration: 0.6, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] as const },
   }),
 };
 
 export default function Experience() {
-  const ref = useRef(null);
+  const ref    = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section id="experience" ref={ref} className="py-24 px-6 border-t border-white/[0.04]">
+    <section
+      id="experience"
+      ref={ref}
+      className="py-20 md:py-32 px-6 border-t border-white/[0.04]"
+    >
       <div className="max-w-6xl mx-auto">
-        {/* Section heading */}
-        <motion.h2
-          initial={{ opacity: 0, y: 28 }}
-          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 28 }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="text-[clamp(36px,5vw,56px)] font-normal text-white mb-16 leading-none"
-          style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic" }}
+
+        {/* Section header */}
+        <p
+          className="text-xs mb-12 tracking-widest"
+          style={{ fontFamily: "'JetBrains Mono', monospace", color: "#f0b429" }}
         >
-          Experience
-        </motion.h2>
+          {">"} WORK_HISTORY
+        </p>
 
-        {/* Timeline */}
-        <div className="relative">
-          {/* Vertical indigo line */}
-          <div
-            aria-hidden="true"
-            className="absolute left-0 top-0 bottom-0 w-px pointer-events-none"
-            style={{ background: "rgba(99,102,241,0.2)" }}
-          />
-
+        {/* Entries */}
+        <div>
           {experiences.map((exp, i) => (
-            <motion.div
-              key={exp.company}
-              custom={i}
-              variants={fadeUp}
-              initial="hidden"
-              animate={inView ? "show" : "hidden"}
-              className="relative pl-10 pb-14 last:pb-0"
-            >
-              {/* Timeline dot */}
-              <div
-                aria-hidden="true"
-                className="absolute rounded-full"
+            <div key={exp.id}>
+              <motion.div
+                custom={i}
+                variants={entryAnim}
+                initial="hidden"
+                animate={inView ? "show" : "hidden"}
                 style={{
-                  left: "-4px",
-                  top: "14px",
-                  width: "9px",
-                  height: "9px",
-                  background: "#080808",
-                  border: "2px solid rgba(99,102,241,0.55)",
+                  background: exp.accent ? "rgba(0,255,65,0.02)" : "#111",
+                  border:     exp.accent
+                    ? "1px solid rgba(0,255,65,0.25)"
+                    : "1px solid rgba(255,255,255,0.06)",
+                  padding: "2rem",
                 }}
-              />
-
-              {/* Company + date row */}
-              <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-1.5">
-                <h3
-                  className="text-[clamp(22px,2.8vw,30px)] font-normal text-white leading-tight"
-                  style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic" }}
+              >
+                {/* Company name — display type */}
+                <p
+                  style={{
+                    fontFamily: "'Bebas Neue', sans-serif",
+                    fontSize:   "clamp(28px, 4vw, 38px)",
+                    lineHeight: 1,
+                    color:      exp.accent ? "#e8e8e8" : "#aaa",
+                    letterSpacing: "0.02em",
+                  }}
                 >
                   {exp.company}
-                </h3>
-                <span
-                  className="text-xs text-gray-500 tracking-wide whitespace-nowrap shrink-0"
-                  style={{ fontFamily: "'DM Sans', sans-serif" }}
+                </p>
+
+                {/* Role + period — monospace subline */}
+                <p
+                  className="text-[11px] tracking-wider mt-1.5 mb-5"
+                  style={{ fontFamily: "'JetBrains Mono', monospace", color: "#f0b429" }}
                 >
-                  {exp.date} · {exp.location}
-                </span>
-              </div>
+                  [{exp.period}] · {exp.role}
+                </p>
 
-              {/* Role */}
-              <p
-                className="text-sm text-gray-400 mb-5"
-                style={{ fontFamily: "'DM Sans', sans-serif" }}
-              >
-                {exp.role}
-              </p>
-
-              {/* Bullets */}
-              <ul className="flex flex-col gap-2.5">
-                {exp.bullets.map((bullet, j) => (
-                  <li
-                    key={j}
-                    className="flex items-start gap-3 text-sm text-gray-400 leading-relaxed"
-                    style={{ fontFamily: "'DM Sans', sans-serif" }}
-                  >
-                    <span
-                      aria-hidden="true"
-                      className="mt-[9px] shrink-0 rounded-full"
+                {/* Bullets */}
+                <ul className="space-y-2">
+                  {exp.bullets.map((bullet, j) => (
+                    <li
+                      key={`${exp.id}-${j}`}
+                      className="text-sm leading-relaxed"
                       style={{
-                        width: "4px",
-                        height: "4px",
-                        background: "rgba(99,102,241,0.45)",
+                        fontFamily: "'Inter', sans-serif",
+                        color:      j === 0 ? "#cccccc" : "#555",
+                        fontWeight: j === 0 ? 500 : 400,
                       }}
-                    />
-                    {bullet}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
+                    >
+                      {j === 0 ? "▸  " : "→  "}{bullet}
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+
+              {/* Dashed divider between entries (not after last) */}
+              {i < experiences.length - 1 && (
+                <div
+                  style={{
+                    borderTop: "1px dashed rgba(255,255,255,0.06)",
+                    margin:    "2rem 0",
+                  }}
+                />
+              )}
+            </div>
           ))}
         </div>
+
       </div>
     </section>
   );

@@ -3,97 +3,166 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 
-const groups = [
-  { label: "Languages", items: ["SQL", "Python", "R", "SAS", "Stata"] },
-  { label: "Frontend",  items: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"] },
-  { label: "Backend",   items: ["Node.js", "Prisma", "Twilio", "Stripe"] },
-  { label: "Analytics", items: ["Tableau", "Power BI", "Knime", "Excel", "SPSS"] },
+// ── Proficiency tiers ─────────────────────────────────────────────────────────
+const tiers: { label: string; tier: "DAILY" | "WORKING" | "LEARNING"; detail: string }[] = [
+  { label: "ANALYTICS",   tier: "DAILY",    detail: "SQL · Tableau · Excel · Power BI · SPSS" },
+  { label: "AI",          tier: "DAILY",    detail: "LLM APIs · Compliance · Automation pipelines" },
+  { label: "PRODUCT",     tier: "DAILY",    detail: "4 shipped products — fintech & consumer" },
+  { label: "ENGINEERING", tier: "WORKING",  detail: "Next.js · Node.js · Prisma · TypeScript" },
 ];
 
-const badgeAnim = {
-  hidden: { opacity: 0, scale: 0.8 },
-  show: (i: number) => ({
-    opacity: 1,
-    scale: 1,
-    transition: { duration: 0.35, delay: i * 0.05, ease: "easeOut" },
-  }),
+const TIER_COLOR: Record<string, string> = {
+  DAILY:    "#00ff41",
+  WORKING:  "#f0b429",
+  LEARNING: "#666",
 };
 
-const colAnim = {
-  hidden: { opacity: 0, y: 22 },
+// ── Category data ─────────────────────────────────────────────────────────────
+const categories = [
+  { label: "LANGUAGES", items: ["SQL", "Python", "R", "SAS", "Stata"]                         },
+  { label: "FRONTEND",  items: ["React", "Next.js", "TypeScript", "Tailwind", "Framer Motion"] },
+  { label: "BACKEND",   items: ["Node.js", "Prisma", "Twilio", "Stripe"]                       },
+  { label: "ANALYTICS", items: ["Tableau", "Power BI", "Knime", "Excel", "SPSS"]               },
+];
+
+// ── Row animation ─────────────────────────────────────────────────────────────
+const rowAnim = {
+  hidden: { opacity: 0, x: -8 },
   show: (i: number) => ({
     opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] },
+    x: 0,
+    transition: { duration: 0.55, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] as const },
   }),
 };
 
 export default function Stack() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
+  const ref    = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section id="stack" ref={ref} className="py-24 px-6 border-t border-white/[0.04]">
+    <section
+      id="stack"
+      ref={ref}
+      className="py-20 md:py-32 px-6 border-t border-white/[0.04]"
+    >
       <div className="max-w-6xl mx-auto">
-        {/* Two-column layout */}
-        <div className="grid md:grid-cols-[1fr_2fr] gap-16 items-start">
-          {/* Left heading */}
-          <motion.div
-            variants={colAnim}
-            custom={0}
-            initial="hidden"
-            animate={inView ? "show" : "hidden"}
-          >
-            <h2
-              className="text-[clamp(42px,5.5vw,72px)] font-normal text-white leading-[1.05] sticky top-28"
-              style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic" }}
-            >
-              My
-              <br />
-              Stack
-            </h2>
-          </motion.div>
 
-          {/* Right badge grid */}
-          <div className="grid sm:grid-cols-2 gap-10">
-            {groups.map((group, gi) => (
-              <motion.div
-                key={group.label}
-                custom={gi + 1}
-                variants={colAnim}
-                initial="hidden"
-                animate={inView ? "show" : "hidden"}
+        {/* Section header */}
+        <p
+          className="text-xs mb-12 tracking-widest"
+          style={{ fontFamily: "'JetBrains Mono', monospace", color: "#f0b429" }}
+        >
+          {">"} SYSTEM_SPECS
+        </p>
+
+        {/* Proficiency tiers */}
+        <div
+          className="mb-6 p-6"
+          style={{
+            background: "#111",
+            border:     "1px solid rgba(255,255,255,0.07)",
+          }}
+        >
+          <p
+            className="text-[10px] tracking-widest mb-5"
+            style={{ fontFamily: "'JetBrains Mono', monospace", color: "#f0b429" }}
+          >
+            PROFICIENCY_MATRIX
+          </p>
+
+          <div className="flex flex-col gap-4">
+            {tiers.map((row) => (
+              <div
+                key={row.label}
+                className="flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-6"
               >
-                <p
-                  className="text-[10px] text-indigo-400/80 tracking-[0.2em] uppercase mb-4"
-                  style={{ fontFamily: "'DM Sans', sans-serif" }}
-                >
-                  {group.label}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {group.items.map((item, ii) => (
-                    <motion.span
-                      key={item}
-                      custom={gi * 6 + ii}
-                      variants={badgeAnim}
-                      initial="hidden"
-                      animate={inView ? "show" : "hidden"}
-                      whileHover={{
-                        borderColor: "rgba(99,102,241,0.45)",
-                        color: "#fff",
-                        transition: { duration: 0.15 },
-                      }}
-                      className="text-xs text-gray-400 bg-[#111] border border-white/[0.07] rounded-lg px-3 py-1.5 cursor-none transition-colors duration-150"
-                      style={{ fontFamily: "'DM Sans', sans-serif" }}
-                    >
-                      {item}
-                    </motion.span>
-                  ))}
+                {/* Label + tier badge */}
+                <div className="flex items-center gap-3 sm:min-w-[200px]">
+                  <span
+                    className="text-[10px] tracking-wider"
+                    style={{ fontFamily: "'JetBrains Mono', monospace", color: "#666" }}
+                  >
+                    {row.label}
+                  </span>
+                  <span
+                    className="text-[9px] px-1.5 py-0.5 tracking-widest"
+                    style={{
+                      fontFamily: "'JetBrains Mono', monospace",
+                      color:      TIER_COLOR[row.tier],
+                      border:     `1px solid ${TIER_COLOR[row.tier]}`,
+                      opacity:    0.9,
+                    }}
+                  >
+                    {row.tier}
+                  </span>
                 </div>
-              </motion.div>
+
+                {/* Detail */}
+                <span
+                  className="text-[10px] leading-relaxed"
+                  style={{ fontFamily: "'JetBrains Mono', monospace", color: "#555" }}
+                >
+                  {row.detail}
+                </span>
+              </div>
             ))}
           </div>
         </div>
+
+        {/* Category rows */}
+        <div className="flex flex-col gap-2">
+          {categories.map((cat, i) => (
+            <motion.div
+              key={cat.label}
+              custom={i}
+              variants={rowAnim}
+              initial="hidden"
+              animate={inView ? "show" : "hidden"}
+              className="flex flex-wrap items-center gap-4 p-6"
+              style={{
+                background: "#111",
+                border:     "1px solid rgba(255,255,255,0.07)",
+              }}
+            >
+              {/* Category label */}
+              <span
+                className="text-[10px] uppercase tracking-widest shrink-0"
+                style={{
+                  fontFamily: "'JetBrains Mono', monospace",
+                  color:      "#f0b429",
+                  minWidth:   "160px",
+                }}
+              >
+                {cat.label}
+              </span>
+
+              {/* Skill badges */}
+              <div className="flex flex-wrap gap-2">
+                {cat.items.map((item) => (
+                  <motion.span
+                    key={item}
+                    whileHover={{
+                      borderColor:     "#00ff41",
+                      color:           "#00ff41",
+                      backgroundColor: "rgba(0,255,65,0.05)",
+                      transition:      { duration: 0.15 },
+                    }}
+                    className="text-[10px] px-3 py-1 cursor-none"
+                    style={{
+                      fontFamily: "'JetBrains Mono', monospace",
+                      background: "#0a0a0a",
+                      border:     "1px solid rgba(255,255,255,0.08)",
+                      color:      "#9a9a9a",
+                    }}
+                  >
+                    {item}
+                  </motion.span>
+                ))}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
       </div>
     </section>
   );

@@ -20,10 +20,10 @@ function WaveformSVG() {
       {bars.map((h, i) => (
         <div
           key={i}
-          className="w-1 rounded-full origin-bottom"
+          className="w-1 rounded-none origin-bottom"
           style={{
             height: `${h * 2.2}px`,
-            background: "rgba(245,158,11,0.5)",
+            background: "rgba(240,180,41,0.5)",
             animation: `waveBar ${0.8 + i * 0.08}s ease-in-out infinite alternate`,
             animationDelay: `${i * 0.06}s`,
           }}
@@ -43,12 +43,12 @@ export default function NoTrace() {
       ref={ref}
       className="py-32 px-6 border-t border-white/[0.04] relative overflow-hidden"
     >
-      {/* Gold ambient glow — warm counterpoint to indigo used elsewhere */}
+      {/* Gold ambient glow */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse 60% 50% at 50% 110%, rgba(245,158,11,0.05) 0%, transparent 70%)",
+            "radial-gradient(ellipse 60% 50% at 50% 110%, rgba(240,180,41,0.05) 0%, transparent 70%)",
         }}
       />
 
@@ -63,8 +63,8 @@ export default function NoTrace() {
               animate={inView ? "show" : "hidden"}
               className="text-[10px] tracking-[0.25em] uppercase mb-6"
               style={{
-                fontFamily: "'DM Sans', sans-serif",
-                color: "rgba(245,158,11,0.6)",
+                fontFamily: "'JetBrains Mono', monospace",
+                color: "rgba(240,180,41,0.6)",
               }}
             >
               Music
@@ -77,7 +77,7 @@ export default function NoTrace() {
               initial="hidden"
               animate={inView ? "show" : "hidden"}
               className="text-[clamp(64px,10vw,120px)] font-normal text-white leading-[0.9] mb-8"
-              style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic" }}
+              style={{ fontFamily: "'Bebas Neue', sans-serif" }}
             >
               No Trace
             </motion.h2>
@@ -100,7 +100,7 @@ export default function NoTrace() {
               initial="hidden"
               animate={inView ? "show" : "hidden"}
               className="text-gray-500 text-sm leading-7 max-w-sm mb-8"
-              style={{ fontFamily: "'DM Sans', sans-serif" }}
+              style={{ fontFamily: "'Inter', sans-serif" }}
             >
               Dark, high-energy club music in the tech-house and lo-fi house space.
               Built for late nights and loud rooms.
@@ -117,8 +117,8 @@ export default function NoTrace() {
               {["Tech-House", "Lo-Fi House", "Ableton"].map((t) => (
                 <span
                   key={t}
-                  className="text-[11px] text-gray-600 border border-white/[0.07] rounded-full px-2.5 py-0.5"
-                  style={{ fontFamily: "'DM Sans', sans-serif" }}
+                  className="text-[11px] text-gray-600 border border-white/[0.07] rounded-none px-2.5 py-0.5"
+                  style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
                   {t}
                 </span>
@@ -129,15 +129,15 @@ export default function NoTrace() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 ml-2 transition-colors duration-200 cursor-none"
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: "'JetBrains Mono', monospace",
                   fontSize: "11px",
-                  color: "rgba(245,158,11,0.6)",
+                  color: "rgba(240,180,41,0.6)",
                 }}
                 onMouseEnter={(e) =>
-                  ((e.currentTarget as HTMLAnchorElement).style.color = "rgba(245,158,11,1)")
+                  ((e.currentTarget as HTMLAnchorElement).style.color = "rgba(240,180,41,1)")
                 }
                 onMouseLeave={(e) =>
-                  ((e.currentTarget as HTMLAnchorElement).style.color = "rgba(245,158,11,0.6)")
+                  ((e.currentTarget as HTMLAnchorElement).style.color = "rgba(240,180,41,0.6)")
                 }
               >
                 <ExternalLink size={11} />
@@ -154,8 +154,7 @@ export default function NoTrace() {
             <span
               className="text-[clamp(100px,14vw,180px)] font-normal text-white leading-none"
               style={{
-                fontFamily: "'Instrument Serif', serif",
-                fontStyle: "italic",
+                fontFamily: "'Bebas Neue', sans-serif",
                 opacity: 0.03,
                 writingMode: "vertical-rl",
                 textOrientation: "mixed",

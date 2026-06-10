@@ -6,30 +6,39 @@ brand
 
 ## Users
 
-Hiring managers and technical recruiters evaluating Sahil for senior IC or consulting roles. They arrive with a short attention window — typically referred or found via LinkedIn — and need to quickly assess range, depth, and personality. Secondary audience: potential collaborators and independent clients who want to build something together.
+**Primary:** Recruiters and hiring managers evaluating Sahil for senior individual-contributor or consulting roles in fintech, strategy, or AI-adjacent functions.
+
+**Secondary:** Founders and operators looking for a collaborator who can both think strategically and ship product — someone who understands finance and can write code.
+
+Both audiences are sophisticated. They scan fast, pattern-match against dozens of portfolios, and leave within seconds if nothing hooks them. The site must earn attention in the first viewport and reward it on scroll.
 
 ## Product Purpose
 
-A personal portfolio that positions Sahil K. as a rare multi-disciplinary professional: strategy consultant (AI compliance at BofA), indie software builder (4 shipped products), and music producer (No Trace). Success means the visitor finishes with a clear, memorable impression of someone who operates across high-stakes corporate work and independent creative practice — and reaches out.
+Personal portfolio for Sahil Dixit — Strategy & Management Consultant at Bank of America by day, indie product builder by night. The site exists to communicate one thing: this person operates at an unusual intersection of institutional finance, AI compliance, and independent software development. It should make that duality feel deliberate and impressive, not scattered.
+
+Success looks like: a recruiter bookmarks it, a founder DMs within 24 hours of visiting, or a hiring manager says "I've never seen a portfolio that looked like this."
 
 ## Brand Personality
 
-Technical · Creative · Human. Authoritative without being cold. The portfolio of someone equally comfortable in a regulatory compliance meeting and a club at 2am. Not trying to impress; demonstrating through specificity.
+**Sharp · Technical · Ambitious**
+
+Voice: direct, specific, zero filler. No "passionate about" language. Reads like a system log written by someone who also studied Strunk & White. Confident without being loud. The aesthetic earns authority so the copy doesn't have to claim it.
 
 ## Anti-references
 
-- Generic developer portfolio: Tailwind/shadcn minimal, GitHub green contribution graph, same-sized project card grid, "Here are my skills" badge dump.
-- Corporate consulting deck: McKinsey blues, bullet-pointed achievements, safe serif, forgettable structure.
-- Hacker-aesthetic terminal: green-on-black, monospace-only, deliberate ugliness as aesthetic.
+- **Generic SaaS cream** — Inter font, card grids, gradient CTAs, hero with emoji, testimonial rows. Indistinguishable from every Y Combinator landing page clone.
+- **Finance-bro navy & gold** — The classic Wall Street palette. Conservative, corporate, expected from someone in banking. Actively avoided.
+- **Neon-everything crypto** — Purple + cyan overload, max glow effects, Web3 maximalism. The terminal aesthetic is intentional but restrained; it is not a rave.
+- **Minimal-to-blank agency** — White void, single font, no content. Clever but says nothing. This site has things to say.
 
 ## Design Principles
 
-1. **Specificity over genericism.** Every choice should signal a particular sensibility, not a category. The portfolio of a strategy consultant who produces tech-house is its own thing — not a developer's, not a consultant's.
-2. **Show range without fragmenting identity.** Three very different worlds (finance, software, music) must feel unified, not compartmentalized. The throughline is a singular, intentional person.
-3. **Editorial confidence.** Typography and spacing do the heavy lifting. Effects reinforce content; they don't substitute for it.
-4. **Restraint as sophistication.** What's left out matters as much as what's in. No filler sections, no generic icons, no padded copy.
-5. **The work earns the aesthetic.** The dark palette and italic serif aren't decoration — they match the nocturnal, cross-disciplinary nature of the work itself.
+1. **The system is the brand.** The terminal/OS aesthetic is not decoration — it communicates that Sahil thinks in systems. Every design choice should reinforce this, not contradict it.
+2. **Specificity over superlatives.** Numbers, project names, real outputs. "~30 model-level submissions" beats "extensive regulatory work." The design should frame specific content, not generic claims.
+3. **Earn trust before asking for contact.** Information architecture should build a case: capability then proof then invitation. Don't lead with a CTA.
+4. **Restrained use of the signature color.** Terminal-green (#00ff41) is the accent, not the canvas. Used sparingly, it signals activity and importance. Used everywhere, it becomes noise.
+5. **Desktop-first, mobile-functional.** The primary audience reviews this on a laptop. Mobile must work but is not the showcase viewport.
 
 ## Accessibility & Inclusion
 
-WCAG 2.1 AA minimum. Respect `prefers-reduced-motion` for all animations. Decorative motion (cursor, marquee, background orbs) must not interfere with content readability. No accessibility-critical information conveyed by color alone.
+Best effort — reasonable contrast ratios, keyboard-navigable interactions, reduced-motion support via `@media (prefers-reduced-motion)`. No formal WCAG certification required. Custom cursor is hidden on touch/coarse-pointer devices.

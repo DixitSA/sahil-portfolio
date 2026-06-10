@@ -1,3 +1,4 @@
+import BootScreen from "@/components/BootScreen";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Marquee from "@/components/Marquee";
@@ -10,7 +11,8 @@ import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
-    <main className="bg-[#080808] overflow-x-hidden">
+    <main className="bg-[#0a0a0a] overflow-x-hidden">
+      <BootScreen />
       <Navbar />
       <Hero />
       <Marquee />
