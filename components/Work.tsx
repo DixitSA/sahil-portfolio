@@ -12,6 +12,7 @@ type Project = {
   status: string;
   href?: string;
   accent: string;
+  previewImg?: string;
 };
 
 // ── Data ──────────────────────────────────────────────────────────────────────
@@ -40,8 +41,9 @@ const products: Project[] = [
     desc:  "Deterministic Vedic astrology API. Give it a birth chart, get structured guidance across career, health, and relationships.",
     tags:  ["Next.js", "TypeScript", "Capacitor"],
     status: "LIVE",
-    href:  "https://github.com/DixitSA/kaal",
-    accent: "#f0b429",
+    href:       "https://github.com/DixitSA/kaal",
+    accent:     "#f0b429",
+    previewImg: "/previews/kaal-dashboard.png",
   },
   {
     index: "P04",
@@ -435,37 +437,62 @@ export default function Work() {
             style={{
               position:      "fixed",
               left:          cursor.x + 20,
-              top:           cursor.y - 110,
+              top:           cursor.y - (hoveredProject.previewImg ? 190 : 110),
               zIndex:        200,
               pointerEvents: "none",
               width:         220,
               background:    "#111",
               border:        `1px solid ${hoveredProject.accent}`,
-              padding:       "1.25rem",
+              overflow:      "hidden",
             }}
           >
-            <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: hoveredProject.accent, letterSpacing: "0.1em", marginBottom: 6 }}>
-              {hoveredProject.index}
-            </p>
-            <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 28, color: "#e8e8e8", lineHeight: 1, marginBottom: 10 }}>
-              {hoveredProject.name}
-            </p>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
-              {hoveredProject.tags.slice(0, 3).map(t => (
-                <span
-                  key={t}
-                  style={{
-                    fontFamily: "'JetBrains Mono', monospace",
-                    fontSize:   9,
-                    border:     "1px solid rgba(255,255,255,0.1)",
-                    color:      "#555",
-                    padding:    "1px 6px",
-                  }}
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
+            {hoveredProject.previewImg ? (
+              <>
+                {/* Screenshot with gradient overlay */}
+                <div style={{ position: "relative", height: 130 }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={hoveredProject.previewImg}
+                    alt=""
+                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                  />
+                  <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, #111 0%, transparent 55%)" }} />
+                  <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "0.6rem 0.75rem" }}>
+                    <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: hoveredProject.accent, letterSpacing: "0.1em", marginBottom: 2 }}>
+                      {hoveredProject.index}
+                    </p>
+                    <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 24, color: "#e8e8e8", lineHeight: 1 }}>
+                      {hoveredProject.name}
+                    </p>
+                  </div>
+                </div>
+                {/* Tags below image */}
+                <div style={{ padding: "0.5rem 0.75rem 0.75rem", display: "flex", flexWrap: "wrap", gap: 4 }}>
+                  {hoveredProject.tags.slice(0, 3).map(t => (
+                    <span key={t} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, border: "1px solid rgba(255,255,255,0.1)", color: "#555", padding: "1px 6px" }}>
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </>
+            ) : (
+              /* Text-only card */
+              <div style={{ padding: "1.25rem" }}>
+                <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: hoveredProject.accent, letterSpacing: "0.1em", marginBottom: 6 }}>
+                  {hoveredProject.index}
+                </p>
+                <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 28, color: "#e8e8e8", lineHeight: 1, marginBottom: 10 }}>
+                  {hoveredProject.name}
+                </p>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+                  {hoveredProject.tags.slice(0, 3).map(t => (
+                    <span key={t} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, border: "1px solid rgba(255,255,255,0.1)", color: "#555", padding: "1px 6px" }}>
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
