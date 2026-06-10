@@ -60,7 +60,7 @@ export default function Experience() {
     <section
       id="experience"
       ref={ref}
-      className="py-20 md:py-32 px-6 border-t border-white/[0.04]"
+      className="py-24 md:py-40 px-6 border-t border-white/[0.04]"
     >
       <div className="max-w-6xl mx-auto">
 
@@ -86,7 +86,7 @@ export default function Experience() {
                   border:     exp.accent
                     ? "1px solid rgba(0,255,65,0.25)"
                     : "1px solid rgba(255,255,255,0.06)",
-                  padding: "2rem",
+                  padding: "2.5rem",
                 }}
               >
                 {/* Company name — display type */}

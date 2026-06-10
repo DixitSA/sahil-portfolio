@@ -48,7 +48,7 @@ export default function Contact() {
           animate={inView ? "show" : "hidden"}
           style={{
             fontFamily: "'Bebas Neue', sans-serif",
-            fontSize: "clamp(52px, 10vw, 100px)",
+            fontSize: "clamp(68px, 12vw, 140px)",
             lineHeight: 0.9,
             color: "#e8e8e8",
           }}

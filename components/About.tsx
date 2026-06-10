@@ -36,7 +36,7 @@ export default function About() {
     <section
       id="about"
       ref={ref}
-      className="py-20 md:py-32 px-6 border-t border-white/[0.04]"
+      className="py-24 md:py-40 px-6 border-t border-white/[0.04]"
     >
       <div className="max-w-6xl mx-auto">
 
@@ -59,7 +59,7 @@ export default function About() {
             style={{
               background: "#111",
               border:     "1px solid rgba(255,255,255,0.07)",
-              padding:    "2rem",
+              padding:    "2.5rem",
             }}
           >
             {/* Bio */}
@@ -126,8 +126,8 @@ export default function About() {
                 style={{
                   background:  "#111",
                   border:      "1px solid rgba(255,255,255,0.07)",
-                  padding:     "1.5rem",
-                  minHeight:   "120px",
+                  padding:     "2rem",
+                  minHeight:   "140px",
                   boxShadow:   "inset 0 0 0 transparent",
                 }}
               >

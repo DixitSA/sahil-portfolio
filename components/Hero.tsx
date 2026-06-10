@@ -100,7 +100,7 @@ export default function Hero() {
                 className="block text-white"
                 style={{
                   fontFamily: "'Bebas Neue', sans-serif",
-                  fontSize: "clamp(60px, 10vw, 120px)",
+                  fontSize: "clamp(72px, 12vw, 148px)",
                   lineHeight: 0.9,
                 }}
               >
