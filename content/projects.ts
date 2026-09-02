@@ -13,10 +13,12 @@ export const projects: Project[] = [
     summary:
       "Multi-agent outreach automation. Three specialized LLM agents in one pipeline, running on ~$0 of infrastructure.",
     tags: ["Python", "LLM agent orchestration", "Self-hosted Linux"],
-    // NO repo link on purpose. github.com/DixitSA/axira-lite (the URL on the
-    // resume) is a different project: a Next.js/Prisma operations dashboard for
-    // trade businesses, not this Python multi-agent system. Verified twice.
-    // Set `repo` once the real source is pushed somewhere public.
+    // Added back at the owner's request. Flagged twice and worth repeating:
+    // this URL currently resolves to a Next.js/Prisma operations dashboard for
+    // trade businesses, not the Python multi-agent system described above. It
+    // is also the URL printed on the resume, so the two are at least
+    // consistent. Repoint both once the real source is public.
+    repo: "https://github.com/DixitSA/axira-lite",
     caseStudy: {
       problem:
         "Outreach breaks into three jobs that need different things from a model. Research rewards breadth and tolerates being wrong. Drafting rewards voice and cannot be wrong about facts. Follow-up rewards restraint. A single prompt doing all three does each one badly, and the failure is silent: the output still reads like English, so nothing alerts you that the research step hallucinated the premise the draft is built on.",

@@ -51,6 +51,33 @@ export default function Page() {
                 {p.summary}
               </p>
             </Link>
+
+            {/* Source and live links sit outside the row Link: nesting an
+                anchor inside an anchor is invalid and breaks activation. */}
+            <div className="flex flex-wrap gap-4 pb-6">
+              {p.href && (
+                <a
+                  href={p.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ ...mono, color: "var(--color-ink)" }}
+                  className="underline-offset-4 hover:underline"
+                >
+                  {"> live site"}
+                </a>
+              )}
+              {p.repo && (
+                <a
+                  href={p.repo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ ...mono, color: "var(--color-ink-subtle)" }}
+                  className="underline-offset-4 hover:underline"
+                >
+                  {"> github"}
+                </a>
+              )}
+            </div>
           </li>
         ))}
       </ul>
@@ -72,7 +99,7 @@ export default function Page() {
                 style={{ ...mono, color: "var(--color-ink-subtle)" }}
                 className="underline-offset-4 hover:underline"
               >
-                {"> source"}
+                {"> github"}
               </a>
             )}
           </li>

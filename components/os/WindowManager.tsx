@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { AnimatePresence } from "framer-motion";
 import { useOS } from "@/lib/os/store";
 import { useIsCompact } from "@/lib/os/useIsCompact";
+import { useIsHydrated } from "@/lib/os/useIsHydrated";
 import { Window, MENUBAR_HEIGHT } from "./Window";
 
 /**
@@ -184,30 +185,29 @@ export function WindowManager({
   );
 
   /**
-   * The document layer, and the reason this build is not just another
-   * client-side macOS clone.
+   * The document layer. Renders the current route as a plain document so the
+   * page is not empty without JavaScript, which is the whole reason this is
+   * not just another client-side macOS clone.
    *
-   * Window state is client-only, so during SSR `visible` is empty and the
-   * window layer emits nothing. Without this, a crawler or a visitor with
-   * JavaScript off would receive a page with no content in it, which is the
-   * exact failure DESIGN.md's routing rule exists to prevent.
+   * It must disappear the moment the window layer takes over. Three bugs came
+   * from it staying mounted:
+   *   - it is `inset-0 pointer-events-auto`, so it sat over the desktop and
+   *     swallowed every icon click
+   *   - closing the last window briefly re-showed it, flashing the route text
+   *   - it double-rendered content that a window was already showing
    *
-   * So the current route's body is also rendered as a plain document:
-   *   - at "/" it is permanent. That route is the bare desktop, and this
-   *     panel is what sits on the wallpaper.
-   *   - elsewhere it renders until the first window exists, then hands off.
-   *
-   * `hasWindows` is read from the store rather than from a mounted flag, so
-   * the server and the client's first render agree and hydration matches.
+   * The previous guard was `currentContent != null`, which never fired:
+   * `children` is a React element even when the page component returns null.
+   * Hydration state is the correct signal.
    */
-  const hasWindows = windows.length > 0;
   const isRoot = pathname === "/";
   const compact = useIsCompact();
+  const hydrated = useIsHydrated();
 
-  // Below 768px the desktop metaphor is dropped: the route renders as a
-  // full-screen app view instead of a draggable window, per DESIGN.md.
-  // Faking window management on a phone is worse than not shipping it.
-  const showDocument = currentContent != null && (isRoot || compact || !hasWindows);
+  // "/" is the bare desktop and owns no document. Below 768px the desktop
+  // metaphor is dropped, so the document IS the view. Otherwise it exists
+  // only until React takes over.
+  const showDocument = !isRoot && (compact || !hydrated);
 
   return (
     <div
