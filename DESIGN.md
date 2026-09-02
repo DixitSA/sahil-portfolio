@@ -27,6 +27,24 @@ colors:
   ink-faint: "#6a6a6a"         #  3.7:1  indices, disabled. LARGE TEXT ONLY
   ornament: "#2a2a2a"          #  non-text. Ghost type, rules-as-texture
 
+  # OS chrome
+  desktop: "#070707"                        # deeper than canvas. The wallpaper ground
+  chrome-menubar: "rgba(14,14,14,0.72)"     # + backdrop-blur(20px) saturate(180%)
+  chrome-window: "rgba(17,17,17,0.88)"      # + backdrop-blur(24px)
+  chrome-titlebar: "#161616"                # focused window title bar
+  chrome-titlebar-inactive: "#101010"       # unfocused window title bar
+  chrome-dock: "rgba(20,20,20,0.60)"        # + backdrop-blur(28px) saturate(180%)
+  chrome-border: "#2a2a2a"                  # unfocused window border
+  chrome-border-focused: "#3a3a3a"          # focused window border
+  selection: "rgba(0,255,65,0.14)"          # icon + text selection fill
+  selection-border: "rgba(0,255,65,0.45)"   # selection outline
+
+  # Traffic lights. Licensed quotation, focused window only. See OS Shell section.
+  tl-close: "#ff5f57"
+  tl-minimize: "#febc2e"
+  tl-zoom: "#28c840"
+  tl-inactive: "#3a3a3a"
+
 typography:
   display-xl:
     fontFamily: JetBrains Mono, ui-monospace, SFMono-Regular, monospace
@@ -99,10 +117,12 @@ typography:
     textTransform: uppercase
 
 rounded:
-  none: 0px      # default for everything
+  none: 0px      # default for everything INSIDE a window
   xs: 2px        # status pills, tag chips
-  sm: 4px        # maximum permitted radius
-  full: 9999px   # 6px status dots ONLY
+  sm: 4px        # maximum permitted radius for content
+  window: 10px   # OS chrome ONLY. Licensed exception, see OS Shell
+  dock: 16px     # the dock slab ONLY
+  full: 9999px   # status dots, traffic lights, dock icons
 
 spacing:
   xxs: 2px
@@ -116,6 +136,30 @@ spacing:
   4xl: 96px
   section: 128px
 
+  # OS metrics
+  menubar-height: 28px
+  titlebar-height: 32px
+  dock-height: 64px
+  dock-icon: 48px
+  dock-icon-max: 72px      # magnified
+  desktop-icon: 72px       # glyph box, label sits below
+  desktop-gutter: 24px     # inset from viewport edges
+  window-min-w: 480px
+  window-min-h: 320px
+  resize-handle: 8px       # invisible hit area on each edge
+
+zindex:
+  desktop: 0
+  desktop-icon: 10
+  window-base: 100         # incremented by 1 per focus event
+  window-ceiling: 899      # renormalize the stack when any window reaches this
+  dock: 900
+  menubar: 1000
+  menu-dropdown: 1010
+  spotlight: 1100
+  boot: 9000
+  grain: 9999
+
 motion:
   ease-standard: "cubic-bezier(0.22, 1, 0.36, 1)"
   ease-exit: "cubic-bezier(0.4, 0, 1, 1)"
@@ -125,6 +169,13 @@ motion:
   stagger: "80ms"
   spring-magnetic: "stiffness 300, damping 25"
   spring-row: "stiffness 400, damping 30"
+  # OS shell
+  spring-window-open: "stiffness 260, damping 26, mass 0.9"
+  spring-dock-magnify: "stiffness 400, damping 28"
+  duration-window-close: "160ms"
+  duration-minimize: "280ms"
+  duration-spotlight: "140ms"
+  drag-momentum: "none"    # windows stop where released. No inertia.
 
 components:
   nav-bar:
@@ -223,6 +274,118 @@ components:
     typography: "{typography.caption}"
     borderTop: "1px solid {colors.hairline}"
     padding: "{spacing.3xl} {spacing.xl}"
+
+  # ── OS shell ────────────────────────────────────────
+  menu-bar:
+    height: "{spacing.menubar-height}"
+    backgroundColor: "{colors.chrome-menubar}"
+    backdropFilter: "blur(20px) saturate(180%)"
+    borderBottom: "1px solid {colors.hairline}"
+    textColor: "{colors.ink}"
+    typography: "{typography.mono-sm}"
+    padding: "0 {spacing.md}"
+    zIndex: "{zindex.menubar}"
+    position: "fixed top"
+  menu-bar-item:
+    textColor: "{colors.ink-muted}"
+    textColorActive: "{colors.ink}"
+    backgroundColorOpen: "{colors.selection}"
+    typography: "{typography.mono-sm}"
+    rounded: "{rounded.sm}"
+    padding: "{spacing.xxs} {spacing.sm}"
+  menu-bar-status:
+    textColor: "{colors.ink-subtle}"
+    typography: "{typography.mono-sm}"
+    gap: "{spacing.md}"
+    items: "availability dot, local clock"
+  menu-dropdown:
+    backgroundColor: "{colors.chrome-window}"
+    backdropFilter: "blur(24px)"
+    borderColor: "{colors.chrome-border-focused}"
+    rounded: "{rounded.sm}"
+    padding: "{spacing.xs} 0"
+    minWidth: "200px"
+    itemPadding: "{spacing.xs} {spacing.md}"
+    itemHoverBackground: "{colors.selection}"
+    zIndex: "{zindex.menu-dropdown}"
+  window:
+    backgroundColor: "{colors.chrome-window}"
+    backdropFilter: "blur(24px)"
+    borderColor: "{colors.chrome-border}"
+    borderColorFocused: "{colors.chrome-border-focused}"
+    rounded: "{rounded.window}"
+    minWidth: "{spacing.window-min-w}"
+    minHeight: "{spacing.window-min-h}"
+    overflow: "hidden"
+    opacityUnfocused: 0.92
+  window-titlebar:
+    height: "{spacing.titlebar-height}"
+    backgroundColor: "{colors.chrome-titlebar}"
+    backgroundColorUnfocused: "{colors.chrome-titlebar-inactive}"
+    borderBottom: "1px solid {colors.hairline}"
+    textColor: "{colors.ink-subtle}"
+    textColorFocused: "{colors.ink}"
+    typography: "{typography.mono-sm}"
+    titleAlign: "center"
+    cursor: "grab / grabbing while dragging"
+  traffic-light:
+    size: "12px"
+    gap: "{spacing.sm}"
+    inset: "{spacing.md}"
+    rounded: "{rounded.full}"
+    colorUnfocused: "{colors.tl-inactive}"
+    colorClose: "{colors.tl-close}"
+    colorMinimize: "{colors.tl-minimize}"
+    colorZoom: "{colors.tl-zoom}"
+    glyphOnGroupHover: "x, minus, arrows. {colors.on-primary} at 60% opacity"
+    hitArea: "20px"
+  window-body:
+    backgroundColor: "{colors.canvas}"
+    padding: "{spacing.xl}"
+    overflowY: "auto"
+    rounded: "{rounded.none}"
+  desktop:
+    backgroundColor: "{colors.desktop}"
+    backgroundImage: "24px dot grid, rgba(255,255,255,0.03)"
+    padding: "{spacing.desktop-gutter}"
+  desktop-icon:
+    size: "{spacing.desktop-icon}"
+    glyph: "1px stroke SVG, {colors.ink-muted}"
+    labelTypography: "{typography.caption}"
+    labelColor: "{colors.ink-muted}"
+    labelBackgroundSelected: "{colors.selection}"
+    borderSelected: "1px solid {colors.selection-border}"
+    rounded: "{rounded.sm}"
+    layout: "right-aligned column, top-down, 96px pitch"
+  dock:
+    height: "{spacing.dock-height}"
+    backgroundColor: "{colors.chrome-dock}"
+    backdropFilter: "blur(28px) saturate(180%)"
+    borderColor: "{colors.hairline-strong}"
+    rounded: "{rounded.dock}"
+    padding: "{spacing.sm}"
+    gap: "{spacing.sm}"
+    zIndex: "{zindex.dock}"
+    position: "fixed bottom center, {spacing.md} from edge"
+  dock-item:
+    size: "{spacing.dock-icon}"
+    sizeMagnified: "{spacing.dock-icon-max}"
+    rounded: "{rounded.full}"
+    runningIndicator: "3px dot, {colors.primary}, below icon"
+    transform: "scale only. Never width/height"
+    spring: "{motion.spring-dock-magnify}"
+  spotlight:
+    width: "min(560px, 90vw)"
+    backgroundColor: "{colors.chrome-window}"
+    backdropFilter: "blur(32px)"
+    borderColor: "{colors.chrome-border-focused}"
+    rounded: "{rounded.window}"
+    inputTypography: "{typography.display-sm}"
+    resultTypography: "{typography.mono-md}"
+    resultHoverBackground: "{colors.selection}"
+    padding: "{spacing.lg}"
+    zIndex: "{zindex.spotlight}"
+    trigger: "Cmd+K / Ctrl+K"
 ---
 
 ## Overview
@@ -241,6 +404,7 @@ Two chromatic signals carry the whole brand, and their separation is the single 
 - A four-step ink ladder where every step has a measured contrast ratio and a named job.
 - Sentence-level copy is specific and unadorned. Numbers over adjectives, always.
 - The page is a document, not a deck. Sections are bands separated by 1px rules, never floating cards.
+- **The shell is a macOS-style desktop.** Projects are files, sections are applications, navigation happens by opening windows. The metaphor is committed to completely, and it is subordinate to real routes and server-rendered content. See OS Shell.
 
 **Reference lineage.** ClickHouse supplies the structure: identical near-black canvas, a stepped surface ladder, and a single high-voltage accent used sparingly. Warp supplies the restraint: tight radii, hairline elevation, no shadows, and display type set at a light weight rather than a heavy one. opencode.ai supplies the typographic nerve to run monospace everywhere and treat bracket glyphs as the icon system. Linear supplies the rule that product screenshots do the persuading while the chrome stays quiet.
 
@@ -375,12 +539,170 @@ There are three levels and none of them use a shadow.
 
 | Token | Value | Use |
 |---|---|---|
-| `{rounded.none}` | 0px | **Default.** Panels, cards, buttons, inputs, previews. |
+| `{rounded.none}` | 0px | **Default for all content.** Panels, cards, buttons, inputs, previews. |
 | `{rounded.xs}` | 2px | Status pills, tag chips. |
-| `{rounded.sm}` | 4px | Ceiling. Requires a reason. |
-| `{rounded.full}` | 9999px | The 6px live-status dot. Nothing else. |
+| `{rounded.sm}` | 4px | Content ceiling. Requires a reason. |
+| `{rounded.window}` | 10px | **OS chrome only.** Window frames, spotlight, dropdowns. |
+| `{rounded.dock}` | 16px | The dock slab only. |
+| `{rounded.full}` | 9999px | Status dots, traffic lights, dock icons. |
 
-Rectangularity is load-bearing. A rounded card on this canvas immediately reads as a generic dashboard component, which is the exact register the project's anti-references rule out.
+Rectangularity is load-bearing for content. A rounded card on this canvas immediately reads as a generic dashboard component, which is the exact register the project's anti-references rule out.
+
+**The chrome exception.** OS chrome is a separate layer with its own physics, and it obeys the conventions of the thing it depicts rather than the conventions of the content it holds. A macOS window with 4px corners does not read as restraint, it reads as a bug. So window frames, the dock, dropdowns, and spotlight get `{rounded.window}` and `{rounded.dock}`.
+
+The rule that survives: **everything inside a window is still sharp.** The frame is round, the content is not. That boundary is what keeps the diegesis from leaking into the design system, and it is the single easiest place for this build to go soft. Watch it.
+
+## OS Shell
+
+The site boots into a desktop rather than presenting a scrolling page. Projects are files, sections are applications, and navigation happens by opening windows. The metaphor has to be committed to completely or not at all, because a half-simulated OS reads as a broken website rather than as a designed one.
+
+### The rule that governs everything else
+
+**Routes are the source of truth. Window state is derived from the URL, never the other way around.**
+
+Every openable surface owns a real route that server-renders its content:
+
+```
+/                 desktop, no windows open
+/about            desktop + About window open and focused
+/work             desktop + Work (Finder) window open
+/work/kaal        desktop + the Kaal case study window open
+/experience       desktop + Experience window open
+/contact          desktop + Contact window open
+```
+
+Opening a window pushes a route. Closing pops it. Multiple open windows serialize into the URL so a specific arrangement is linkable. Focus changes are `replaceState`, not `pushState`, so clicking between windows does not poison the back button.
+
+This is non-negotiable and it is the single thing that separates this build from the four reference implementations. A recruiter must be able to send a colleague `sahildixit.dev/work/kaal` and have that person land on the case study, not on a desktop they have to re-navigate. Search engines must get real HTML per project. Any window whose content exists only in client state is a window that does not exist as far as hiring is concerned.
+
+**Test:** disable JavaScript. Every case study must still render its full text content. The chrome can disappear. The content cannot.
+
+### Layers
+
+| Layer | z-index | Contents |
+|---|---|---|
+| Desktop | `{zindex.desktop}` | Wallpaper, dot grid |
+| Icons | `{zindex.desktop-icon}` | Desktop files, right-aligned column |
+| Windows | `{zindex.window-base}`+ | Stacked, one increment per focus event |
+| Dock | `{zindex.dock}` | Fixed bottom center |
+| Menu bar | `{zindex.menubar}` | Fixed top, full width |
+| Dropdowns | `{zindex.menu-dropdown}` | Open menu panels |
+| Spotlight | `{zindex.spotlight}` | Command palette |
+| Boot | `{zindex.boot}` | Boot sequence, first visit only |
+| Grain | `{zindex.grain}` | Texture overlay, above everything |
+
+Windows take `{zindex.window-base}` plus a counter incremented on each focus. When the counter reaches `{zindex.window-ceiling}`, renormalize the whole stack back down rather than letting it climb without bound.
+
+### Window lifecycle
+
+**Open.** Scale from 0.94 with opacity 0, origin at the launching icon or dock item, `{motion.spring-window-open}`. Never a fade alone. The window should feel like it came from somewhere.
+
+**Focus.** Click anywhere in the window raises it, sets the border to `{colors.chrome-border-focused}`, restores full opacity, brightens the title, and colorizes the traffic lights. Unfocused windows sit at `opacityUnfocused` 0.92 with `{colors.chrome-border}` and gray lights. This single treatment does more for the illusion than any animation.
+
+**Drag.** By the title bar only. `transform: translate3d` on a `motion.div`, never `top`/`left`. `{motion.drag-momentum}` is `none`: windows stop where released, because inertia on a window reads as a bug. Constrain so the title bar can never go under the menu bar or fully off-screen. Dragging a window raises it.
+
+**Resize.** 8px invisible hit areas on all four edges and corners, floored at `{spacing.window-min-w}` × `{spacing.window-min-h}`. Cursor changes per edge.
+
+**Zoom.** Green light animates to fill the available desktop area between menu bar and dock. Not true fullscreen.
+
+**Minimize.** Scale and translate toward the window's dock slot over `{motion.duration-minimize}`. A genie effect is not required and a clean scale reads better than a bad genie.
+
+**Close.** Scale to 0.96 with opacity 0 over `{motion.duration-window-close}`, then pop the route.
+
+### Traffic lights
+
+12px circles at the left of the title bar, `{spacing.sm}` apart, with a 20px hit area so they are actually clickable.
+
+**Unfocused windows show `{colors.tl-inactive}` gray dots. Only the focused window shows color.** This is authentic macOS behavior and it does most of the work of communicating focus.
+
+Glyphs (`x`, `−`, `⤢`) appear inside the dots only on hover of the traffic-light group, never persistently.
+
+**On the color license.** `{colors.tl-close}`, `{colors.tl-minimize}`, and `{colors.tl-zoom}` are the real macOS values and they introduce a red and a second green that the base palette forbids. This is a deliberate quotation, not a palette expansion, and it is bounded by three rules:
+
+1. These three values appear on traffic lights and nowhere else on the site, ever.
+2. They render only on the focused window, so at most one set is colored at a time.
+3. They are never used to communicate site state. `{colors.primary}` remains the only signal for live status.
+
+Recoloring them to the site palette was considered and rejected: a macOS window with green, green, and green traffic lights reads as a knockoff. Quoting a convention exactly is stronger than half-adopting it.
+
+### Menu bar
+
+Fixed top, `{spacing.menubar-height}` 28px, translucent with `blur(20px) saturate(180%)`. The saturation boost is what makes backdrop blur read as macOS rather than as a gray panel.
+
+- **Left:** monogram, then the active window's name in medium weight, then menus. Menus are repurposed, not decorative: `File` holds Resume and Contact, `View` toggles desktop arrangement, `Go` jumps to sections, `Help` opens the keyboard shortcut list.
+- **Right:** status items in `{typography.mono-sm}` — the live availability dot in `{colors.primary}`, and a local clock ticking in real time. The clock is the cheapest possible proof the thing is alive. Update it on a one-second interval, and clear the interval on unmount.
+- No fake battery or wifi icons. Simulating hardware you do not have is where an OS portfolio tips from clever into costume.
+
+### Dock
+
+Fixed bottom center, `{rounded.dock}` 16px, `blur(28px) saturate(180%)`, floating `{spacing.md}` off the bottom edge.
+
+- Icons at `{spacing.dock-icon}` 48px, magnifying to `{spacing.dock-icon-max}` 72px.
+- **Magnification is `transform: scale` only.** Never animate width or height. Neighbors scale on a falloff curve based on pointer distance, driven by `useMotionValue` so pointer movement causes zero React re-renders.
+- A 3px `{colors.primary}` dot under any icon whose window is open. This is a legitimate live-state use of green.
+- Separator rule before the trailing group.
+- Dock items are `<button>` elements with real labels, not divs.
+
+### Desktop and the filesystem
+
+Icons in a right-aligned column at 96px pitch, matching macOS convention.
+
+Model the content as an actual tree rather than a flat list, because the Finder window and the desktop must read from the same source:
+
+```
+~/
+  Work/          one file per project, opens a case study window
+  Experience/    one file per role
+  About.md
+  Resume.pdf     opens a real PDF, does not simulate one
+  Contact.app
+```
+
+Single click selects with `{colors.selection}` fill and `{colors.selection-border}` outline. Double click opens. Icons are 1px-stroke SVG in `{colors.ink-muted}`, consistent with the ASCII-and-hairline icon rule. No skeuomorphic Apple icon replicas.
+
+### Spotlight
+
+`Cmd+K` / `Ctrl+K` opens a centered command palette. This is the most valuable single component in the build: it is on-metaphor, it is what a technical audience reaches for by reflex, and it doubles as the accessible navigation path that rescues the entire OS conceit.
+
+Searches projects, sections, and actions. Enter opens the top result. Escape closes. Arrow keys move selection.
+
+### Mobile
+
+**The desktop metaphor does not survive at 375px, and faking it is worse than dropping it.** Draggable windows on a phone are unusable and no one is impressed by a dock they cannot hover.
+
+Below 768px the shell degrades to a springboard: a home-screen grid of the same icons, tapping one opens a full-screen "app" view with a back affordance in place of a title bar. Same routes, same content, same tree, no window management. The menu bar collapses to a status strip with the clock and availability dot.
+
+This is a real degradation, not a fallback. It should look intentional, because on a phone it is the better interface.
+
+### Accessibility
+
+An OS simulation is the easiest possible way to build an inaccessible site. These are floors, not aspirations.
+
+- Every window is `role="dialog"` with `aria-label` set to its title. The focused window is the accessibility root.
+- Traffic lights, dock items, and desktop icons are `<button>`s with `aria-label`. Nothing interactive is a bare `div`.
+- Full keyboard path to every piece of content, with no pointer required: `Cmd+K` for spotlight, `Tab` cycles within the focused window, `Cmd+W` closes, `Esc` closes the frontmost window or dropdown.
+- Arrow keys move desktop icon selection; `Enter` opens.
+- Visible `{colors.primary}` focus ring on every interactive element. Never `outline: none` without a replacement.
+- Respect `prefers-reduced-motion`: windows appear and disappear with opacity only, dock magnification is disabled, the boot sequence is skipped.
+- The boot sequence runs on first visit only. Persist a flag. Making a returning recruiter watch a boot animation twice is a hostile pattern, and making someone arriving on a deep link watch one before they see the thing they came for is worse. **A deep link never boots.**
+
+### Performance
+
+The chosen constraint is wow factor over load speed, so the budget is generous but not unbounded. These are the floors that keep the site from failing the audience it exists for:
+
+- **The first viewport is never a spinner.** Desktop, menu bar, and dock render server-side as static markup. Window management hydrates after.
+- Backdrop blur is expensive and compounds. Cap it at four simultaneously blurred surfaces. Blurring ten stacked windows will drop a mid-range laptop to single-digit frame rates.
+- Window contents mount lazily and unmount on close. Do not keep ten case studies in the tree.
+- Everything that animates uses `transform` and `opacity` exclusively.
+- Case study content is server-rendered regardless of window state, per the routing rule above.
+
+### The discipline
+
+The failure mode of this genre is building an OS instead of a portfolio. Every reference implementation drifts this way, adding a calculator, a music player, a working terminal, a FaceTime clone. Those are fun to build and they are why most OS portfolios have no actual content in them.
+
+Build only what carries content or sells the illusion at low cost: windows, dock, menu bar, spotlight, desktop icons, a clock. Nothing else earns its place. A trash can that does nothing is a liability. If a component does not hold a case study or take under an hour, it does not ship.
+
+The site still has to answer, in the first ten seconds, why someone should hire you.
 
 ## Motion
 
@@ -449,6 +771,32 @@ This document is the target, not a description of `master`. The following are kn
 | 11 | `og.png` referenced in metadata but absent from `public/` | `layout.tsx:17` | S |
 | 12 | 4 of 5+ projects have no screenshot | `Work.tsx` | M |
 
+### Content truth
+
+Checked against the current resume. These are factual mismatches, and they cost more than any styling gap.
+
+| # | Gap | Location | Effort |
+|---|---|---|---|
+| 13 | Kaal links to a GitHub repo. It is a shipped product at `getkaal.com`, web + iOS, 17 modules, 277 commits | `Work.tsx:43` | S |
+| 14 | Axira described as "SMS-powered retention SaaS for physical retail." Resume describes multi-agent LLM outreach automation: 3 orchestrated agents, human-in-the-loop gate, ~$0 self-hosted infra | `Work.tsx:22` | S |
+| 15 | Capital One role listed as "Business Analyst Intern." Resume says "Business Analyst, Retail Banking" | `Experience.tsx:24` | S |
+| 16 | Resume metrics absent from the site: ~69MM-client Consumer Bank, ~8 regulatory responses, ~30 model-level submissions ~80% ahead of deadline, 3 AI workstreams, slide turnaround hours to ~15 min, ~10% premium reduction across 7 clients | `About.tsx`, `Experience.tsx` | M |
+| 17 | Site lists 5+ projects; resume curates to 2. Consider demoting the weaker three so the strong two carry the page | `Work.tsx` | S |
+
+### OS shell (not yet built)
+
+| # | Gap | Effort |
+|---|---|---|
+| 18 | Route-driven window state. Every window needs a real server-rendered route | L |
+| 19 | Window manager: focus stack, drag, resize, minimize, zoom, close | L |
+| 20 | Menu bar with live clock and availability status | M |
+| 21 | Dock with transform-only magnification and running indicators | M |
+| 22 | Spotlight command palette on Cmd+K | M |
+| 23 | Desktop icons reading from a shared content tree | M |
+| 24 | Mobile springboard degradation below 768px | M |
+| 25 | Boot sequence gated to first visit only, skipped on deep links | S |
+| 26 | Keyboard path to all content, `role="dialog"` windows, focus rings | M |
+
 ## Do's and Don'ts
 
 ### Do
@@ -459,6 +807,10 @@ This document is the target, not a description of `master`. The following are kn
 - Let project screenshots do the persuading. Keep the chrome quiet.
 - Use ASCII glyphs before reaching for an icon.
 - Write specifics. Numbers, project names, real outputs.
+- Give every window a real route that server-renders its content.
+- Show color on the focused window's traffic lights only.
+- Animate windows and dock icons with `transform` and `opacity` exclusively.
+- Degrade to a springboard on mobile rather than faking window management.
 
 ### Don't
 - Don't use Inter or Bebas Neue anywhere.
@@ -470,3 +822,10 @@ This document is the target, not a description of `master`. The following are kn
 - Don't add scanlines, CRT curvature, or glow.
 - Don't introduce a third chromatic color. If the page needs one, it needs less content.
 - Don't build a card grid. This page is a document.
+- Don't let window content exist only in client state. If it does not server-render, it does not exist to a recruiter or to Google.
+- Don't use the traffic-light colors anywhere except traffic lights.
+- Don't round the content inside a window. The frame is round, the content is sharp.
+- Don't simulate hardware you do not have. No fake battery, no fake wifi.
+- Don't boot on a deep link, and don't boot a returning visitor twice.
+- Don't build a calculator, a music player, a working terminal, or a trash can. Build windows that hold case studies.
+- Don't stack more than four blurred surfaces at once.
