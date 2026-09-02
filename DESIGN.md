@@ -449,7 +449,13 @@ Pure `#ffffff` is not in the system. On a near-black canvas it vibrates, and `{c
 Two faces, down from three.
 
 1. **Geist** (400 / 500) carries display, body, section headings, and links. It is the voice of the site.
-2. **JetBrains Mono** (300 / 400) carries technical values only: tags, status, indices, periods, paths, metrics, and code.
+2. **JetBrains Mono** (300 / 400) carries technical values only: tags, status, indices, periods, paths, metrics, keycaps, and code.
+
+**OS chrome follows the same rule.** The menu bar, desktop icon labels, dock
+tooltips and spotlight all set in Geist at 13px, sentence case, no tracking,
+because that is how macOS sets its own chrome. They were uppercase letterspaced
+mono, which is a terminal reading a file listing rather than a Mac naming a
+file. Icon labels read "About.md", not "ABOUT.MD".
 
 **The roles were swapped once the shell became macOS.** The original system ran
 monospace everywhere, which was right for a terminal page and wrong inside Mac
@@ -674,19 +680,25 @@ happen, and leaves is the most expensive failure this design can produce.
 
 Two affordances, both restrained.
 
-- **Spotlight in the menu bar.** A magnifier with the shortcut printed beside
-  it, where macOS puts search. Permanent, native, and it teaches the single
-  most useful key without saying anything.
-- **A first-visit hint.** One line above the dock naming double click, Command
-  K, and right click. It fades on its own after nine seconds and disappears the
-  moment the visitor does anything, because a hint still on screen after it is
-  needed has become an instruction manual. First visit only, and never on a
-  deep link: someone arriving at /work/kaal came for the case study, not a
-  tutorial.
+**A permanent hint bar** above the dock names double click, Command K and right
+click. It does not time out. A hint that disappears has only helped the
+visitors who happened to be looking, and the cost of someone never working out
+how to open a file is losing them entirely.
 
-No modal, no tour, no overlay the visitor has to dismiss. If someone ignores
-both, every route is still reachable from the dock, the menu bar, and the
-hidden navigation.
+The Command K hint is itself the button, so a visitor who does not want to
+learn a shortcut can click it. That is why the menu bar carries no separate
+search affordance: one control, in one place.
+
+It is hidden on deep links, where the visitor came for a specific case study
+rather than a tour, and below `lg`, where the springboard replaces the desktop
+and none of it applies.
+
+**The menu bar's active application is a control.** With nothing focused it
+reads Finder and opens Work, which is the file browser this desktop has. It was
+inert text, so clicking it did nothing and read as broken.
+
+No modal, no tour, nothing to dismiss. A visitor who ignores the bar still
+reaches every route from the dock, the menu bar and the hidden navigation.
 
 ### Easter eggs
 

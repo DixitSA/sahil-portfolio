@@ -88,7 +88,7 @@ export default function DesktopIcon({
       </span>
 
       <span
-        className="max-w-full px-1 font-mono text-[10px] leading-[1.4] tracking-[0.14em] break-words uppercase"
+        className="max-w-full px-1 font-body text-[12px] leading-[1.35] break-words"
         style={{
           color: "#ffffff",
           backgroundColor: selected ? "var(--color-selection)" : "transparent",

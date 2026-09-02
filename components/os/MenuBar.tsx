@@ -56,9 +56,14 @@ export default function MenuBar({ onOpen }: MenuBarProps) {
 
   const setSpotlight = useOS((s) => s.setSpotlight);
   const closeAll = useOS((s) => s.closeAll);
-  const focusedTitle = useOS(
-    (s) => s.windows.find((w) => w.id === s.focusedId)?.title ?? "Finder",
+  const focusedWindowTitle = useOS(
+    (s) => s.windows.find((w) => w.id === s.focusedId)?.title,
   );
+  // With nothing focused the active app is Finder, which on a Mac is the file
+  // browser. Here that is Work. It used to be inert text, so clicking it did
+  // nothing and read as broken.
+  const isFinder = !focusedWindowTitle;
+  const focusedTitle = focusedWindowTitle ?? "Finder";
 
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const barRef = useRef<HTMLDivElement>(null);
@@ -241,18 +246,29 @@ export default function MenuBar({ onOpen }: MenuBarProps) {
           ))}
         </nav>
 
-        {/* Focused window name. Medium weight, per the spec. */}
-        <span
-          className="ml-1 hidden items-center px-2 font-mono text-[12px] font-medium md:flex"
-          style={{ color: "var(--color-ink)" }}
-        >
-          {focusedTitle}
-        </span>
+        {/* Active application. Finder opens the file browser, which here is
+            Work; a focused window just names itself. */}
+        {isFinder ? (
+          <button
+            type="button"
+            onClick={() => activate(OS_APPS.find((a) => a.id === "/work")!)}
+            aria-label="Open Finder"
+            className="ml-1 hidden items-center px-2 font-body text-[13px] font-semibold md:flex"
+            style={{ color: "var(--color-ink)", borderRadius: "var(--radius-sm)" }}
+          >
+            Finder
+          </button>
+        ) : (
+          <span
+            className="ml-1 hidden items-center px-2 font-body text-[13px] font-semibold md:flex"
+            style={{ color: "var(--color-ink)" }}
+          >
+            {focusedTitle}
+          </span>
+        )}
       </div>
 
       <div className="flex items-center gap-3">
-        <SpotlightButton onOpen={() => setSpotlight(true)} />
-        <Availability available={profile.available} reduce={Boolean(reduce)} />
         <Clock />
       </div>
     </header>
@@ -313,7 +329,7 @@ function MenuTitle({
           }
         }}
         className={[
-          "flex items-center px-2 font-mono text-[12px] transition-colors duration-150",
+          "flex items-center px-2 font-body text-[13px] transition-colors duration-150",
           menu.monogram ? "tracking-[0.1em]" : "",
         ].join(" ")}
         style={{
@@ -387,7 +403,7 @@ function MenuTitle({
                       onClose(false);
                       item.run();
                     }}
-                    className="flex w-full items-center justify-between gap-6 px-3 py-1 text-left font-mono text-[12px] transition-colors duration-150 hover:bg-selection focus-visible:bg-selection"
+                    className="flex w-full items-center justify-between gap-6 px-3 py-1 text-left font-body text-[13px] transition-colors duration-150 hover:bg-selection focus-visible:bg-selection"
                     style={{ color: "var(--color-ink-muted)" }}
                   >
                     <span>{item.label}</span>
@@ -406,70 +422,6 @@ function MenuTitle({
 }
 
 /* ── Status items ──────────────────────────────────────────────────── */
-
-/**
- * Spotlight affordance.
- *
- * macOS keeps search in the menu bar, and this doubles as the only permanent
- * instruction on the page: the shortcut is printed next to the glyph, so a
- * visitor learns the most useful key without being told anything.
- */
-function SpotlightButton({ onOpen }: { onOpen: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onOpen}
-      aria-label="Search. Keyboard shortcut Command K"
-      className="flex items-center gap-1.5 px-1.5 py-0.5"
-      style={{ borderRadius: "var(--radius-sm)" }}
-    >
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <circle
-          cx="11"
-          cy="11"
-          r="6.5"
-          stroke="var(--color-ink-subtle)"
-          strokeWidth="1.6"
-        />
-        <path
-          d="M16 16l4.5 4.5"
-          stroke="var(--color-ink-subtle)"
-          strokeWidth="1.6"
-          strokeLinecap="round"
-        />
-      </svg>
-      <span
-        className="hidden font-mono text-[10px] tracking-[0.1em] md:inline"
-        style={{ color: "var(--color-ink-faint)" }}
-      >
-        ⌘K
-      </span>
-    </button>
-  );
-}
-
-function Availability({ available, reduce }: { available: boolean; reduce: boolean }) {
-  return (
-    <span className="flex items-center gap-2">
-      <span
-        aria-hidden="true"
-        className="h-[6px] w-[6px] rounded-full"
-        style={{
-          backgroundColor: available
-            ? "var(--color-primary)"
-            : "var(--color-ink-faint)",
-          animation: available && !reduce ? "status-pulse 2s ease-in-out infinite" : undefined,
-        }}
-      />
-      <span
-        className="hidden font-mono text-[10px] tracking-[0.14em] uppercase sm:inline"
-        style={{ color: "var(--color-ink-subtle)" }}
-      >
-        {available ? "Available" : "Booked"}
-      </span>
-    </span>
-  );
-}
 
 /**
  * Local clock. The cheapest possible proof the thing is alive.
@@ -499,7 +451,7 @@ function Clock() {
 
   return (
     <span
-      className="font-mono text-[12px] tabular-nums"
+      className="font-body text-[13px] tabular-nums"
       style={{ color: "var(--color-ink-subtle)" }}
       suppressHydrationWarning
     >

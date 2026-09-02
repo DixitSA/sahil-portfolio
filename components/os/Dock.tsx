@@ -434,7 +434,7 @@ function DockItem({
 
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-full left-1/2 mb-4 -translate-x-1/2 px-2 py-[2px] font-mono text-[10px] tracking-[0.14em] whitespace-nowrap uppercase opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100"
+        className="pointer-events-none absolute bottom-full left-1/2 mb-4 -translate-x-1/2 px-2 py-[2px] font-body text-[12px] whitespace-nowrap opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100"
         style={{
           backgroundColor: "var(--color-surface-3)",
           border: "1px solid var(--color-hairline-strong)",

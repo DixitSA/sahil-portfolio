@@ -285,7 +285,7 @@ function Panel({ onOpen }: SpotlightProps) {
         >
           <span
             aria-hidden="true"
-            className="font-mono text-[20px] leading-none"
+            className="font-body text-[20px] leading-none"
             style={{ color: "var(--color-ink-faint)" }}
           >
             &gt;
@@ -309,7 +309,7 @@ function Panel({ onOpen }: SpotlightProps) {
             placeholder="Search"
             autoComplete="off"
             spellCheck={false}
-            className="w-full bg-transparent font-mono text-[20px] leading-[1.2] tracking-[-0.01em] outline-none"
+            className="w-full bg-transparent font-body text-[20px] leading-[1.2] tracking-[-0.01em] outline-none"
             style={{ color: "var(--color-ink)" }}
           />
         </div>
@@ -351,7 +351,7 @@ function Panel({ onOpen }: SpotlightProps) {
                     {result.category}
                   </span>
                   <span
-                    className="shrink-0 font-mono text-[14px]"
+                    className="shrink-0 font-body text-[14px]"
                     style={{
                       color: active ? "var(--color-ink)" : "var(--color-ink-muted)",
                     }}
@@ -371,7 +371,7 @@ function Panel({ onOpen }: SpotlightProps) {
 
           {filtered.length === 0 ? (
             <li
-              className="px-4 py-3 font-mono text-[12px]"
+              className="px-4 py-3 font-body text-[13px]"
               style={{ color: "var(--color-ink-faint)" }}
             >
               NO RESULTS
