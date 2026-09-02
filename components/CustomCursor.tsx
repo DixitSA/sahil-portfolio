@@ -1,20 +1,36 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { useEffect, useState, useSyncExternalStore } from "react";
+import { motion, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
+
+/* Pointer capability is a platform fact, not React state, so it is read through
+   useSyncExternalStore instead of being pushed into state from inside an
+   effect. The server snapshot reports "no fine pointer" so nothing renders
+   during SSR. */
+const subscribeToPointer = () => () => {};
+const readHasFinePointer = () => !("ontouchstart" in window);
+const readHasFinePointerOnServer = () => false;
 
 export default function CustomCursor() {
-  const [visible, setVisible] = useState(false);
+  const hasFinePointer = useSyncExternalStore(
+    subscribeToPointer,
+    readHasFinePointer,
+    readHasFinePointerOnServer,
+  );
   const [hovered, setHovered] = useState(false);
+  const reduce = useReducedMotion();
 
   const rawX = useMotionValue(-100);
   const rawY = useMotionValue(-100);
-  const x = useSpring(rawX, { stiffness: 800, damping: 40, mass: 0.1 });
-  const y = useSpring(rawY, { stiffness: 800, damping: 40, mass: 0.1 });
+  const springX = useSpring(rawX, { stiffness: 800, damping: 40, mass: 0.1 });
+  const springY = useSpring(rawY, { stiffness: 800, damping: 40, mass: 0.1 });
+
+  // Reduced motion tracks the pointer directly. No spring lag, no smoothing.
+  const x = reduce ? rawX : springX;
+  const y = reduce ? rawY : springY;
 
   useEffect(() => {
-    if ("ontouchstart" in window) return;
-    setVisible(true);
+    if (!hasFinePointer) return;
 
     const onMove = (e: MouseEvent) => {
       rawX.set(e.clientX - 4);
@@ -32,9 +48,9 @@ export default function CustomCursor() {
       window.removeEventListener("mousemove", onMove);
       document.removeEventListener("mouseover", onOver);
     };
-  }, [rawX, rawY]);
+  }, [hasFinePointer, rawX, rawY]);
 
-  if (!visible) return null;
+  if (!hasFinePointer) return null;
 
   return (
     <motion.div
@@ -51,11 +67,11 @@ export default function CustomCursor() {
       className="hidden md:block"
     >
       <motion.span
+        className="font-mono"
         animate={{ fontSize: hovered ? "20px" : "12px" }}
-        transition={{ duration: 0.15, ease: "easeOut" }}
+        transition={reduce ? { duration: 0 } : { duration: 0.15, ease: "easeOut" }}
         style={{
-          fontFamily: "'JetBrains Mono', 'Courier New', monospace",
-          color: "#00ff41",
+          color: "var(--color-primary)",
           display: "block",
           userSelect: "none",
           lineHeight: 1,
