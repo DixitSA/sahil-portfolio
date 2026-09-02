@@ -228,6 +228,27 @@ body::before {
   will-change: transform;
 }
 
+/* ── iOS view transitions ────────────────────────────────────────────
+   CSS, not JS. A JS-driven transition that stalls can leave the incoming
+   view unmounted, which blanks the screen on navigation. A keyframe
+   always resolves, and animation-fill-mode both means the resting state
+   is correct even if the animation never runs at all.
+   ──────────────────────────────────────────────────────────────────── */
+@keyframes ios-push {
+  from { opacity: 0; transform: translate3d(18px, 0, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@keyframes ios-home {
+  from { opacity: 0; transform: scale(0.975); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.ios-push { animation: ios-push 240ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+.ios-home { animation: ios-home 220ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ios-push, .ios-home { animation: none; }
+}
+
 /* ── Dock launch bounce ──────────────────────────────────────────── */
 @keyframes dock-bounce {
   0%   { transform: translateY(0); }

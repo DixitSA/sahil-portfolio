@@ -3,7 +3,6 @@
 import type { ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { desktop, projects, roles } from "@/content";
 import type { FSNode } from "@/content/types";
 import { useIsCompact } from "@/lib/os/useIsCompact";
@@ -73,7 +72,6 @@ export default function MobileShell({
   const compact = useIsCompact();
   const pathname = usePathname();
   const router = useRouter();
-  const reduce = useReducedMotion();
   const { wallpaper } = useWallpaper();
 
   // Desktop is untouched: above the breakpoint this renders nothing at all.
@@ -90,85 +88,79 @@ export default function MobileShell({
         backgroundColor: isHome ? "var(--color-desktop)" : "var(--color-canvas)",
       }}
     >
-      <AnimatePresence mode="wait" initial={false}>
-        {isHome ? (
-          <motion.div
-            key="home"
-            initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.97 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 1.03 }}
-            transition={{ duration: reduce ? 0 : 0.24, ease: [0.22, 1, 0.36, 1] }}
-            className="h-full overflow-y-auto overscroll-contain"
-            style={{ paddingTop: "max(env(safe-area-inset-top), 12px)" }}
+      {/*
+        No AnimatePresence here on purpose. `mode="wait"` holds the incoming
+        view until the outgoing one finishes animating, so a stalled exit
+        leaves nothing mounted and the screen goes blank on navigation. The
+        transition is a CSS keyframe instead, which always resolves and whose
+        fill-mode leaves the correct resting state even if it never runs.
+      */}
+      {isHome ? (
+        <div
+          key="home"
+          className="ios-home h-full overflow-y-auto overscroll-contain"
+          style={{ paddingTop: "max(env(safe-area-inset-top), 12px)" }}
+        >
+          <HomeScreen widgets={widgets} />
+        </div>
+      ) : (
+        <div key={pathname} className="ios-push flex h-full flex-col">
+          {/* Nav bar. Translucent, as iOS draws it. */}
+          <header
+            className="relative flex shrink-0 items-center px-2"
+            style={{
+              paddingTop: "max(env(safe-area-inset-top), 10px)",
+              paddingBottom: 10,
+              background: "var(--color-chrome-menubar)",
+              backdropFilter: "blur(20px) saturate(180%)",
+              WebkitBackdropFilter: "blur(20px) saturate(180%)",
+              borderBottom: "1px solid var(--color-hairline)",
+            }}
           >
-            <HomeScreen widgets={widgets} />
-          </motion.div>
-        ) : (
-          <motion.div
-            key={pathname}
-            initial={reduce ? { opacity: 0 } : { opacity: 0, x: 26 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={reduce ? { opacity: 0 } : { opacity: 0, x: 26 }}
-            transition={{ duration: reduce ? 0 : 0.24, ease: [0.22, 1, 0.36, 1] }}
-            className="flex h-full flex-col"
-          >
-            {/* Nav bar. Translucent and sticky, as iOS draws it. */}
-            <header
-              className="flex shrink-0 items-center gap-1 px-2"
+            <button
+              type="button"
+              onClick={() => router.push(parentOf(pathname))}
+              aria-label={`Back to ${titleFor(parentOf(pathname))}`}
+              className="flex items-center gap-0.5 px-2 py-1"
               style={{
-                paddingTop: "max(env(safe-area-inset-top), 10px)",
-                paddingBottom: 10,
-                background: "var(--color-chrome-menubar)",
-                backdropFilter: "blur(20px) saturate(180%)",
-                WebkitBackdropFilter: "blur(20px) saturate(180%)",
-                borderBottom: "1px solid var(--color-hairline)",
+                fontFamily: "var(--font-body)",
+                fontSize: 17,
+                color: "var(--link-accent)",
               }}
             >
-              <button
-                type="button"
-                onClick={() => router.push(parentOf(pathname))}
-                aria-label={`Back to ${titleFor(parentOf(pathname))}`}
-                className="flex items-center gap-0.5 px-2 py-1"
-                style={{
-                  fontFamily: "var(--font-body)",
-                  fontSize: 16,
-                  color: "var(--link-accent)",
-                }}
-              >
-                <svg width="11" height="18" viewBox="0 0 11 18" fill="none" aria-hidden="true">
-                  <path
-                    d="M9.5 1.5 2 9l7.5 7.5"
-                    stroke="currentColor"
-                    strokeWidth="2.2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                {titleFor(parentOf(pathname))}
-              </button>
+              <svg width="11" height="18" viewBox="0 0 11 18" fill="none" aria-hidden="true">
+                <path
+                  d="M9.5 1.5 2 9l7.5 7.5"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              {titleFor(parentOf(pathname))}
+            </button>
 
-              <span
-                className="absolute left-1/2 -translate-x-1/2"
-                style={{
-                  fontFamily: "var(--font-body)",
-                  fontSize: 16,
-                  fontWeight: 600,
-                  color: "var(--color-ink)",
-                }}
-              >
-                {titleFor(pathname)}
-              </span>
-            </header>
-
-            <main
-              className="min-h-0 flex-1 overflow-y-auto overscroll-contain"
-              style={{ paddingBottom: "max(env(safe-area-inset-bottom), 24px)" }}
+            <span
+              className="pointer-events-none absolute left-1/2 -translate-x-1/2"
+              style={{
+                fontFamily: "var(--font-body)",
+                fontSize: 17,
+                fontWeight: 600,
+                color: "var(--color-ink)",
+              }}
             >
-              {children}
-            </main>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              {titleFor(pathname)}
+            </span>
+          </header>
+
+          <main
+            className="min-h-0 flex-1 overflow-y-auto overscroll-contain"
+            style={{ paddingBottom: "max(env(safe-area-inset-bottom), 24px)" }}
+          >
+            {children}
+          </main>
+        </div>
+      )}
     </div>
   );
 }

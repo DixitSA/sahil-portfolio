@@ -131,6 +131,15 @@ export function WindowManager({
   const windows = useOS((s) => s.windows);
   const focusedId = useOS((s) => s.focusedId);
 
+  /**
+   * Below the breakpoint MobileShell owns routing entirely, so every route
+   * effect here stands down. Leaving them running meant the focus effect saw
+   * a window still open for the previous route, decided the URL was wrong,
+   * and replaced it back. Every tap navigated and was instantly undone, which
+   * is why the buttons appeared broken on a phone.
+   */
+  const compact = useIsCompact();
+
   // Held in a ref so a new array identity from the parent cannot re-fire the
   // route effect. The route is what drives window state, not the table.
   const tableRef = useRef(effective);
@@ -140,14 +149,16 @@ export function WindowManager({
 
   // 1. pathname -> window. Opening an already-open window focuses it.
   useEffect(() => {
+    if (compact) return;
     const d = resolveRoute(pathname, tableRef.current);
     if (!d) return;
     open({ id: d.route, title: d.title, route: d.route, w: d.w, h: d.h });
-  }, [pathname, open]);
+  }, [pathname, open, compact]);
 
   // 2 + 3. window closed -> route follows.
   const prevCount = useRef(windows.length);
   useEffect(() => {
+    if (compact) return;
     const count = windows.length;
     const had = prevCount.current;
     prevCount.current = count;
@@ -163,15 +174,15 @@ export function WindowManager({
       const top = windows.reduce((a, b) => (b.z > a.z ? b : a));
       router.push(top.route);
     }
-  }, [windows, pathname, router]);
+  }, [windows, pathname, router, compact]);
 
   // 4. focus -> replaceState. Never pushes, so back still walks open/close.
   useEffect(() => {
-    if (!focusedId) return;
+    if (compact || !focusedId) return;
     const w = windows.find((win) => win.id === focusedId);
     if (!w || w.minimized || w.route === pathname) return;
     router.replace(w.route, { scroll: false });
-  }, [focusedId, windows, pathname, router]);
+  }, [focusedId, windows, pathname, router, compact]);
 
   const contentByRoute = useMemo(() => {
     const map = new Map<string, ReactNode>();
@@ -201,7 +212,6 @@ export function WindowManager({
    * Hydration state is the correct signal.
    */
   const isRoot = pathname === "/";
-  const compact = useIsCompact();
   const hydrated = useIsHydrated();
 
   // "/" is the bare desktop and owns no document. Otherwise the document

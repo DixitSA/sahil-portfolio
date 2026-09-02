@@ -180,7 +180,9 @@ export function Chip({ children }: { children: ReactNode }) {
 
 /** Live status. Green stays reserved for genuinely live state. */
 export function Status({ value }: { value: string }) {
-  const live = value === "LIVE" || value === "ACTIVE";
+  // Availability is live state too. It was rendering grey because only the
+  // project statuses were listed here.
+  const live = value === "LIVE" || value === "ACTIVE" || value.startsWith("AVAILABLE");
   return (
     <span
       style={{
