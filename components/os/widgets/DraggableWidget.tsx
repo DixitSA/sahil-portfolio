@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useSyncExternalStore } from "react";
+import { useCallback, useSyncExternalStore } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 
 /**
@@ -63,7 +63,6 @@ export default function DraggableWidget({
   children: React.ReactNode;
 }) {
   const reduce = useReducedMotion();
-  const constraints = useRef<HTMLDivElement | null>(null);
 
   const raw = useSyncExternalStore(
     subscribe,
@@ -77,10 +76,29 @@ export default function DraggableWidget({
 
   const start: Point = raw ? read(id) : { x: 0, y: 0 };
 
+  /**
+   * Clamp before storing rather than constraining while dragging.
+   *
+   * `dragConstraints` used to point at a `fixed` sibling element. framer
+   * measured that box against a widget living in an absolutely positioned
+   * column and "corrected" the widget into it on mount, applying a bogus
+   * transform of roughly (502, 140). In development the offset was absorbed;
+   * in the production build it centred both widgets and stacked them on top
+   * of each other, so Now was completely hidden behind Watching.
+   *
+   * Nothing constrains the drag now. Widgets still cannot be lost, because
+   * the position is clamped to the viewport at the moment it is saved.
+   */
   const persist = useCallback(
     (point: Point) => {
+      const maxX = Math.max(0, window.innerWidth - 260);
+      const maxY = Math.max(0, window.innerHeight - 200);
+      const safe: Point = {
+        x: Math.min(Math.max(point.x, -8), maxX),
+        y: Math.min(Math.max(point.y, -8), maxY),
+      };
       try {
-        localStorage.setItem(key(id), JSON.stringify(point));
+        localStorage.setItem(key(id), JSON.stringify(safe));
       } catch {
         /* not worth failing over */
       }
@@ -92,23 +110,18 @@ export default function DraggableWidget({
   if (reduce) return <div>{children}</div>;
 
   return (
-    <>
-      {/* Drag bounds: the whole viewport, minus room for the menu bar and dock. */}
-      <div ref={constraints} className="pointer-events-none fixed inset-x-4 top-8 bottom-24" />
-      <motion.div
-        drag
-        dragMomentum={false}
-        dragElastic={0.04}
-        dragConstraints={constraints}
-        initial={false}
-        style={{ x: start.x, y: start.y, cursor: "grab" }}
-        whileDrag={{ cursor: "grabbing", scale: 1.015 }}
-        onDragEnd={(_, info) =>
-          persist({ x: start.x + info.offset.x, y: start.y + info.offset.y })
-        }
-      >
-        {children}
-      </motion.div>
-    </>
+    <motion.div
+      drag
+      dragMomentum={false}
+      dragElastic={0.04}
+      initial={false}
+      style={{ x: start.x, y: start.y, cursor: "grab" }}
+      whileDrag={{ cursor: "grabbing", scale: 1.015 }}
+      onDragEnd={(_, info) =>
+        persist({ x: start.x + info.offset.x, y: start.y + info.offset.y })
+      }
+    >
+      {children}
+    </motion.div>
   );
 }
