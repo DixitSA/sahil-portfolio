@@ -1,7 +1,23 @@
 import type { Metadata } from "next";
+import { Geist, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import CustomCursor from "@/components/CustomCursor";
 import MotionProvider from "@/components/MotionProvider";
+
+/* Self-hosted via next/font. No runtime request to Google. */
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["300", "400"],
+  variable: "--font-jetbrains",
+  display: "swap",
+});
+
+const geist = Geist({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-geist",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://sahildixit.dev"),
@@ -13,7 +29,6 @@ export const metadata: Metadata = {
     description:
       "Strategy & Management Consultant at Bank of America. AI tools by day. Indie SaaS by night.",
     type: "website",
-    images: [{ url: "/og.png", width: 1200, height: 630 }], /* TODO: create /public/og.png */
   },
 };
 
@@ -23,15 +38,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@300;400;500&family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;1,14..32,400&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html
+      lang="en"
+      className={`h-full ${jetbrainsMono.variable} ${geist.variable}`}
+      data-scroll-behavior="smooth"
+    >
       <body className="min-h-full antialiased">
         <a href="#hero" className="skip-to-content">SKIP_TO_CONTENT</a>
         <CustomCursor />

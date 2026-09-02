@@ -1,15 +1,89 @@
 @import "tailwindcss";
 
+/* ═══════════════════════════════════════════════════════════════════
+   Tokens. Source of truth is DESIGN.md. Do not add a color here that
+   is not in that file, and do not hardcode a hex in a component.
+   ═══════════════════════════════════════════════════════════════════ */
 @theme {
-  --color-bg: #0a0a0a;
-  --color-terminal-green: #00ff41;
-  --color-terminal-amber: #f0b429;
-  --color-surface: #111111;
-  --color-surface-elevated: #161616;
-  --color-muted: #6b7280;
-  --font-display: 'Bebas Neue', 'Arial Narrow', sans-serif;
-  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
-  --font-body: 'Inter', system-ui, sans-serif;
+  /* ── Signal ────────────────────────────────────────────────────── */
+  --color-primary: #00ff41;          /* terminal green. LIVE STATE ONLY */
+  --color-on-primary: #0a0a0a;
+  --color-primary-dim: rgba(0, 255, 65, 0.55);
+  --color-primary-ghost: rgba(0, 255, 65, 0.1);
+  --color-label: #f0b429;            /* terminal amber. LABELS ONLY */
+  --color-label-dim: rgba(240, 180, 41, 0.55);
+
+  /* ── Surfaces ──────────────────────────────────────────────────── */
+  --color-canvas: #0a0a0a;
+  --color-surface-1: #0d0d0d;
+  --color-surface-2: #111111;
+  --color-surface-3: #161616;
+  --color-hairline: #1e1e1e;
+  --color-hairline-strong: #2a2a2a;
+
+  /* ── Ink ladder. Ratios verified against #0a0a0a ───────────────── */
+  --color-ink: #e8e8e8;              /* 16.2:1  headlines */
+  --color-ink-muted: #9a9a9a;        /*  7.0:1  body copy */
+  --color-ink-subtle: #8a8a8a;       /*  5.7:1  meta, dates */
+  --color-ink-faint: #6a6a6a;        /*  3.7:1  indices. LARGE ONLY */
+  --color-ornament: #2a2a2a;         /*  non-text */
+
+  /* ── OS chrome ─────────────────────────────────────────────────── */
+  --color-desktop: #070707;
+  --color-chrome-menubar: rgba(14, 14, 14, 0.72);
+  --color-chrome-window: rgba(17, 17, 17, 0.88);
+  --color-chrome-titlebar: #161616;
+  --color-chrome-titlebar-inactive: #101010;
+  --color-chrome-dock: rgba(20, 20, 20, 0.6);
+  --color-chrome-border: #2a2a2a;
+  --color-chrome-border-focused: #3a3a3a;
+  --color-selection: rgba(0, 255, 65, 0.14);
+  --color-selection-border: rgba(0, 255, 65, 0.45);
+
+  /* Traffic lights. Licensed quotation, focused window only. */
+  --color-tl-close: #ff5f57;
+  --color-tl-minimize: #febc2e;
+  --color-tl-zoom: #28c840;
+  --color-tl-inactive: #3a3a3a;
+
+  /* ── Type ──────────────────────────────────────────────────────── */
+  --font-display: var(--font-jetbrains), ui-monospace, SFMono-Regular, monospace;
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, monospace;
+  --font-body: var(--font-geist), system-ui, sans-serif;
+
+  /* ── Radii. Content caps at 4px. Chrome is the exception. ──────── */
+  --radius-none: 0px;
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-window: 10px;
+  --radius-dock: 16px;
+
+  /* ── OS metrics ────────────────────────────────────────────────── */
+  --spacing-menubar-height: 28px;
+  --spacing-titlebar-height: 32px;
+  --spacing-dock-height: 64px;
+  --spacing-dock-icon: 48px;
+  --spacing-dock-icon-max: 72px;
+  --spacing-desktop-icon: 72px;
+  --spacing-section: 128px;
+
+  /* ── Motion ────────────────────────────────────────────────────── */
+  --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+}
+
+/* ── z-index scale. Kept out of @theme so it stays readable. ─────── */
+:root {
+  --z-desktop: 0;
+  --z-desktop-icon: 10;
+  --z-window-base: 100;
+  --z-window-ceiling: 899;
+  --z-dock: 900;
+  --z-menubar: 1000;
+  --z-menu-dropdown: 1010;
+  --z-spotlight: 1100;
+  --z-boot: 9000;
+  --z-grain: 9999;
 }
 
 html {
@@ -17,11 +91,11 @@ html {
 }
 
 body {
-  background-color: #0a0a0a;
-  background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-color: var(--color-canvas);
+  background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
   background-size: 24px 24px;
-  color: #e5e7eb;
-  font-family: 'Inter', system-ui, sans-serif;
+  color: var(--color-ink-muted);
+  font-family: var(--font-body);
   cursor: none;
 }
 
@@ -29,24 +103,24 @@ body {
   body { cursor: auto; }
 }
 
-/* ── Custom scrollbar ────────────────────────── */
+/* ── Custom scrollbar ────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: #111; }
-::-webkit-scrollbar-thumb { background: #555; }
-::-webkit-scrollbar-thumb:hover { background: #777; }
-* { scrollbar-width: thin; scrollbar-color: #555 #111; }
+::-webkit-scrollbar-track { background: var(--color-surface-2); }
+::-webkit-scrollbar-thumb { background: var(--color-hairline-strong); }
+::-webkit-scrollbar-thumb:hover { background: var(--color-ink-faint); }
+* { scrollbar-width: thin; scrollbar-color: var(--color-hairline-strong) var(--color-surface-2); }
 
-/* ── Skip to content ─────────────────────────── */
+/* ── Skip to content ─────────────────────────────────────────────── */
 .skip-to-content {
   position: absolute;
   left: -9999px;
-  z-index: 9999;
-  font-family: 'JetBrains Mono', monospace;
+  z-index: var(--z-grain);
+  font-family: var(--font-mono);
   font-size: 12px;
   letter-spacing: 0.1em;
-  color: #00ff41;
-  background: #0a0a0a;
-  border: 1px solid #00ff41;
+  color: var(--color-primary);
+  background: var(--color-canvas);
+  border: 1px solid var(--color-primary);
   padding: 6px 16px;
 }
 .skip-to-content:focus {
@@ -55,25 +129,24 @@ body {
   left: 0;
 }
 
-/* ── Focus visible ───────────────────────────── */
+/* ── Focus visible ───────────────────────────────────────────────── */
 :focus-visible {
-  outline: 2px solid #00ff41;
+  outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
 
-/* ── Grain texture overlay ───────────────────── */
+/* ── Grain texture overlay ───────────────────────────────────────── */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23grain)' opacity='0.04'/%3E%3C/svg%3E");
   pointer-events: none;
-  z-index: 9999;
+  z-index: var(--z-grain);
   opacity: 1;
 }
 
-
-/* ── Marquee ────────────────────────────────── */
+/* ── Marquee ─────────────────────────────────────────────────────── */
 @keyframes marquee {
   0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
@@ -85,16 +158,27 @@ body::before {
 .marquee-track         { animation: marquee     40s linear infinite; }
 .marquee-track-reverse { animation: marquee-rev 40s linear infinite; }
 
-/* ── Reduced motion ─────────────────────────── */
+/* ── Live status pulse ───────────────────────────────────────────── */
+@keyframes status-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.4; }
+}
+
+/* ── Reduced motion ──────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
   .marquee-track,
   .marquee-track-reverse {
     animation: none;
   }
-  * {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
 }
 
-/* ── Clip-reveal helper ─────────────────────── */
+/* ── Clip-reveal helper ──────────────────────────────────────────── */
 .clip-line { overflow: hidden; }
