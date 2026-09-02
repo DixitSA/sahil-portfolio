@@ -1,5 +1,8 @@
-/* Styled ticker marquee — pure-CSS animation, no JS library */
-import type { CSSProperties } from "react";
+/* Styled ticker marquee — pure-CSS animation, no JS library.
+   Per the texture contract the marquee is ghost type: it is aria-hidden
+   decoration, so it carries the ornament color and neither signal color.
+   Green is live state only and this is not live; amber is a structural label
+   and this is not one. */
 
 const items = [
   { ticker: "AXIRA",             tag: "MULTI_AGENT" },
@@ -18,18 +21,16 @@ const items = [
   { ticker: "TYPESCRIPT",        tag: null          },
 ];
 
-const MONO: CSSProperties = {
-  fontFamily: "'JetBrains Mono', 'Courier New', monospace",
-  fontSize: "11px",
-};
-
 function TickerItem({ ticker, tag }: { ticker: string; tag: string | null }) {
   return (
-    <span className="inline-flex items-center gap-2 mr-10" style={MONO}>
-      <span style={{ color: "#f0b429" }}>{ticker}</span>
-      <span style={{ color: "#00ff41" }}>▲</span>
-      {tag && <span style={{ color: "#555" }}>+{tag}</span>}
-      <span style={{ color: "#333", marginLeft: "16px" }}>·</span>
+    <span
+      className="font-mono inline-flex items-center gap-2 mr-10 text-[11px]"
+      style={{ color: "var(--color-ornament)" }}
+    >
+      <span>{ticker}</span>
+      <span>▲</span>
+      {tag && <span>+{tag}</span>}
+      <span style={{ marginLeft: "16px" }}>·</span>
     </span>
   );
 }
@@ -58,28 +59,29 @@ export default function Marquee() {
       className="relative select-none pointer-events-none"
       aria-hidden="true"
       style={{
-        background: "#0d0d0d",
-        borderTop: "1px solid rgba(255,255,255,0.07)",
-        borderBottom: "1px solid rgba(255,255,255,0.07)",
+        background:   "var(--color-surface-1)",
+        borderTop:    "1px solid var(--color-hairline)",
+        borderBottom: "1px solid var(--color-hairline)",
       }}
     >
       {/* LIVE_FEED label — absolute left edge with fade-out gradient */}
       <div
         className="absolute left-0 top-0 bottom-0 z-10 flex items-center pl-3"
         style={{
-          background: "linear-gradient(to right, #0d0d0d 110px, transparent)",
+          background:
+            "linear-gradient(to right, var(--color-surface-1) 110px, transparent)",
         }}
       >
         <span
-          className="text-[10px] tracking-[0.15em] uppercase"
-          style={{ fontFamily: "'JetBrains Mono', monospace", color: "#333" }}
+          className="font-mono text-[10px] uppercase"
+          style={{ color: "var(--color-ornament)", letterSpacing: "0.14em" }}
         >
           LIVE_FEED
         </span>
       </div>
 
       {/* Row 1: left */}
-      <div style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
+      <div style={{ borderBottom: "1px solid var(--color-hairline)" }}>
         <Track cls="marquee-track" />
       </div>
 

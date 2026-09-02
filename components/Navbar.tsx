@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
 const links = [
@@ -13,8 +13,9 @@ const links = [
 ];
 
 export default function Navbar() {
-  const [open, setOpen]               = useState(false);
-  const [activeSection, setActive]    = useState("");
+  const [open, setOpen]            = useState(false);
+  const [activeSection, setActive] = useState("");
+  const reduce = useReducedMotion();
 
   useEffect(() => {
     const ids = links.map((l) => l.href.replace("#", ""));
@@ -43,30 +44,35 @@ export default function Navbar() {
       <nav
         className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6"
         style={{
-          height: "44px",
-          background: "#0d0d0d",
-          borderBottom: "1px solid rgba(255,255,255,0.07)",
+          height:       "44px",
+          background:   "var(--color-surface-1)",
+          borderBottom: "1px solid var(--color-hairline)",
         }}
       >
-        {/* LEFT: blinking dot + exe name */}
+        {/* LEFT: live-status dot + exe name */}
         <a href="#" className="flex items-center gap-2 cursor-none">
           <motion.span
-            className="w-1.5 h-1.5 bg-terminal-green inline-block"
-            animate={{ opacity: [1, 0, 1] }}
-            transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
+            className="w-1.5 h-1.5 inline-block"
+            style={{ background: "var(--color-primary)", borderRadius: "9999px" }}
+            animate={reduce ? { opacity: 1 } : { opacity: [1, 0, 1] }}
+            transition={
+              reduce
+                ? { duration: 0 }
+                : { duration: 1, repeat: Infinity, ease: "easeInOut" }
+            }
           />
           <span
-            className="text-xs tracking-widest text-[#e8e8e8]"
-            style={{ fontFamily: "'JetBrains Mono', monospace" }}
+            className="font-mono text-xs"
+            style={{ color: "var(--color-ink)", letterSpacing: "0.1em" }}
           >
             SAHIL_DIXIT.exe
           </span>
         </a>
 
-        {/* CENTER: status — desktop only, truly centered via absolute */}
+        {/* CENTER: live availability — desktop only, truly centered via absolute */}
         <span
-          className="hidden md:block absolute left-1/2 -translate-x-1/2 text-xs text-terminal-green pointer-events-none select-none"
-          style={{ fontFamily: "'JetBrains Mono', monospace" }}
+          className="font-mono hidden md:block absolute left-1/2 -translate-x-1/2 text-xs pointer-events-none select-none"
+          style={{ color: "var(--color-primary)" }}
         >
           STATUS: AVAILABLE_FOR_WORK
         </span>
@@ -80,12 +86,16 @@ export default function Navbar() {
                 <li key={l.label}>
                   <button
                     onClick={() => handleNav(l.href)}
-                    className={`text-xs cursor-none transition-colors duration-150 ${
-                      active
-                        ? "text-terminal-green"
-                        : "text-gray-500 hover:text-terminal-green"
-                    }`}
-                    style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                    className="font-mono text-xs cursor-none transition-colors duration-150"
+                    style={{
+                      /* The active link is the one live thing in the nav, so it
+                         is the only place the green underline appears. */
+                      color:          active ? "var(--color-ink)" : "var(--color-ink-subtle)",
+                      borderBottom:   active
+                        ? "1px solid var(--color-primary)"
+                        : "1px solid transparent",
+                      paddingBottom:  "2px",
+                    }}
                   >
                     [{l.label}]
                   </button>
@@ -95,7 +105,8 @@ export default function Navbar() {
           </ul>
 
           <button
-            className="md:hidden text-gray-400 hover:text-white cursor-none transition-colors p-1"
+            className="md:hidden cursor-none transition-colors p-1"
+            style={{ color: "var(--color-ink-subtle)" }}
             onClick={() => setOpen((v) => !v)}
             aria-label="Toggle menu"
             aria-expanded={open}
@@ -114,12 +125,14 @@ export default function Navbar() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[55] bg-[#0a0a0a] flex flex-col items-center justify-center md:hidden"
+            transition={reduce ? { duration: 0 } : { duration: 0.2 }}
+            className="fixed inset-0 z-[55] flex flex-col items-center justify-center md:hidden"
+            style={{ background: "var(--color-canvas)" }}
           >
             {/* Close button */}
             <button
-              className="absolute top-3 right-6 text-gray-500 hover:text-white cursor-none transition-colors"
+              className="absolute top-3 right-6 cursor-none transition-colors"
+              style={{ color: "var(--color-ink-subtle)" }}
               onClick={() => setOpen(false)}
               aria-label="Close menu"
             >
@@ -131,15 +144,22 @@ export default function Navbar() {
               {links.map((l, i) => (
                 <motion.button
                   key={l.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.07, duration: 0.3, ease: "easeOut" }}
+                  initial={reduce ? { opacity: 0 } : { opacity: 0, y: 20 }}
+                  animate={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
+                  transition={
+                    reduce
+                      ? { duration: 0 }
+                      : { delay: i * 0.06, duration: 0.3, ease: [0.22, 1, 0.36, 1] }
+                  }
                   onClick={() => handleNav(l.href)}
-                  className="text-white hover:text-terminal-green transition-colors duration-150 cursor-none"
+                  className="font-display cursor-none transition-colors duration-150"
                   style={{
-                    fontFamily: "'Bebas Neue', sans-serif",
-                    fontSize: "clamp(48px, 10vw, 72px)",
-                    lineHeight: 1.1,
+                    fontSize:      "clamp(34px, 9vw, 56px)",
+                    fontWeight:    300,
+                    lineHeight:    1.1,
+                    letterSpacing: "-0.035em",
+                    textTransform: "uppercase",
+                    color:         "var(--color-ink)",
                   }}
                 >
                   {l.label}

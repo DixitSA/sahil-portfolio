@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 
 // ── Proficiency tiers ─────────────────────────────────────────────────────────
 const tiers: { label: string; tier: "DAILY" | "WORKING" | "LEARNING"; detail: string }[] = [
@@ -11,10 +11,12 @@ const tiers: { label: string; tier: "DAILY" | "WORKING" | "LEARNING"; detail: st
   { label: "ENGINEERING", tier: "WORKING",  detail: "Next.js · Node.js · Prisma · TypeScript" },
 ];
 
+/* Proficiency is neither live state nor a structural label, so it carries
+   neither green nor amber. The three tiers separate on the ink ladder. */
 const TIER_COLOR: Record<string, string> = {
-  DAILY:    "#00ff41",
-  WORKING:  "#f0b429",
-  LEARNING: "#666",
+  DAILY:    "var(--color-ink)",
+  WORKING:  "var(--color-ink-muted)",
+  LEARNING: "var(--color-ink-faint)",
 };
 
 // ── Category data ─────────────────────────────────────────────────────────────
@@ -25,32 +27,35 @@ const categories = [
   { label: "ANALYTICS", items: ["Tableau", "Power BI", "Knime", "Excel", "SPSS"]               },
 ];
 
-// ── Row animation ─────────────────────────────────────────────────────────────
-const rowAnim = {
-  hidden: { opacity: 0, x: -8 },
-  show: (i: number) => ({
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.55, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] as const },
-  }),
-};
-
 export default function Stack() {
   const ref    = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
+  const reduce = useReducedMotion();
+
+  const rowAnim = {
+    hidden: reduce ? { opacity: 0 } : { opacity: 0, x: -8 },
+    show: (i: number) => ({
+      opacity: 1,
+      x: 0,
+      transition: reduce
+        ? { duration: 0 }
+        : { duration: 0.55, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] as const },
+    }),
+  };
 
   return (
     <section
       id="stack"
       ref={ref}
-      className="py-20 md:py-32 px-6 border-t border-white/[0.04]"
+      className="py-16 md:py-32 px-6"
+      style={{ borderTop: "1px solid var(--color-hairline)" }}
     >
       <div className="max-w-6xl mx-auto">
 
-        {/* Section header */}
+        {/* Section eyebrow — structural label, amber */}
         <p
-          className="text-xs mb-12 tracking-widest"
-          style={{ fontFamily: "'JetBrains Mono', monospace", color: "#f0b429" }}
+          className="font-mono text-[11px] uppercase mb-12"
+          style={{ color: "var(--color-label)", letterSpacing: "0.22em" }}
         >
           {">"} SYSTEM_SPECS
         </p>
@@ -59,13 +64,13 @@ export default function Stack() {
         <div
           className="mb-6 p-6"
           style={{
-            background: "#111",
-            border:     "1px solid rgba(255,255,255,0.07)",
+            background: "var(--color-surface-2)",
+            border:     "1px solid var(--color-hairline)",
           }}
         >
           <p
-            className="text-[10px] tracking-widest mb-5"
-            style={{ fontFamily: "'JetBrains Mono', monospace", color: "#f0b429" }}
+            className="font-mono text-[11px] uppercase mb-5"
+            style={{ color: "var(--color-label)", letterSpacing: "0.22em" }}
           >
             PROFICIENCY_MATRIX
           </p>
@@ -79,18 +84,18 @@ export default function Stack() {
                 {/* Label + tier badge */}
                 <div className="flex items-center gap-3 sm:min-w-[200px]">
                   <span
-                    className="text-[10px] tracking-wider"
-                    style={{ fontFamily: "'JetBrains Mono', monospace", color: "#666" }}
+                    className="font-mono text-[11px] uppercase"
+                    style={{ color: "var(--color-ink-subtle)", letterSpacing: "0.14em" }}
                   >
                     {row.label}
                   </span>
                   <span
-                    className="text-[9px] px-1.5 py-0.5 tracking-widest"
+                    className="font-mono text-[10px] px-1.5 py-0.5 uppercase"
                     style={{
-                      fontFamily: "'JetBrains Mono', monospace",
-                      color:      TIER_COLOR[row.tier],
-                      border:     `1px solid ${TIER_COLOR[row.tier]}`,
-                      opacity:    0.9,
+                      color:         TIER_COLOR[row.tier],
+                      border:        "1px solid var(--color-hairline-strong)",
+                      borderRadius:  "var(--radius-xs)",
+                      letterSpacing: "0.14em",
                     }}
                   >
                     {row.tier}
@@ -99,8 +104,8 @@ export default function Stack() {
 
                 {/* Detail */}
                 <span
-                  className="text-[10px] leading-relaxed"
-                  style={{ fontFamily: "'JetBrains Mono', monospace", color: "#555" }}
+                  className="font-mono text-[11px] leading-relaxed"
+                  style={{ color: "var(--color-ink-subtle)" }}
                 >
                   {row.detail}
                 </span>
@@ -120,39 +125,36 @@ export default function Stack() {
               animate={inView ? "show" : "hidden"}
               className="flex flex-wrap items-center gap-4 p-6"
               style={{
-                background: "#111",
-                border:     "1px solid rgba(255,255,255,0.07)",
+                background: "var(--color-surface-2)",
+                border:     "1px solid var(--color-hairline)",
               }}
             >
-              {/* Category label */}
+              {/* Category label — a column header, so amber is in role */}
               <span
-                className="text-[10px] uppercase tracking-widest shrink-0"
+                className="font-mono text-[11px] uppercase shrink-0"
                 style={{
-                  fontFamily: "'JetBrains Mono', monospace",
-                  color:      "#f0b429",
-                  minWidth:   "160px",
+                  color:         "var(--color-label)",
+                  letterSpacing: "0.22em",
+                  minWidth:      "160px",
                 }}
               >
                 {cat.label}
               </span>
 
-              {/* Skill badges */}
+              {/* Skill badges. stack-badge borderColorHover is primary-dim. */}
               <div className="flex flex-wrap gap-2">
                 {cat.items.map((item) => (
                   <motion.span
                     key={item}
                     whileHover={{
-                      borderColor:     "#00ff41",
-                      color:           "#00ff41",
-                      backgroundColor: "rgba(0,255,65,0.05)",
-                      transition:      { duration: 0.15 },
+                      borderColor: "var(--color-primary-dim)",
+                      transition:  { duration: reduce ? 0 : 0.15 },
                     }}
-                    className="text-[10px] px-3 py-1 cursor-none"
+                    className="font-mono text-xs px-3 py-1 cursor-none"
                     style={{
-                      fontFamily: "'JetBrains Mono', monospace",
-                      background: "#0a0a0a",
-                      border:     "1px solid rgba(255,255,255,0.08)",
-                      color:      "#9a9a9a",
+                      background: "var(--color-surface-3)",
+                      border:     "1px solid var(--color-hairline)",
+                      color:      "var(--color-ink-muted)",
                     }}
                   >
                     {item}

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { Project } from "@/content/types";
 
 /**
@@ -110,23 +111,28 @@ export default function CaseStudy({ project }: { project: Project }) {
       </div>
 
       {project.preview && (
-        /* eslint-disable-next-line @next/next/no-img-element */
-        <div
+        <figure
           className="mb-12 border p-2"
           style={{
             borderColor: "var(--color-hairline-strong)",
             background: "var(--color-surface-2)",
           }}
         >
-          <img
+          {/*
+            Product screenshots are full-page portrait captures. Forcing them
+            into a 16:10 crop throws away most of the interface, so the frame
+            caps height instead and the image keeps its own proportions.
+          */}
+          <Image
             src={project.preview}
             alt={`${project.name} interface`}
-            width={1280}
-            height={800}
-            className="block w-full"
-            style={{ aspectRatio: "16 / 10", objectFit: "cover" }}
+            width={project.previewSize?.w ?? 1280}
+            height={project.previewSize?.h ?? 800}
+            sizes="(max-width: 768px) 100vw, 720px"
+            className="mx-auto block h-auto w-auto"
+            style={{ maxHeight: 560, objectFit: "contain" }}
           />
-        </div>
+        </figure>
       )}
 
       {cs ? (

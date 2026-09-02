@@ -42,8 +42,8 @@ export default function Image() {
 
         <div style={{ display: "flex", flexDirection: "column" }}>
           <span style={{ fontSize: 26, color: "#f0b429", letterSpacing: 6, marginBottom: 20 }}>
-            // STRATEGY · AI GOVERNANCE · PRODUCT
-          </span>
+            {"// STRATEGY · AI GOVERNANCE · PRODUCT"}
+</span>
           <span
             style={{
               fontSize: 104,

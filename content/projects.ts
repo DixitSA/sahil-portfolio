@@ -69,6 +69,7 @@ export const projects: Project[] = [
     href: "https://getkaal.com",
     repo: "https://github.com/DixitSA/kaal",
     preview: "/previews/kaal-dashboard.png",
+    previewSize: { w: 826, h: 1600 },
     caseStudy: {
       problem:
         "Astrology apps are the easy case for an LLM and the wrong one. Ask a model for a reading and it produces something fluent, unfalsifiable, and different every time you ask. That is fatal for a product people are supposed to return to: if today's guidance contradicts yesterday's for the same birth chart, there is no product, only a slot machine. The hard requirement was that identical inputs must always produce identical output, while the actual astronomy stayed correct across timezones and birth times.",

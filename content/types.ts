@@ -37,6 +37,8 @@ export interface Project {
   repo?: string;
   /** Screenshot under /public. Only featured projects have one. */
   preview?: string;
+  /** Intrinsic pixel size of `preview`. Required to avoid layout shift. */
+  previewSize?: { w: number; h: number };
   /** Present only when tier === "featured". */
   caseStudy?: CaseStudy;
 }

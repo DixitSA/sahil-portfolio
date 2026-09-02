@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef, useState, useCallback } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+import { motion, useInView, useReducedMotion, AnimatePresence } from "framer-motion";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 type Project = {
@@ -11,7 +12,6 @@ type Project = {
   tags: string[];
   status: string;
   href?: string;
-  accent: string;
   previewImg?: string;
 };
 
@@ -24,7 +24,6 @@ const products: Project[] = [
     tags:  ["Python", "LLM Orchestration", "Self-hosted Linux"],
     status: "LIVE",
     href:  "https://github.com/DixitSA/axira-lite",
-    accent: "#00ff41",
   },
   {
     index: "P02",
@@ -33,7 +32,6 @@ const products: Project[] = [
     tags:  ["Next.js", "TypeScript", "Python", "Capacitor"],
     status: "LIVE",
     href:       "https://getkaal.com",
-    accent:     "#f0b429",
     previewImg: "/previews/kaal-dashboard.png",
   },
   {
@@ -43,7 +41,6 @@ const products: Project[] = [
     tags:  ["Next.js", "Firebase", "Spotify API"],
     status: "LIVE",
     href:  "https://github.com/DixitSA/VibeQueue",
-    accent: "#00ff41",
   },
   {
     index: "P04",
@@ -52,7 +49,6 @@ const products: Project[] = [
     tags:  ["Next.js", "Fastify", "PostgreSQL", "WebSocket"],
     status: "LIVE",
     href:  "https://github.com/DixitSA/MANIFEST",
-    accent: "#00ff41",
   },
   {
     index: "P05",
@@ -60,7 +56,6 @@ const products: Project[] = [
     desc:  "Bot that mirrors positions from top traders on Polymarket prediction markets.",
     tags:  ["Python", "Polymarket API"],
     status: "BUILD",
-    accent: "#f0b429",
   },
 ];
 
@@ -71,7 +66,6 @@ const consulting: Project[] = [
     desc:  "Coordinated model-risk governance across 3 AI complaint-handling workstreams. Delivered ~30 model-level submissions and ~8 regulatory responses, ~80% ahead of deadline.",
     tags:  ["AI/ML Governance", "Model Risk", "Regulatory"],
     status: "ACTIVE",
-    accent: "#00ff41",
   },
   {
     index: "C02",
@@ -79,7 +73,6 @@ const consulting: Project[] = [
     desc:  "Cut ad-hoc slide turnaround from hours to ~15 minutes with a governed prompt framework that turns rough inputs into source-backed executive slides. Adopted teamwide.",
     tags:  ["Generative AI", "Prompt Engineering", "Workflow"],
     status: "ACTIVE",
-    accent: "#00ff41",
   },
   {
     index: "C03",
@@ -87,30 +80,26 @@ const consulting: Project[] = [
     desc:  "Prioritized growth opportunities and key risks in a 3-year strategic plan for a ~69MM-client Consumer Bank. Shaped Investor Day messaging for senior leadership.",
     tags:  ["Strategy", "Market Analysis", "Executive Comms"],
     status: "ACTIVE",
-    accent: "#00ff41",
   },
 ];
 
-// ── Status colors ─────────────────────────────────────────────────────────────
+/* Status colors. Green is live state and nothing else, so LIVE and ACTIVE take
+   it. BUILD is also a state, and amber may never indicate state, so it drops to
+   the ink ladder rather than borrowing the label color. */
 const STATUS_COLOR: Record<string, string> = {
-  LIVE:   "#00ff41",
-  ACTIVE: "#00ff41",
-  BUILD:  "#f0b429",
-};
-
-// ── Row animation ─────────────────────────────────────────────────────────────
-const rowAnim = {
-  hidden: { opacity: 0, x: -8 },
-  show: (i: number) => ({
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.55, delay: i * 0.09, ease: [0.22, 1, 0.36, 1] as const },
-  }),
+  LIVE:   "var(--color-primary)",
+  ACTIVE: "var(--color-primary)",
+  BUILD:  "var(--color-ink-subtle)",
 };
 
 // ── Featured hero card ────────────────────────────────────────────────────────
-function FeaturedProject({ project, inView }: { project: Project; inView: boolean }) {
+function FeaturedProject({
+  project, inView, reduce,
+}: { project: Project; inView: boolean; reduce: boolean }) {
   const [hovered, setHovered] = useState(false);
+
+  const rest  = reduce ? { opacity: 0 } : { opacity: 0, y: 24 };
+  const shown = reduce ? { opacity: 1 } : { opacity: 1, y: 0 };
 
   return (
     <motion.a
@@ -118,52 +107,46 @@ function FeaturedProject({ project, inView }: { project: Project; inView: boolea
       target="_blank"
       rel="noopener noreferrer"
       aria-label={`Open ${project.name} (opens in a new tab)`}
-      initial={{ opacity: 0, y: 24 }}
-      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
-      transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+      initial={rest}
+      animate={inView ? shown : rest}
+      transition={reduce ? { duration: 0 } : { duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       className="block mb-16 cursor-none"
       style={{
-        background:    hovered ? "rgba(0,255,65,0.02)" : "#111",
-        border:        `1px solid ${hovered ? "rgba(0,255,65,0.35)" : "rgba(255,255,255,0.07)"}`,
-        padding:       "2.5rem",
+        background:     hovered ? "var(--color-surface-3)" : "var(--color-surface-2)",
+        border:         `1px solid ${hovered ? "var(--color-hairline-strong)" : "var(--color-hairline)"}`,
+        padding:        "2.5rem",
         textDecoration: "none",
-        transition:    "background 0.25s, border-color 0.25s",
+        transition:     "background 250ms var(--ease-standard), border-color 250ms var(--ease-standard)",
       }}
     >
       {/* Index + status */}
       <div className="flex items-center justify-between mb-8">
         <span
-          style={{
-            fontFamily:    "'JetBrains Mono', monospace",
-            fontSize:      10,
-            color:         "#555",
-            letterSpacing: "0.08em",
-          }}
+          className="font-mono text-[11px]"
+          style={{ color: "var(--color-ink-faint)", fontWeight: 300, letterSpacing: "0.1em" }}
         >
           {project.index} · FEATURED
         </span>
         <span
-          style={{
-            fontFamily: "'JetBrains Mono', monospace",
-            fontSize:   10,
-            color:      STATUS_COLOR[project.status],
-          }}
+          className="font-mono text-[10px]"
+          style={{ color: STATUS_COLOR[project.status], letterSpacing: "0.14em" }}
         >
           <span aria-hidden="true">● </span>{project.status}
         </span>
       </div>
 
-      {/* Name — large display */}
+      {/* Name — display-xl, weight 300 */}
       <p
+        className="font-display"
         style={{
-          fontFamily:    "'Bebas Neue', sans-serif",
-          fontSize:      "clamp(64px, 10vw, 120px)",
-          lineHeight:    0.88,
-          letterSpacing: "0.01em",
-          color:         hovered ? "#00ff41" : "#e8e8e8",
-          transition:    "color 0.2s",
+          fontSize:      "clamp(48px, 8vw, 104px)",
+          fontWeight:    300,
+          lineHeight:    0.94,
+          letterSpacing: "-0.045em",
+          textTransform: "uppercase",
+          color:         "var(--color-ink)",
           marginBottom:  "1.5rem",
         }}
       >
@@ -172,30 +155,31 @@ function FeaturedProject({ project, inView }: { project: Project; inView: boolea
 
       {/* Description */}
       <p
+        className="font-body text-sm"
         style={{
-          fontFamily:   "'Inter', sans-serif",
-          fontSize:     14,
-          color:        "#777",
+          color:        "var(--color-ink-subtle)",
           maxWidth:     480,
-          lineHeight:   1.7,
+          lineHeight:   1.6,
           marginBottom: "1.5rem",
         }}
       >
         {project.desc}
       </p>
 
-      {/* Tags + CTA */}
+      {/* Tags + CTA. Tags live inside a link, so they are interactive and can
+          never be amber. They take the tag-chip treatment instead. */}
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div className="flex flex-wrap gap-2">
-          {project.tags.map(tag => (
+          {project.tags.map((tag) => (
             <span
               key={tag}
+              className="font-mono text-[10px]"
               style={{
-                fontFamily: "'JetBrains Mono', monospace",
-                fontSize:   10,
-                border:     "1px solid rgba(240,180,41,0.3)",
-                color:      "#f0b429",
-                padding:    "2px 8px",
+                border:        "1px solid var(--color-hairline-strong)",
+                color:         "var(--color-ink-subtle)",
+                letterSpacing: "0.14em",
+                borderRadius:  "var(--radius-xs)",
+                padding:       "2px 8px",
               }}
             >
               {tag}
@@ -204,12 +188,10 @@ function FeaturedProject({ project, inView }: { project: Project; inView: boolea
         </div>
         <motion.span
           animate={{ opacity: hovered ? 1 : 0 }}
+          transition={reduce ? { duration: 0 } : { duration: 0.15 }}
           aria-hidden="true"
-          style={{
-            fontFamily: "'JetBrains Mono', monospace",
-            fontSize:   11,
-            color:      "#00ff41",
-          }}
+          className="font-mono text-[11px]"
+          style={{ color: "var(--color-primary)" }}
         >
           {">> OPEN PROJECT"}
         </motion.span>
@@ -220,58 +202,74 @@ function FeaturedProject({ project, inView }: { project: Project; inView: boolea
 
 // ── ProjectRow ────────────────────────────────────────────────────────────────
 function ProjectRow({
-  index, name, desc, tags, status, href, animIndex, inView, onHoverStart, onHoverEnd,
+  index, name, desc, tags, status, href, animIndex, inView, reduce,
+  onHoverStart, onHoverEnd,
 }: {
   index: string; name: string; desc: string; tags: string[]; status: string;
-  href?: string; animIndex: number; inView: boolean;
+  href?: string; animIndex: number; inView: boolean; reduce: boolean;
   onHoverStart: () => void; onHoverEnd: () => void;
 }) {
   const [hovered, setHovered] = useState(false);
 
+  /* Hover feedback is a surface step plus a borderColor shift. The old
+     `inset 0 -2px 0` box-shadow and its transition are gone. */
   const rowStyle = {
-    background:  hovered ? "rgba(0,255,65,0.02)" : "#111",
-    border:      "1px solid rgba(255,255,255,0.07)",
-    boxShadow:   hovered ? "inset 0 -2px 0 #00ff41" : "inset 0 -2px 0 transparent",
-    transition:  "background 0.2s, box-shadow 0.2s",
+    background: hovered ? "var(--color-surface-1)" : "var(--color-surface-2)",
+    border:     `1px solid ${hovered ? "var(--color-hairline-strong)" : "var(--color-hairline)"}`,
+    transition: "background 200ms var(--ease-standard), border-color 200ms var(--ease-standard)",
+  };
+
+  const rowAnim = {
+    hidden: reduce ? { opacity: 0 } : { opacity: 0, x: -8 },
+    show: (i: number) => ({
+      opacity: 1,
+      x: 0,
+      transition: reduce
+        ? { duration: 0 }
+        : { duration: 0.55, delay: Math.min(i, 4) * 0.08, ease: [0.22, 1, 0.36, 1] as const },
+    }),
   };
 
   const inner = (
     <>
       <span
-        className="text-xs shrink-0 min-w-[48px]"
-        style={{ fontFamily: "'JetBrains Mono', monospace", color: "#555" }}
+        className="font-mono text-[11px] shrink-0 min-w-[48px]"
+        style={{ color: "var(--color-ink-faint)", fontWeight: 300, letterSpacing: "0.1em" }}
       >
         {index}
       </span>
 
       <div className="flex-1 min-w-0">
         <p
-          className="text-2xl leading-tight"
+          className="font-display"
           style={{
-            fontFamily: "'Bebas Neue', sans-serif",
-            color:      hovered ? "#00ff41" : "#e8e8e8",
-            transition: "color 0.15s",
+            fontSize:      "24px",
+            fontWeight:    400,
+            lineHeight:    1.1,
+            letterSpacing: "-0.02em",
+            color:         "var(--color-ink)",
           }}
         >
           {name}
         </p>
         <p
-          className="text-xs leading-relaxed mt-0.5"
-          style={{ fontFamily: "'Inter', sans-serif", color: "#777" }}
+          className="font-body text-sm leading-relaxed mt-1"
+          style={{ color: "var(--color-ink-subtle)" }}
         >
           {desc}
         </p>
       </div>
 
       <div className="hidden sm:flex flex-wrap gap-1.5 justify-end max-w-[260px] shrink-0">
-        {tags.map(tag => (
+        {tags.map((tag) => (
           <span
             key={tag}
-            className="text-[10px] px-2 py-0.5"
+            className="font-mono text-[10px] px-2 py-0.5"
             style={{
-              fontFamily: "'JetBrains Mono', monospace",
-              border:     "1px solid rgba(240,180,41,0.3)",
-              color:      "#f0b429",
+              border:        "1px solid var(--color-hairline-strong)",
+              color:         "var(--color-ink-subtle)",
+              letterSpacing: "0.14em",
+              borderRadius:  "var(--radius-xs)",
             }}
           >
             {tag}
@@ -281,10 +279,10 @@ function ProjectRow({
 
       <div className="flex items-center gap-3 shrink-0 justify-end" style={{ minWidth: "80px" }}>
         <span
-          className="text-xs whitespace-nowrap"
+          className="font-mono text-[10px] whitespace-nowrap"
           style={{
-            fontFamily: "'JetBrains Mono', monospace",
-            color:      STATUS_COLOR[status] ?? "#00ff41",
+            color:         STATUS_COLOR[status] ?? "var(--color-ink-subtle)",
+            letterSpacing: "0.14em",
           }}
         >
           <span aria-hidden="true">● </span>{status}
@@ -294,10 +292,10 @@ function ProjectRow({
             <motion.span
               key="open"
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              transition={{ duration: 0.15 }}
+              transition={reduce ? { duration: 0 } : { duration: 0.15 }}
               aria-hidden="true"
-              className="text-xs whitespace-nowrap hidden md:inline"
-              style={{ fontFamily: "'JetBrains Mono', monospace", color: "#00ff41" }}
+              className="font-mono text-[11px] whitespace-nowrap hidden md:inline"
+              style={{ color: "var(--color-primary)" }}
             >
               {">> OPEN"}
             </motion.span>
@@ -306,10 +304,10 @@ function ProjectRow({
             <motion.span
               key="link-soon"
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              transition={{ duration: 0.15 }}
+              transition={reduce ? { duration: 0 } : { duration: 0.15 }}
               aria-hidden="true"
-              className="text-xs whitespace-nowrap hidden md:inline"
-              style={{ fontFamily: "'JetBrains Mono', monospace", color: "#f0b429" }}
+              className="font-mono text-[11px] whitespace-nowrap hidden md:inline"
+              style={{ color: "var(--color-ink-subtle)" }}
             >
               [LINK_SOON]
             </motion.span>
@@ -320,14 +318,15 @@ function ProjectRow({
   );
 
   const sharedProps = {
-    custom:    animIndex,
-    variants:  rowAnim,
-    initial:   "hidden" as const,
-    animate:   inView ? ("show" as const) : ("hidden" as const),
+    custom:       animIndex,
+    variants:     rowAnim,
+    initial:      "hidden" as const,
+    animate:      inView ? ("show" as const) : ("hidden" as const),
+    whileHover:   reduce ? undefined : { x: 8 },
+    transition:   { type: "spring" as const, stiffness: 400, damping: 30 },
     onMouseEnter: () => { setHovered(true);  onHoverStart(); },
     onMouseLeave: () => { setHovered(false); onHoverEnd(); },
-    className: "flex items-center gap-4 px-5 py-4",
-    style:     rowStyle,
+    style:        rowStyle,
   };
 
   if (href) {
@@ -355,6 +354,7 @@ function ProjectRow({
 export default function Work() {
   const ref    = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
+  const reduce = !!useReducedMotion();
 
   const [hoveredProject, setHoveredProject] = useState<Project | null>(null);
   const [cursor, setCursor]                 = useState({ x: 0, y: 0 });
@@ -367,26 +367,27 @@ export default function Work() {
     <section
       id="work"
       ref={ref}
-      className="py-20 md:py-32 px-6 border-t border-white/[0.04]"
+      className="py-16 md:py-32 px-6"
+      style={{ borderTop: "1px solid var(--color-hairline)" }}
       onMouseMove={handleMouseMove}
     >
       <div className="max-w-6xl mx-auto">
 
-        {/* Section header */}
+        {/* Section eyebrow — structural label, amber */}
         <p
-          className="text-xs mb-12 tracking-widest"
-          style={{ fontFamily: "'JetBrains Mono', monospace", color: "#f0b429" }}
+          className="font-mono text-[11px] uppercase mb-12"
+          style={{ color: "var(--color-label)", letterSpacing: "0.22em" }}
         >
           {">"} PROJECT_REGISTRY
         </p>
 
         {/* Featured hero */}
-        <FeaturedProject project={products[0]} inView={inView} />
+        <FeaturedProject project={products[0]} inView={inView} reduce={reduce} />
 
         {/* Products index */}
         <p
-          className="text-xs mb-4 tracking-widest"
-          style={{ fontFamily: "'JetBrains Mono', monospace", color: "#f0b429" }}
+          className="font-mono text-[11px] uppercase mb-4"
+          style={{ color: "var(--color-label)", letterSpacing: "0.22em" }}
         >
           {"// PRODUCTS [05]"}
         </p>
@@ -397,6 +398,7 @@ export default function Work() {
               {...p}
               animIndex={i}
               inView={inView}
+              reduce={reduce}
               onHoverStart={() => setHoveredProject(p)}
               onHoverEnd={() => setHoveredProject(null)}
             />
@@ -405,8 +407,8 @@ export default function Work() {
 
         {/* Consulting index */}
         <p
-          className="text-xs mb-4 mt-12 tracking-widest"
-          style={{ fontFamily: "'JetBrains Mono', monospace", color: "#f0b429" }}
+          className="font-mono text-[11px] uppercase mb-4 mt-12"
+          style={{ color: "var(--color-label)", letterSpacing: "0.22em" }}
         >
           {"// CONSULTING [03]"}
         </p>
@@ -415,8 +417,9 @@ export default function Work() {
             <ProjectRow
               key={p.index}
               {...p}
-              animIndex={products.length + i}
+              animIndex={i}
               inView={inView}
+              reduce={reduce}
               onHoverStart={() => setHoveredProject(p)}
               onHoverEnd={() => setHoveredProject(null)}
             />
@@ -430,10 +433,10 @@ export default function Work() {
         {hoveredProject && (
           <motion.div
             key={hoveredProject.index}
-            initial={{ opacity: 0, scale: 0.94, y: 8 }}
-            animate={{ opacity: 1, scale: 1,    y: 0 }}
-            exit={{    opacity: 0, scale: 0.94, y: 8 }}
-            transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+            initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.94, y: 8 }}
+            animate={reduce ? { opacity: 1 } : { opacity: 1, scale: 1, y: 0 }}
+            exit={reduce    ? { opacity: 0 } : { opacity: 0, scale: 0.94, y: 8 }}
+            transition={reduce ? { duration: 0 } : { duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
             style={{
               position:      "fixed",
               left:          cursor.x + 20,
@@ -441,58 +444,63 @@ export default function Work() {
               zIndex:        200,
               pointerEvents: "none",
               width:         220,
-              background:    "#111",
-              border:        `1px solid ${hoveredProject.accent}`,
-              overflow:      "hidden",
+              /* preview-card: surface-2 fill, hairline-strong border, 8px inset
+                 frame so the screenshot reads as a mounted plate. No radius. */
+              background:    "var(--color-surface-2)",
+              border:        "1px solid var(--color-hairline-strong)",
+              padding:       "8px",
             }}
           >
-            {hoveredProject.previewImg ? (
-              <>
-                {/* Screenshot with gradient overlay */}
-                <div style={{ position: "relative", height: 130 }}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={hoveredProject.previewImg}
-                    alt=""
-                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                  />
-                  <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, #111 0%, transparent 55%)" }} />
-                  <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "0.6rem 0.75rem" }}>
-                    <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: hoveredProject.accent, letterSpacing: "0.1em", marginBottom: 2 }}>
-                      {hoveredProject.index}
-                    </p>
-                    <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 24, color: "#e8e8e8", lineHeight: 1 }}>
-                      {hoveredProject.name}
-                    </p>
-                  </div>
-                </div>
-                {/* Tags below image */}
-                <div style={{ padding: "0.5rem 0.75rem 0.75rem", display: "flex", flexWrap: "wrap", gap: 4 }}>
-                  {hoveredProject.tags.slice(0, 3).map(t => (
-                    <span key={t} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, border: "1px solid rgba(255,255,255,0.1)", color: "#555", padding: "1px 6px" }}>
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </>
-            ) : (
-              /* Text-only card */
-              <div style={{ padding: "1.25rem" }}>
-                <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: hoveredProject.accent, letterSpacing: "0.1em", marginBottom: 6 }}>
-                  {hoveredProject.index}
-                </p>
-                <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 28, color: "#e8e8e8", lineHeight: 1, marginBottom: 10 }}>
-                  {hoveredProject.name}
-                </p>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
-                  {hoveredProject.tags.slice(0, 3).map(t => (
-                    <span key={t} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, border: "1px solid rgba(255,255,255,0.1)", color: "#555", padding: "1px 6px" }}>
-                      {t}
-                    </span>
-                  ))}
-                </div>
+            {hoveredProject.previewImg && (
+              /* 16:10 plate, explicit dimensions so it cannot shift layout */
+              <div style={{ position: "relative", width: 204, height: 128, overflow: "hidden" }}>
+                <Image
+                  src={hoveredProject.previewImg}
+                  alt=""
+                  width={204}
+                  height={128}
+                  style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                />
               </div>
             )}
+
+            <div style={{ paddingTop: hoveredProject.previewImg ? "0.6rem" : 0 }}>
+              <p
+                className="font-mono text-[10px]"
+                style={{ color: "var(--color-ink-faint)", letterSpacing: "0.1em", marginBottom: 4 }}
+              >
+                {hoveredProject.index}
+              </p>
+              <p
+                className="font-display"
+                style={{
+                  fontSize:      20,
+                  fontWeight:    400,
+                  lineHeight:    1.2,
+                  letterSpacing: "-0.01em",
+                  color:         "var(--color-ink)",
+                  marginBottom:  8,
+                }}
+              >
+                {hoveredProject.name}
+              </p>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+                {hoveredProject.tags.slice(0, 3).map((t) => (
+                  <span
+                    key={t}
+                    className="font-mono text-[10px]"
+                    style={{
+                      border:       "1px solid var(--color-hairline-strong)",
+                      color:        "var(--color-ink-subtle)",
+                      borderRadius: "var(--radius-xs)",
+                      padding:      "1px 6px",
+                    }}
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

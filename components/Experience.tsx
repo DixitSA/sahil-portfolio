@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 const experiences = [
@@ -42,32 +42,35 @@ const experiences = [
   },
 ];
 
-// ── Animation ─────────────────────────────────────────────────────────────────
-const entryAnim = {
-  hidden: { opacity: 0, x: -8 },
-  show: (i: number) => ({
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.6, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] as const },
-  }),
-};
-
 export default function Experience() {
   const ref    = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
+  const reduce = useReducedMotion();
+
+  const entryAnim = {
+    hidden: reduce ? { opacity: 0 } : { opacity: 0, x: -8 },
+    show: (i: number) => ({
+      opacity: 1,
+      x: 0,
+      transition: reduce
+        ? { duration: 0 }
+        : { duration: 0.6, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] as const },
+    }),
+  };
 
   return (
     <section
       id="experience"
       ref={ref}
-      className="py-24 md:py-40 px-6 border-t border-white/[0.04]"
+      className="py-16 md:py-32 px-6"
+      style={{ borderTop: "1px solid var(--color-hairline)" }}
     >
       <div className="max-w-6xl mx-auto">
 
-        {/* Section header */}
+        {/* Section eyebrow — structural label, amber */}
         <p
-          className="text-xs mb-12 tracking-widest"
-          style={{ fontFamily: "'JetBrains Mono', monospace", color: "#f0b429" }}
+          className="font-mono text-[11px] uppercase mb-12"
+          style={{ color: "var(--color-label)", letterSpacing: "0.22em" }}
         >
           {">"} WORK_HISTORY
         </p>
@@ -82,32 +85,38 @@ export default function Experience() {
                 initial="hidden"
                 animate={inView ? "show" : "hidden"}
                 style={{
-                  background: exp.accent ? "rgba(0,255,65,0.02)" : "#111",
+                  /* Emphasis comes from a surface step and a stronger hairline.
+                     Green is reserved for live state, so it is not used here. */
+                  background: "var(--color-surface-2)",
                   border:     exp.accent
-                    ? "1px solid rgba(0,255,65,0.25)"
-                    : "1px solid rgba(255,255,255,0.06)",
+                    ? "1px solid var(--color-hairline-strong)"
+                    : "1px solid var(--color-hairline)",
                   padding: "2.5rem",
                 }}
               >
-                {/* Company name — display type */}
+                {/* Company name — display type at weight 300 */}
                 <p
+                  className="font-display"
                   style={{
-                    fontFamily: "'Bebas Neue', sans-serif",
-                    fontSize:   "clamp(28px, 4vw, 38px)",
-                    lineHeight: 1,
-                    color:      exp.accent ? "#e8e8e8" : "#aaa",
-                    letterSpacing: "0.02em",
+                    fontSize:      "clamp(24px, 3.4vw, 34px)",
+                    fontWeight:    300,
+                    lineHeight:    1,
+                    letterSpacing: "-0.035em",
+                    textTransform: "uppercase",
+                    color:         exp.accent ? "var(--color-ink)" : "var(--color-ink-muted)",
                   }}
                 >
                   {exp.company}
                 </p>
 
-                {/* Role + period — monospace subline */}
-                <p
-                  className="text-[11px] tracking-wider mt-1.5 mb-5"
-                  style={{ fontFamily: "'JetBrains Mono', monospace", color: "#f0b429" }}
-                >
-                  [{exp.period}] · {exp.role}
+                {/* Period is a structural label (amber). The role is content (ink). */}
+                <p className="font-mono text-[11px] mt-1.5 mb-5">
+                  <span style={{ color: "var(--color-label)", letterSpacing: "0.1em" }}>
+                    [{exp.period}]
+                  </span>
+                  <span style={{ color: "var(--color-ink-subtle)" }}>
+                    {" "}· {exp.role}
+                  </span>
                 </p>
 
                 {/* Bullets */}
@@ -115,14 +124,13 @@ export default function Experience() {
                   {exp.bullets.map((bullet, j) => (
                     <li
                       key={`${exp.id}-${j}`}
-                      className="text-sm leading-relaxed"
+                      className="font-body text-sm leading-relaxed"
                       style={{
-                        fontFamily: "'Inter', sans-serif",
-                        color:      j === 0 ? "#cccccc" : "#555",
+                        color:      j === 0 ? "var(--color-ink-muted)" : "var(--color-ink-subtle)",
                         fontWeight: j === 0 ? 500 : 400,
                       }}
                     >
-                      {j === 0 ? "▸  " : "→  "}{bullet}
+                      <span aria-hidden="true">{j === 0 ? "▸  " : "→  "}</span>{bullet}
                     </li>
                   ))}
                 </ul>
@@ -132,7 +140,7 @@ export default function Experience() {
               {i < experiences.length - 1 && (
                 <div
                   style={{
-                    borderTop: "1px dashed rgba(255,255,255,0.06)",
+                    borderTop: "1px dashed var(--color-hairline)",
                     margin:    "2rem 0",
                   }}
                 />
