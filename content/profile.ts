@@ -7,10 +7,19 @@ export const profile: Profile = {
   email: "sahild1230@gmail.com",
   github: "https://github.com/DixitSA",
   available: true,
+  /**
+   * A thesis, not a second copy of the resume.
+   *
+   * The resume already lists what was done. This says what the work is for and
+   * why the combination is unusual, which is the thing a hiring manager cannot
+   * get from a bullet list. Every claim still resolves to something on the
+   * resume, so the two never contradict each other.
+   */
   bio: [
-    "Strategy and management consultant at Bank of America, working on the Consumer & Small Business side. The 3-year strategic plan I help shape covers a bank serving roughly 69 million clients.",
-    "Most of the work sits where AI governance meets execution: regulatory responses for AI/ML models under active model-risk review, evidence coordinated across three enterprise systems, and a Copilot prompt framework that took ad-hoc slide turnaround from hours to about 15 minutes.",
-    "Outside the day job I ship. Kaal is a Vedic astrology decision app live on web and iOS at 277 commits. Axira runs 3 LLM agents through an outreach pipeline on a home server at roughly $0 of infrastructure.",
+    "Most AI programs die in the gap between what a model can do and what an institution can defend. I work in that gap.",
+    "At Bank of America I sit between Consumer & Small Business strategy and AI/ML model-risk governance: helping shape a 3-year plan for a bank of roughly 69 million clients, and carrying AI complaint-handling models through active model risk review. The hard part is rarely the model. It is getting the people who own the math and the people who own the liability to describe the same system the same way, fast enough to matter.",
+    "I build at night because I do not think you can govern systems you have never shipped. Kaal is a decision engine live on web and iOS that is deliberately deterministic rather than generative, because a product people return to cannot contradict itself. Axira runs three LLM agents through an outreach pipeline behind a human approval gate, on a home server costing close to nothing.",
+    "I am most useful where finance, regulation, and working software all have to agree with each other.",
   ],
   education: {
     school: "Virginia Commonwealth University",
