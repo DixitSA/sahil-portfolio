@@ -228,6 +228,21 @@ body::before {
   will-change: transform;
 }
 
+/* ── Lock screen dismissal ──────────────────────────────────────────
+   The unmount is driven by a timeout, not by this animation finishing, so
+   a fade that never runs cannot strand the lock screen over the site.
+   ──────────────────────────────────────────────────────────────────── */
+@keyframes lock-leave {
+  to { opacity: 0; transform: scale(1.04); }
+}
+.lock-leave {
+  animation: lock-leave 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lock-leave { animation: none; opacity: 0; }
+}
+
 /* ── iOS view transitions ────────────────────────────────────────────
    CSS, not JS. A JS-driven transition that stalls can leave the incoming
    view unmounted, which blanks the screen on navigation. A keyframe

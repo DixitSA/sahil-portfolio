@@ -671,6 +671,26 @@ everything else that is true about the owner.
 The stack is hidden below the `lg` breakpoint, where the springboard owns the
 screen.
 
+### Lock screens
+
+macOS on a desktop, iOS on a phone. The two platforms lock differently, and
+copying one onto the other is the kind of detail that gives a simulation away.
+
+- **macOS**: date, large clock, account avatar, name, click to unlock.
+- **iOS**: padlock, date, an enormous light-weight clock, swipe up to open, and
+  a home indicator. No account. iOS does not show one.
+
+Both dismiss on a tap, a key, or an upward swipe, auto-dismiss on a timer, run
+on the first visit only, and never appear on a deep link.
+
+Dismissal is deliberately not an `AnimatePresence` exit. An exit animation that
+stalls leaves the lock screen mounted over the entire site with no way past it,
+which is the same failure that broke mobile navigation. The fade is a CSS class
+and the unmount is a timeout, so the two cannot deadlock.
+
+The iOS lock screen is the one place the site draws a home indicator, because
+it covers the real one. Everywhere else the phone draws its own.
+
 ### Guiding the visitor
 
 A desktop is only intuitive to people who already know desktops. Two things
