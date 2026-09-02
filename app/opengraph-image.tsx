@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { SITE_HOST } from "@/lib/site";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -70,7 +71,7 @@ export default function Image() {
             letterSpacing: 2,
           }}
         >
-          sahildixit.dev
+          {SITE_HOST}
         </div>
       </div>
     ),

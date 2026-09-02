@@ -1,6 +1,7 @@
 import { profile, projects } from "@/content";
+import { SITE_URL } from "@/lib/site";
 
-const BASE = "https://sahildixit.dev";
+const BASE = SITE_URL;
 
 /**
  * Person + CreativeWork structured data. A recruiter's first contact with

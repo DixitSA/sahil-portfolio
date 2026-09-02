@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { SITE_URL } from "@/lib/site";
 import { Geist, JetBrains_Mono, Playfair_Display, Quattrocento_Sans } from "next/font/google";
 import "./globals.css";
 
@@ -68,7 +69,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://sahildixit.dev"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Sahil Dixit — Strategist. Builder.",
     template: "%s",

@@ -1,7 +1,8 @@
 import type { MetadataRoute } from "next";
 import { projects, roles } from "@/content";
+import { SITE_URL } from "@/lib/site";
 
-const BASE = "https://sahildixit.dev";
+const BASE = SITE_URL;
 
 /**
  * Every window in the OS owns a real, indexable route. If a surface is not
