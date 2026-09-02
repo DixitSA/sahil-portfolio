@@ -2,17 +2,20 @@
 import type { CSSProperties } from "react";
 
 const items = [
-  { ticker: "SCRIBE",            tag: "AI"         },
-  { ticker: "TRACE",             tag: "COMPLIANCE" },
-  { ticker: "AXIRA_LITE",        tag: "SAAS"       },
-  { ticker: "VIBEQUEUE",         tag: "CONSUMER"   },
-  { ticker: "KAAL",              tag: "FINTECH"    },
-  { ticker: "POLYMARKET_TRADER", tag: "AUTOMATION" },
-  { ticker: "SQL",               tag: null         },
-  { ticker: "PYTHON",            tag: null         },
-  { ticker: "NEXT.JS",           tag: null         },
-  { ticker: "PRISMA",            tag: null         },
-  { ticker: "TWILIO",            tag: null         },
+  { ticker: "AXIRA",             tag: "MULTI_AGENT" },
+  { ticker: "KAAL",              tag: "WEB+IOS"     },
+  { ticker: "VIBEQUEUE",         tag: "CONSUMER"    },
+  { ticker: "MANIFEST",          tag: "LOGISTICS"   },
+  { ticker: "POLYMARKET_TRADER", tag: "AUTOMATION"  },
+  { ticker: "MODEL_RISK",        tag: "GOVERNANCE"  },
+  { ticker: "SQL",               tag: null          },
+  { ticker: "PYTHON",            tag: null          },
+  { ticker: "R",                 tag: null          },
+  { ticker: "SAS",               tag: null          },
+  { ticker: "TABLEAU",           tag: null          },
+  { ticker: "POWER_BI",          tag: null          },
+  { ticker: "NEXT.JS",           tag: null          },
+  { ticker: "TYPESCRIPT",        tag: null          },
 ];
 
 const MONO: CSSProperties = {

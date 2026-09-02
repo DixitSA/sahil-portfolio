@@ -12,16 +12,16 @@ const experiences = [
     period:  "2025–PRESENT",
     accent:  true,
     bullets: [
-      "Coordinated AI integration across 3 initiatives (SCRIBE, TRACE, CRU), managing ~8 regulatory responses and ~30 model-level submissions",
-      "Completed ~80% of audit and regulatory submissions ahead of deadline during active model risk reviews",
-      "Analyzed Consumer Bank performance and market trends to support a 3-year strategic plan — revenue trajectory, competitive gaps, risk scenarios",
-      "Pulled together analysis from across the org into planning decks and Investor Day messaging",
+      "Delivered ~8 regulatory responses and ~30 model-level submissions ~80% ahead of deadline for AI/ML complaint-handling models under active model-risk review, coordinating audit and exam evidence across three enterprise systems",
+      "Cut ad-hoc slide turnaround from hours to ~15 minutes with a governed generative-AI prompt framework that turns rough inputs into source-backed executive slides, adopted teamwide",
+      "Prioritized growth opportunities and key risks in a 3-year strategic plan for a ~69MM-client Consumer Bank, diagnosing performance, market trends, and customer dynamics for senior leadership",
+      "Built an executive dashboard giving leadership real-time visibility into testing scope, progress, and control gaps across 3 AI complaint workstreams",
     ],
   },
   {
     id:      "capital-one",
     company: "CAPITAL ONE",
-    role:    "Business Analyst Intern, Retail Banking",
+    role:    "Business Analyst, Retail Banking",
     period:  "2024",
     accent:  false,
     bullets: [

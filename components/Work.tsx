@@ -19,31 +19,31 @@ type Project = {
 const products: Project[] = [
   {
     index: "P01",
-    name:  "AxiraLite",
-    desc:  "SMS-powered retention SaaS for physical retail. Automated re-engagement campaigns.",
-    tags:  ["Next.js", "Prisma", "Twilio", "Stripe"],
+    name:  "Axira",
+    desc:  "Multi-agent outreach automation. Three LLM agents orchestrated across research, drafting, and follow-up in one pipeline, with a human-in-the-loop approval gate. Runs on ~$0 infrastructure via a headless home server.",
+    tags:  ["Python", "LLM Orchestration", "Self-hosted Linux"],
     status: "LIVE",
     href:  "https://github.com/DixitSA/axira-lite",
     accent: "#00ff41",
   },
   {
     index: "P02",
+    name:  "Kaal",
+    desc:  "Vedic astrology decision app, shipped to production on web and iOS. Local-first deterministic chart computation across 17 modules and 277 commits, turning raw chart state into preset guidance.",
+    tags:  ["Next.js", "TypeScript", "Python", "Capacitor"],
+    status: "LIVE",
+    href:       "https://getkaal.com",
+    accent:     "#f0b429",
+    previewImg: "/previews/kaal-dashboard.png",
+  },
+  {
+    index: "P03",
     name:  "VibeQueue",
     desc:  "Lets bar patrons queue songs to the venue's Spotify. Jukebox reimagined.",
     tags:  ["Next.js", "Firebase", "Spotify API"],
     status: "LIVE",
     href:  "https://github.com/DixitSA/VibeQueue",
     accent: "#00ff41",
-  },
-  {
-    index: "P03",
-    name:  "Kaal",
-    desc:  "Deterministic Vedic astrology API. Give it a birth chart, get structured guidance across career, health, and relationships.",
-    tags:  ["Next.js", "TypeScript", "Capacitor"],
-    status: "LIVE",
-    href:       "https://github.com/DixitSA/kaal",
-    accent:     "#f0b429",
-    previewImg: "/previews/kaal-dashboard.png",
   },
   {
     index: "P04",
@@ -67,25 +67,25 @@ const products: Project[] = [
 const consulting: Project[] = [
   {
     index: "C01",
-    name:  "SCRIBE",
-    desc:  "AI tool that summarizes consumer complaints for regulatory filings — supported ~30 model submissions.",
-    tags:  ["AI", "LLM", "Compliance"],
+    name:  "Complaints AI Integration",
+    desc:  "Coordinated model-risk governance across 3 AI complaint-handling workstreams. Delivered ~30 model-level submissions and ~8 regulatory responses, ~80% ahead of deadline.",
+    tags:  ["AI/ML Governance", "Model Risk", "Regulatory"],
     status: "ACTIVE",
     accent: "#00ff41",
   },
   {
     index: "C02",
-    name:  "TRACE",
-    desc:  "LLM tool that generates audit trails for regulatory filings — used in ~8 formal responses.",
-    tags:  ["AI", "Audit", "Regulatory"],
+    name:  "Governed GenAI Slide Framework",
+    desc:  "Cut ad-hoc slide turnaround from hours to ~15 minutes with a governed prompt framework that turns rough inputs into source-backed executive slides. Adopted teamwide.",
+    tags:  ["Generative AI", "Prompt Engineering", "Workflow"],
     status: "ACTIVE",
     accent: "#00ff41",
   },
   {
     index: "C03",
-    name:  "CRU",
-    desc:  "NLP-based complaint triage. ~80% of submissions completed ahead of deadline.",
-    tags:  ["NLP", "Compliance", "Operations"],
+    name:  "Consumer Bank Strategy",
+    desc:  "Prioritized growth opportunities and key risks in a 3-year strategic plan for a ~69MM-client Consumer Bank. Shaped Investor Day messaging for senior leadership.",
+    tags:  ["Strategy", "Market Analysis", "Executive Comms"],
     status: "ACTIVE",
     accent: "#00ff41",
   },
@@ -117,7 +117,7 @@ function FeaturedProject({ project, inView }: { project: Project; inView: boolea
       href={project.href}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label={`Open ${project.name} on GitHub`}
+      aria-label={`Open ${project.name} (opens in a new tab)`}
       initial={{ opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
       transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
@@ -337,7 +337,7 @@ function ProjectRow({
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label={`Open ${name} on GitHub`}
+        aria-label={`Open ${name} (opens in a new tab)`}
         className="flex items-center gap-4 px-5 py-4 cursor-none"
       >
         {inner}
@@ -388,7 +388,7 @@ export default function Work() {
           className="text-xs mb-4 tracking-widest"
           style={{ fontFamily: "'JetBrains Mono', monospace", color: "#f0b429" }}
         >
-          // PRODUCTS [05]
+          {"// PRODUCTS [05]"}
         </p>
         <div className="flex flex-col gap-2">
           {products.map((p, i) => (
@@ -408,7 +408,7 @@ export default function Work() {
           className="text-xs mb-4 mt-12 tracking-widest"
           style={{ fontFamily: "'JetBrains Mono', monospace", color: "#f0b429" }}
         >
-          // CONSULTING [03]
+          {"// CONSULTING [03]"}
         </p>
         <div className="flex flex-col gap-2">
           {consulting.map((p, i) => (

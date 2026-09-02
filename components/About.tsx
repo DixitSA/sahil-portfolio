@@ -14,7 +14,7 @@ const kvPairs = [
 // ── Right panel stats (3 items — first spans full width) ─────────────────────
 const stats = [
   { label: "AI_INITIATIVES",   num: "03",   sub: "AI COMPLIANCE TOOLS",        wide: true  },
-  { label: "PRODUCTS_SHIPPED", num: "05",   sub: "FINTECH & CONSUMER",         wide: false },
+  { label: "PRODUCTS_SHIPPED", num: "04",   sub: "LIVE, WEB & IOS",            wide: false },
   { label: "ON_TIME_RATE",     num: "~80%", sub: "REGULATORY SUBMISSIONS",     wide: false },
 ];
 
@@ -67,10 +67,11 @@ export default function About() {
               className="text-sm leading-7"
               style={{ fontFamily: "'Inter', sans-serif", color: "#9a9a9a" }}
             >
-              Strategy &amp; Management Consultant at Bank of America, focused on AI
-              regulatory compliance and consumer bank strategy. I studied Financial Technology
-              with a Statistics minor at VCU. Outside of work, I build and ship fintech and
-              consumer products.
+              Strategy &amp; Management Consultant at Bank of America. I support a 3-year
+              growth plan for a ~69MM-client Consumer Bank and AI/ML model-risk governance
+              across 3 complaint-handling workstreams. B.S. in Financial Technology with a
+              Statistics minor at VCU, 3.7 GPA. Outside of work I build and ship products:
+              multi-agent LLM systems and a Vedic astrology decision app live on web and iOS.
             </p>
 
             {/* Dashed divider */}
