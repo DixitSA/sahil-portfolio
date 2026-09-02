@@ -635,6 +635,36 @@ Glyphs (`x`, `−`, `⤢`) appear inside the dots only on hover of the traffic-l
 
 Recoloring them to the site palette was considered and rejected: a macOS window with green, green, and green traffic lights reads as a knockoff. Quoting a convention exactly is stronger than half-adopting it.
 
+### Widgets
+
+A Big Sur-style column on the left of the desktop. Two tiles, not a dashboard.
+
+**Kaal.** Runs a real chart against the production Kaal engine: a visitor types
+a birth date, time and place, and gets back the computed moon sign, nakshatra,
+lagna and sidereal sun. It is the product running on the portfolio rather than a
+screenshot of it, which is the one proof-of-shipping claim nobody can fake.
+
+It ends in a link rather than a full reading. Kaal's interpretation endpoint is
+authenticated, and that is correct: the computation is the proof, the reading is
+the thing being sold. The widget stops exactly where the product begins.
+
+It ships with a sample chart already answered, because a widget that demands
+input before showing anything is one most visitors skip.
+
+Requests go through `app/api/kaal/[...path]`, a server proxy with an explicit
+two-route allowlist. That removes any dependence on Kaal's CORS policy, keeps a
+third-party origin out of the visitor's network tab, and means the portfolio
+cannot be used as an open relay to the authenticated parts of the API. Charts
+are never cached: they are personal to whoever typed them in, and nothing is
+stored.
+
+**Now.** What is being worked on this month, dated. Freshness is the one thing a
+static portfolio cannot fake. Content lives in `content/profile.ts` with
+everything else that is true about the owner.
+
+The stack is hidden below the `lg` breakpoint, where the springboard owns the
+screen.
+
 ### Easter eggs
 
 Deliberately unrelated to the work. They exist because an operating system that

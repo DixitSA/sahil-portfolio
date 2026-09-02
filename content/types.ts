@@ -69,6 +69,8 @@ export interface Profile {
     graduated: string;
   };
   stats: { label: string; value: string; sub: string }[];
+  /** "Now" tile. Freshness is the one thing a static portfolio cannot fake. */
+  now?: { updated: string; items: string[] };
   skills: { group: string; items: string[] }[];
 }
 

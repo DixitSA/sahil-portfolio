@@ -7,6 +7,8 @@ import type { FSNode } from "@/content/types";
 import { useOS } from "@/lib/os/store";
 import DesktopIcon from "./DesktopIcon";
 import WallpaperMenu, { useWallpaper } from "./WallpaperMenu";
+import KaalWidget from "./widgets/KaalWidget";
+import NowWidget from "./widgets/NowWidget";
 import { useOpenWindow, type OpenHandler, type OpenTarget } from "./Dock";
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -150,6 +152,16 @@ export default function Desktop({ onOpen, children }: DesktopProps) {
           );
         })}
       </ul>
+
+      {/* Widget column, the way Big Sur stacks them. Hidden on narrow
+          viewports, where the springboard owns the screen. */}
+      <div
+        className="pointer-events-auto absolute top-[52px] left-6 hidden flex-col gap-3 lg:flex"
+        style={{ zIndex: "var(--z-desktop-icon)" }}
+      >
+        <KaalWidget />
+        <NowWidget />
+      </div>
 
       {children}
 

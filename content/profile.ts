@@ -21,6 +21,14 @@ export const profile: Profile = {
     "I build at night because I do not think you can govern systems you have never shipped. Kaal is a decision engine live on web and iOS that is deliberately deterministic rather than generative, because a product people return to cannot contradict itself. Axira runs three LLM agents through an outreach pipeline behind a human approval gate, on a home server costing close to nothing.",
     "I am most useful where finance, regulation, and working software all have to agree with each other.",
   ],
+  now: {
+    updated: "September 2026",
+    items: [
+      "Carrying a second wave of AI complaint-handling models through model-risk review.",
+      "Rebuilding this site as a working desktop, because a portfolio should demonstrate the thing it claims.",
+      "Teaching Kaal to explain its own reasoning without becoming generative.",
+    ],
+  },
   education: {
     school: "Virginia Commonwealth University",
     degree: "B.S. Financial Technology, Minor in Statistics",
