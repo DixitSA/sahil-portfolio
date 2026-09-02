@@ -198,7 +198,7 @@ export default function MenuBar({ onOpen }: MenuBarProps) {
 
   return (
     <header
-      className="fixed inset-x-0 top-0 flex h-7 items-stretch justify-between px-3"
+      className="fixed inset-x-0 top-0 hidden h-7 items-stretch justify-between px-3 md:flex"
       style={{
         zIndex: "var(--z-menubar)",
         backgroundColor: "var(--color-chrome-menubar)",

@@ -99,7 +99,8 @@ export default function Desktop({ onOpen, children, widgets }: DesktopProps) {
 
     <div
       aria-label="Desktop"
-      className="fixed inset-0"
+      // Desktop chrome only. MobileShell replaces all of this below 768px.
+      className="fixed inset-0 hidden md:block"
       onContextMenu={(event) => {
         event.preventDefault();
         setMenuAt({ x: event.clientX, y: event.clientY });

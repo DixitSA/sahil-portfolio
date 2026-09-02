@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, JetBrains_Mono, Playfair_Display, Quattrocento_Sans } from "next/font/google";
 import "./globals.css";
 
@@ -13,6 +13,7 @@ import Dock from "@/components/os/Dock";
 import Spotlight from "@/components/os/Spotlight";
 import Screensaver from "@/components/os/Screensaver";
 import Hints from "@/components/os/Hints";
+import MobileShell from "@/components/os/MobileShell";
 import DraggableWidget from "@/components/os/widgets/DraggableWidget";
 import NowWidget from "@/components/os/widgets/NowWidget";
 import WatchingWidget from "@/components/os/widgets/WatchingWidget";
@@ -55,6 +56,16 @@ const quattrocento = Quattrocento_Sans({
   variable: "--font-kaal-sans",
   display: "swap",
 });
+
+/* viewportFit cover lets the iOS shell paint into the safe areas and then pad
+   itself back out with env(), which is what stops content sitting under the
+   notch or the home indicator. */
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#0b0a14",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://sahildixit.dev"),
@@ -142,6 +153,17 @@ export default function RootLayout({
               ]}
             />
           </main>
+
+          <MobileShell
+            widgets={
+              <>
+                <NowWidget />
+                <WatchingWidget />
+              </>
+            }
+          >
+            {children}
+          </MobileShell>
 
           <Dock />
           <MenuBar />

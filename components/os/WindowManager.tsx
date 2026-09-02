@@ -204,10 +204,14 @@ export function WindowManager({
   const compact = useIsCompact();
   const hydrated = useIsHydrated();
 
-  // "/" is the bare desktop and owns no document. Below 768px the desktop
-  // metaphor is dropped, so the document IS the view. Otherwise it exists
-  // only until React takes over.
-  const showDocument = !isRoot && (compact || !hydrated);
+  // "/" is the bare desktop and owns no document. Otherwise the document
+  // exists only until React takes over, which is what keeps the page
+  // readable without JavaScript.
+  //
+  // Below 768px MobileShell owns the whole viewport, so nothing here renders
+  // once hydrated: two shells drawing the same content is what made the icon
+  // grid and the page text overlap on a phone.
+  const showDocument = !isRoot && !hydrated;
 
   return (
     <div

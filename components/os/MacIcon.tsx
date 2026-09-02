@@ -1,3 +1,7 @@
+"use client";
+
+import { useId } from "react";
+
 /**
  * macOS-language icons, drawn here rather than taken from Apple.
  *
@@ -47,7 +51,15 @@ export default function MacIcon({
   name: MacIconName;
   size?: number;
 }) {
-  const id = `mi-${name}`;
+  /**
+   * Unique per instance. Gradient ids used to be `mi-${name}`, so an icon
+   * rendered in two places emitted duplicate ids. References resolve to the
+   * first match in the document, and the desktop copy is display:none on a
+   * phone, where a gradient does not paint. The visible icon then pointed at a
+   * dead gradient and lost every gradient-filled shape, which looked like the
+   * icon had been clipped.
+   */
+  const id = useId();
   const [from, to] = RAMP[name];
 
   return (

@@ -831,11 +831,31 @@ Searches projects, sections, and actions. Enter opens the top result. Escape clo
 
 ### Mobile
 
-**The desktop metaphor does not survive at 375px, and faking it is worse than dropping it.** Draggable windows on a phone are unusable and no one is impressed by a dock they cannot hover.
+Below 768px the desktop metaphor is dropped completely. Draggable windows are
+unusable on a phone and a dock nobody can hover is not worth shipping. What
+replaces it is the direct translation of the same idea, an iOS springboard, so
+the design language carries across rather than being abandoned.
 
-Below 768px the shell degrades to a springboard: a home-screen grid of the same icons, tapping one opens a full-screen "app" view with a back affordance in place of a title bar. Same routes, same content, same tree, no window management. The menu bar collapses to a status strip with the clock and availability dot.
+`MobileShell.tsx` owns the compact viewport entirely. Desktop, MenuBar, Dock,
+Hints and the window layer all stand down below the breakpoint, and the shell
+renders nothing at all above it. That separation is what keeps the desktop
+build untouched by anything done for phones.
 
-This is a real degradation, not a fallback. It should look intentional, because on a phone it is the better interface.
+Two states:
+
+- **Home.** Widgets stacked, then one app grid four across. There is no
+  separate dock: with six destinations a dock repeats four of them directly
+  under the grid, which reads as a rendering bug rather than as iOS.
+- **App.** A translucent nav bar with a back chevron naming the parent route,
+  a centred title, and the route body below. Navigation is hierarchical, so
+  `/work/kaal` goes back to `/work`, not to the home screen.
+
+Safe areas are honoured through `viewport-fit=cover` plus `env()` padding, so
+nothing sits under a notch or a home indicator.
+
+**No fake status bar.** The phone already draws a real one directly above the
+page, and simulating hardware the site does not have is banned everywhere else
+in this document.
 
 ### Accessibility
 
