@@ -29,7 +29,9 @@ export default function Hints() {
 
   return (
     <div
-      className="pointer-events-none fixed inset-x-0 bottom-[92px] hidden justify-center lg:flex"
+      // Clear of the dock tooltips, which rise to about 112px and were being
+      // covered by this bar.
+      className="pointer-events-none fixed inset-x-0 bottom-[136px] hidden justify-center lg:flex"
       style={{ zIndex: "var(--z-dock)" }}
     >
       <div

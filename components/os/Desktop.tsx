@@ -7,8 +7,6 @@ import type { FSNode } from "@/content/types";
 import { useOS } from "@/lib/os/store";
 import DesktopIcon from "./DesktopIcon";
 import WallpaperMenu, { useWallpaper } from "./WallpaperMenu";
-import NowWidget from "./widgets/NowWidget";
-import DraggableWidget from "./widgets/DraggableWidget";
 import { useOpenWindow, type OpenHandler, type OpenTarget } from "./Dock";
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -46,9 +44,14 @@ export interface DesktopProps {
   onOpen?: OpenHandler;
   /** Windows render above the icon layer. */
   children?: ReactNode;
+  /**
+   * Widget column. Passed in from the server layout rather than composed here,
+   * so a widget can be a server component and fetch its own data.
+   */
+  widgets?: ReactNode;
 }
 
-export default function Desktop({ onOpen, children }: DesktopProps) {
+export default function Desktop({ onOpen, children, widgets }: DesktopProps) {
   const activate = useOpenWindow(onOpen);
   const selected = useOS((s) => s.selectedIcon);
   const selectIcon = useOS((s) => s.selectIcon);
@@ -159,9 +162,7 @@ export default function Desktop({ onOpen, children }: DesktopProps) {
         className="pointer-events-auto absolute top-[52px] left-6 hidden flex-col gap-3 lg:flex"
         style={{ zIndex: "var(--z-desktop-icon)" }}
       >
-        <DraggableWidget id="now">
-          <NowWidget />
-        </DraggableWidget>
+        {widgets}
       </div>
 
       {children}

@@ -29,6 +29,21 @@ export const profile: Profile = {
       "Teaching Kaal to explain its own reasoning without becoming generative.",
     ],
   },
+  /**
+   * Sources for the Watching tile. Curated on purpose: a live feed of
+   * arbitrary trending video would eventually surface something you would not
+   * choose to put in front of a recruiter. Picking the channels keeps the
+   * freshness without the surprise.
+   *
+   * Verified against each feed. Note these are the AI and tech channels the
+   * author selected, not a claim about what the owner watches. Swap them.
+   */
+  watching: [
+    { channelId: "UCbfYPyITQ-7l4upoX8nvctg" }, // Two Minute Papers
+    { channelId: "UCJIfeSCssxSC_Dhc5s7woww" }, // Lex Clips
+    { channelId: "UCxIJaCMEptJjxmmQgGFsnCg" }, // YC Root Access
+    { channelId: "UCQ1VQj-37kl2yS_VUhfQHsw" }, // a16z Deep Dives
+  ],
   education: {
     school: "Virginia Commonwealth University",
     degree: "B.S. Financial Technology, Minor in Statistics",

@@ -13,6 +13,9 @@ import Dock from "@/components/os/Dock";
 import Spotlight from "@/components/os/Spotlight";
 import Screensaver from "@/components/os/Screensaver";
 import Hints from "@/components/os/Hints";
+import DraggableWidget from "@/components/os/widgets/DraggableWidget";
+import NowWidget from "@/components/os/widgets/NowWidget";
+import WatchingWidget from "@/components/os/widgets/WatchingWidget";
 import WindowManager from "@/components/os/WindowManager";
 
 import AboutBody from "./about/page";
@@ -101,7 +104,18 @@ export default function RootLayout({
             bar 1000, spotlight 1100, so these must be root-level siblings
             rather than nested inside the window layer.
           */}
-          <Desktop />
+          <Desktop
+            widgets={
+              <>
+                <DraggableWidget id="now">
+                  <NowWidget />
+                </DraggableWidget>
+                <DraggableWidget id="watching">
+                  <WatchingWidget />
+                </DraggableWidget>
+              </>
+            }
+          />
 
           <main id="main">
             <WindowManager
