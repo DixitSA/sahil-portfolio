@@ -9,9 +9,9 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <div className="mx-auto w-full max-w-3xl px-6 py-16">
-      <p className="mb-8 text-[11px] uppercase" style={eyebrow}>
+      <h1 className="mb-8 text-[11px] uppercase" style={eyebrow}>
         {"// ABOUT"}
-      </p>
+      </h1>
 
       {profile.bio.map((para, i) => (
         <p key={i} className="mb-4 max-w-xl" style={body}>

@@ -18,9 +18,9 @@ export default function Page() {
 
   return (
     <div className="mx-auto w-full max-w-3xl px-6 py-16">
-      <p className="mb-8 text-[11px] uppercase" style={eyebrow}>
+      <h1 className="mb-8 text-[11px] uppercase" style={eyebrow}>
         {`// SELECTED WORK [${String(featured.length).padStart(2, "0")}]`}
-      </p>
+      </h1>
 
       <ul className="mb-16 border-t" style={{ borderColor: "var(--color-hairline)" }}>
         {featured.map((p, i) => (

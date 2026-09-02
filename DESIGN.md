@@ -753,49 +753,54 @@ The previous version of this document described a system the code did not implem
 
 ## Divergences from current code
 
-This document is the target, not a description of `master`. The following are known gaps, ordered by leverage.
+Status as of the OS rebuild. This section is the running ledger; update it
+rather than letting it go stale, which is what happened to the version of this
+document that preceded it.
 
-| # | Gap | Location | Effort |
-|---|---|---|---|
-| 1 | Tokens defined in `@theme` but unused; 60+ inline `fontFamily` declarations | all components | M |
-| 2 | 20 hardcoded hex values, incl. 10 unsystematic grays | all components | M |
-| 3 | `#555` carries footer text at 2.66:1, failing AA and AA-large outright | `Footer.tsx:12` | S |
-| 3b | `#777` carries body copy at 4.42:1, just under the 4.5 AA threshold | `Contact.tsx:66`, `Work.tsx:260` | S |
-| 4 | Bebas Neue still set on 11 display elements | 6 components | M |
-| 5 | Inter still set on 7 body elements | 6 components | S |
-| 6 | Fonts load via render-blocking Google Fonts `<link>` rather than the framework font pipeline | `layout.tsx:29` | S |
-| 7 | Amber used interchangeably with green in `Work.tsx`; roles not separated | `Work.tsx` | S |
-| 8 | Section padding at 96px, contract calls for 128px | all sections | S |
-| 9 | `NoTrace.tsx` is orphaned, not imported by `page.tsx` | `NoTrace.tsx` | S |
-| 10 | Framer components do not call `useReducedMotion()` | all animated components | M |
-| 11 | `og.png` referenced in metadata but absent from `public/` | `layout.tsx:17` | S |
-| 12 | 4 of 5+ projects have no screenshot | `Work.tsx` | M |
+### Resolved
 
-### Content truth
-
-Checked against the current resume. These are factual mismatches, and they cost more than any styling gap.
-
-| # | Gap | Location | Effort |
-|---|---|---|---|
-| 13 | Kaal links to a GitHub repo. It is a shipped product at `getkaal.com`, web + iOS, 17 modules, 277 commits | `Work.tsx:43` | S |
-| 14 | Axira described as "SMS-powered retention SaaS for physical retail." Resume describes multi-agent LLM outreach automation: 3 orchestrated agents, human-in-the-loop gate, ~$0 self-hosted infra | `Work.tsx:22` | S |
-| 15 | Capital One role listed as "Business Analyst Intern." Resume says "Business Analyst, Retail Banking" | `Experience.tsx:24` | S |
-| 16 | Resume metrics absent from the site: ~69MM-client Consumer Bank, ~8 regulatory responses, ~30 model-level submissions ~80% ahead of deadline, 3 AI workstreams, slide turnaround hours to ~15 min, ~10% premium reduction across 7 clients | `About.tsx`, `Experience.tsx` | M |
-| 17 | Site lists 5+ projects; resume curates to 2. Consider demoting the weaker three so the strong two carry the page | `Work.tsx` | S |
-
-### OS shell (not yet built)
-
-| # | Gap | Effort |
+| # | Was | Resolved by |
 |---|---|---|
-| 18 | Route-driven window state. Every window needs a real server-rendered route | L |
-| 19 | Window manager: focus stack, drag, resize, minimize, zoom, close | L |
-| 20 | Menu bar with live clock and availability status | M |
-| 21 | Dock with transform-only magnification and running indicators | M |
-| 22 | Spotlight command palette on Cmd+K | M |
-| 23 | Desktop icons reading from a shared content tree | M |
-| 24 | Mobile springboard degradation below 768px | M |
-| 25 | Boot sequence gated to first visit only, skipped on deep links | S |
-| 26 | Keyboard path to all content, `role="dialog"` windows, focus rings | M |
+| 1 | 64 inline `fontFamily` declarations | Tailwind `font-display` / `font-mono` / `font-body` |
+| 2 | 115 hardcoded hex, 20 distinct, plus ~38 rgba literals | Every color resolves from a token |
+| 3 | `#555` carried footer text at 2.66:1 | Stepped to `ink-subtle` 5.7:1 |
+| 3b | `#777` carried body copy at 4.42:1 | Stepped to `ink-muted` 7.0:1 |
+| 4 | Bebas Neue on 11 display elements | JetBrains Mono 300, negative tracking |
+| 5 | Inter on 7 body elements | Geist |
+| 6 | Render-blocking Google Fonts `<link>` | `next/font`, self-hosted |
+| 7 | Amber and green used interchangeably | Roles enforced: green live-state, amber label |
+| 8 | Section padding 96px | 128px desktop, 64px compact |
+| 9 | `NoTrace.tsx` orphaned | Deleted, with nine more the routes superseded |
+| 10 | No component honored reduced motion | 9 of 9 animating components call `useReducedMotion()` |
+| 11 | `og.png` referenced, absent | `app/opengraph-image.tsx` |
+| 12 | 4 of 5 projects had no screenshot | Two featured projects carry the page; three are plaintext rows |
+| 13 | Kaal linked to a repo, not the product | Links `getkaal.com` |
+| 14 | Axira described as SMS retention SaaS | Multi-agent LLM outreach automation |
+| 15 | Capital One listed as "Intern" | Matches the resume |
+| 16 | Resume metrics absent from the site | Present in profile, roles, and both case studies |
+| 17 | 5 projects flat, none prominent | Two-tier: featured case studies, plaintext index |
+| 18 | No route-driven windows | Every window owns a prerendered route |
+| 19 | No window manager | Focus stack, drag, resize, minimize, zoom, close |
+| 20 | No menu bar | Live clock, availability, section menus |
+| 21 | No dock | Transform-only magnification, running indicators |
+| 22 | No spotlight | Cmd+K palette over projects, sections, actions |
+| 23 | No desktop icons | Rendered from the shared `content/fs.ts` tree |
+| 24 | No mobile degradation | Springboard below 768px, no fake windows |
+| 25 | Boot screen unconditional | Gated to first visit, skipped on deep links |
+| 26 | No keyboard path, no dialog roles | `role="dialog"`, labeled buttons, Escape, arrows, Cmd+K |
+| — | Hero content gated behind JS | CSS reveal with a visible resting state |
+| — | Windows emitted nothing during SSR | Document layer renders the route body without JS |
+
+### Outstanding
+
+| # | Gap | Note |
+|---|---|---|
+| 27 | Axira has no repo link | The URL on the resume is a different project: a Next.js/Prisma operations dashboard, not the Python multi-agent system. Verified twice. Fix the resume, then set `repo`. |
+| 28 | Axira has no screenshot | Its case study is text only. It is the lead project, so this is the highest-value remaining content task. |
+| 29 | Only Kaal has a preview image | VibeQueue, MANIFEST, and Polymarket stay plaintext until they have visuals. |
+| 30 | Animations never verified in a browser | The build environment reports `document.hidden`, so rAF never fires and no Motion animation advances. Structure, tokens, DOM, and content are verified; visual motion is not. |
+| 31 | `useOpenWindow` and shared launcher constants live in `Dock.tsx` | Three components import a hook from a sibling component file. Works, but belongs in `lib/os/`. |
+| 32 | Multi-window is limited to the four section routes | Case studies and roles open as the current-route window. Registering every dynamic route statically would render every case study into every page. |
 
 ## Do's and Don'ts
 

@@ -10,9 +10,9 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <div className="mx-auto w-full max-w-3xl px-6 py-16">
-      <p className="mb-8 text-[11px] uppercase" style={eyebrow}>
+      <h1 className="mb-8 text-[11px] uppercase" style={eyebrow}>
         {"// EXPERIENCE"}
-      </p>
+      </h1>
 
       <ol className="relative" style={{ paddingLeft: 40 }}>
         {/* Timeline rail */}
