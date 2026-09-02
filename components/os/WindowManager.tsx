@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { AnimatePresence } from "framer-motion";
 import { useOS } from "@/lib/os/store";
+import { useIsCompact } from "@/lib/os/useIsCompact";
 import { Window, MENUBAR_HEIGHT } from "./Window";
 
 /**
@@ -201,7 +202,12 @@ export function WindowManager({
    */
   const hasWindows = windows.length > 0;
   const isRoot = pathname === "/";
-  const showDocument = currentContent != null && (isRoot || !hasWindows);
+  const compact = useIsCompact();
+
+  // Below 768px the desktop metaphor is dropped: the route renders as a
+  // full-screen app view instead of a draggable window, per DESIGN.md.
+  // Faking window management on a phone is worse than not shipping it.
+  const showDocument = currentContent != null && (isRoot || compact || !hasWindows);
 
   return (
     <div
@@ -221,7 +227,7 @@ export function WindowManager({
       )}
 
       <AnimatePresence>
-        {visible.map((w) => (
+        {(compact ? [] : visible).map((w) => (
           <Window key={w.id} window={w}>
             {contentByRoute.get(w.route) ?? null}
           </Window>
