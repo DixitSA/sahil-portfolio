@@ -12,6 +12,7 @@ import {
 } from "framer-motion";
 import { profile } from "@/content";
 import { useOS } from "@/lib/os/store";
+import MacIcon, { type MacIconName } from "./MacIcon";
 
 /* ═══════════════════════════════════════════════════════════════════
    Shared launcher contract.
@@ -211,23 +212,17 @@ export interface DockEntry {
   label: string;
   glyph: GlyphName;
   target: OpenTarget;
-  /**
-   * Icon tile fill. macOS dock icons are saturated rounded squares, not
-   * monochrome outlines, and that is most of what makes a dock read as a
-   * dock. Each app gets its own gradient the way a real dock does.
-   */
-  tint: string;
+  /** Drawn macOS-language icon. See MacIcon.tsx. */
+  icon: MacIconName;
   /** Trailing group sits after the separator rule. */
   trailing?: boolean;
 }
 
-const DOCK_TINTS: Record<string, string> = {
-  "/about": "linear-gradient(160deg, #4c8dff 0%, #1e5bd6 100%)",
-  "/work": "linear-gradient(160deg, #63c2ff 0%, #2a7fd4 100%)",
-  "/experience": "linear-gradient(160deg, #ffb340 0%, #e8802b 100%)",
-  "/contact": "linear-gradient(160deg, #56b6ff 0%, #2563eb 100%)",
-  resume: "linear-gradient(160deg, #f4f4f5 0%, #c9ccd2 100%)",
-  github: "linear-gradient(160deg, #4a4a52 0%, #232329 100%)",
+const DOCK_ICONS: Record<string, MacIconName> = {
+  "/about": "person",
+  "/work": "folder",
+  "/experience": "timeline",
+  "/contact": "mail",
 };
 
 const DOCK_GLYPHS: Record<string, GlyphName> = {
@@ -243,14 +238,14 @@ export const DOCK_ENTRIES: DockEntry[] = [
     label: app.title,
     glyph: DOCK_GLYPHS[app.id] ?? "window",
     target: app,
-    tint: DOCK_TINTS[app.id] ?? DOCK_TINTS["/about"],
+    icon: DOCK_ICONS[app.id] ?? "grid",
   })),
   {
     key: "resume",
     label: "Resume",
     glyph: "doc",
     target: { kind: "link", href: RESUME_HREF },
-    tint: DOCK_TINTS.resume,
+    icon: "pdf",
     trailing: true,
   },
   {
@@ -258,7 +253,7 @@ export const DOCK_ENTRIES: DockEntry[] = [
     label: "GitHub",
     glyph: "terminal",
     target: { kind: "link", href: githubHref },
-    tint: DOCK_TINTS.github,
+    icon: "terminal",
     trailing: true,
   },
 ];
@@ -403,15 +398,11 @@ function DockItem({
         style={{
           scale: magnify ? scale : 1,
           transformOrigin: "bottom center",
-          backgroundImage: entry.tint,
-          // ~23% is the squircle approximation macOS uses for app tiles.
-          borderRadius: 11,
-          border: "1px solid rgba(255,255,255,0.16)",
-          color: entry.key === "resume" ? "#1c1c1f" : "#ffffff",
+          filter: "drop-shadow(0 3px 6px rgba(0,0,0,0.45))",
         }}
         className="flex h-12 w-12 items-center justify-center"
       >
-        <Glyph name={entry.glyph} size={25} strokeWidth={1.6} />
+        <MacIcon name={entry.icon} size={48} />
       </motion.span>
 
       {/* Running indicator. Green is live state, which this is. */}

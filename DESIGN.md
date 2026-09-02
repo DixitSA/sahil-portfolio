@@ -625,6 +625,25 @@ Glyphs (`x`, `−`, `⤢`) appear inside the dots only on hover of the traffic-l
 
 Recoloring them to the site palette was considered and rejected: a macOS window with green, green, and green traffic lights reads as a knockoff. Quoting a convention exactly is stronger than half-adopting it.
 
+### The bare desktop
+
+`/` renders no document. macOS does not show a window on login, and a profile
+panel on the wallpaper was the single thing keeping this from reading as an
+operating system.
+
+The cost is that the homepage carries almost no prose, so it is paid for
+deliberately:
+
+- `Desktop.tsx` emits a visually hidden `<nav>` of real `next/link` elements
+  covering every section, project, and role. Not cloaking: it is a genuine
+  focusable navigation that screen reader users reach first.
+- `sitemap.ts` lists every route, and the JSON-LD Person and CreativeWork graph
+  still ships on every page.
+- The prose that used to sit here lives on `/about`, one click away in the
+  dock, the menu bar, and the desktop icons.
+
+Verified: 12 internal routes are reachable from the prerendered `/` HTML.
+
 ### Wallpaper and chrome finish
 
 The desktop is a wallpaper, not a flat fill. `{colors.desktop}` alone read as a
@@ -647,8 +666,12 @@ document surfaces.
    made the first pass read as a toolbar rather than a dock. The 1px stroke rule
    still governs every other icon on the site.
 
-3. **Desktop icons are tinted.** Folders blue, documents pale. The stroke weight
-   rule is unchanged; only the grey is dropped.
+3. **Desktop and dock icons are drawn macOS shapes, not strokes.** `MacIcon.tsx`
+   renders folders with a tab, documents with a folded corner, and squircle app
+   tiles, each with a gradient and a bright top edge. Apple's own icon artwork
+   and marks are copyrighted, and SF Symbols are licensed for Apple platforms
+   only, so none of it ships here. The shape language is what reads as macOS;
+   the artwork is ours. The 1px stroke rule still governs content icons.
 
 **Vibrancy goes on chrome, never on content.** Title bars, the menu bar, the
 dock, and spotlight are translucent with backdrop blur. Window bodies are

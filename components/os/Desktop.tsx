@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useMemo, useRef, type ReactNode } from "react";
-import { desktop } from "@/content";
+import Link from "next/link";
+import { desktop, projects, roles } from "@/content";
 import type { FSNode } from "@/content/types";
 import { useOS } from "@/lib/os/store";
 import DesktopIcon from "./DesktopIcon";
@@ -66,6 +67,26 @@ export default function Desktop({ onOpen, children }: DesktopProps) {
   );
 
   return (
+    <>
+    <nav aria-label="Site" className="sr-only">
+      <ul>
+        <li><Link href="/about">About</Link></li>
+        <li><Link href="/work">Work</Link></li>
+        <li><Link href="/experience">Experience</Link></li>
+        <li><Link href="/contact">Contact</Link></li>
+        {projects.map((p) => (
+          <li key={p.slug}>
+            <Link href={`/work/${p.slug}`}>{p.name}</Link>
+          </li>
+        ))}
+        {roles.map((r) => (
+          <li key={r.id}>
+            <Link href={`/experience/${r.id}`}>{r.company}</Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
     <div
       aria-label="Desktop"
       className="fixed inset-0"
@@ -123,5 +144,6 @@ export default function Desktop({ onOpen, children }: DesktopProps) {
 
       {children}
     </div>
+    </>
   );
 }

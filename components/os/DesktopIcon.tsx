@@ -2,23 +2,25 @@
 
 import type { Ref } from "react";
 import type { FSNode } from "@/content/types";
-import { Glyph, type GlyphName } from "./Dock";
+import MacIcon, { type MacIconName } from "./MacIcon";
 
 /* ═══════════════════════════════════════════════════════════════════
    Desktop icon. 72px glyph box, caption label below.
 
    Single click selects. Double click opens. On coarse pointers a
    single tap opens, because double-tap is not a phone gesture.
-   Glyphs are 1px-stroke SVG in ink-muted. No Apple icon replicas.
+   Icons are macOS-language shapes drawn in MacIcon.tsx, not Apple
+   artwork: folders with a tab, documents with a folded corner.
    ═══════════════════════════════════════════════════════════════════ */
 
-export function glyphFor(node: FSNode): GlyphName {
+export function glyphFor(node: FSNode): MacIconName {
   if (node.kind === "folder") return "folder";
   const name = node.name.toLowerCase();
-  if (name.endsWith(".app")) return "app";
-  if (name.endsWith(".pdf") || name.endsWith(".md") || name.endsWith(".txt")) return "doc";
-  if (node.kind === "file") return "doc";
-  return "window";
+  if (name.endsWith(".app")) return "grid";
+  if (name.endsWith(".pdf")) return "pdf";
+  if (name.endsWith(".md") || name.endsWith(".txt")) return "document";
+  if (node.kind === "file") return "document";
+  return "document";
 }
 
 export interface DesktopIconProps {
@@ -69,14 +71,6 @@ export default function DesktopIcon({
       <span
         className="flex h-[72px] w-[72px] items-center justify-center"
         style={{
-          // macOS desktop icons are tinted, not monochrome outlines: folders
-          // blue, documents pale. Keeps the 1px stroke rule, drops the grey.
-          color:
-            node.kind === "folder"
-              ? "var(--icon-folder)"
-              : node.kind === "file"
-                ? "var(--icon-file)"
-                : "var(--icon-app)",
           backgroundColor: selected ? "var(--color-selection)" : "transparent",
           border: selected
             ? "1px solid var(--color-selection-border)"
@@ -84,15 +78,17 @@ export default function DesktopIcon({
           borderRadius: "var(--radius-sm)",
         }}
       >
-        <Glyph name={glyphFor(node)} size={34} />
+        <MacIcon name={glyphFor(node)} size={46} />
       </span>
 
       <span
         className="max-w-full px-1 font-mono text-[10px] leading-[1.4] tracking-[0.14em] break-words uppercase"
         style={{
-          color: selected ? "var(--color-ink)" : "var(--color-ink-muted)",
+          color: "#ffffff",
           backgroundColor: selected ? "var(--color-selection)" : "transparent",
           borderRadius: "var(--radius-xs)",
+          // Labels sit directly on the wallpaper, which is bright in places.
+          textShadow: "0 1px 3px rgba(0,0,0,0.85)",
         }}
       >
         {node.name}
