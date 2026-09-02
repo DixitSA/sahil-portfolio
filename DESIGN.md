@@ -665,6 +665,29 @@ everything else that is true about the owner.
 The stack is hidden below the `lg` breakpoint, where the springboard owns the
 screen.
 
+### Guiding the visitor
+
+A desktop is only intuitive to people who already know desktops. Two things
+here are not guessable by looking: files open on double click, and the fastest
+route anywhere is Command K. A visitor who single-clicks an icon, sees nothing
+happen, and leaves is the most expensive failure this design can produce.
+
+Two affordances, both restrained.
+
+- **Spotlight in the menu bar.** A magnifier with the shortcut printed beside
+  it, where macOS puts search. Permanent, native, and it teaches the single
+  most useful key without saying anything.
+- **A first-visit hint.** One line above the dock naming double click, Command
+  K, and right click. It fades on its own after nine seconds and disappears the
+  moment the visitor does anything, because a hint still on screen after it is
+  needed has become an instruction manual. First visit only, and never on a
+  deep link: someone arriving at /work/kaal came for the case study, not a
+  tutorial.
+
+No modal, no tour, no overlay the visitor has to dismiss. If someone ignores
+both, every route is still reachable from the dock, the menu bar, and the
+hidden navigation.
+
 ### Easter eggs
 
 Deliberately unrelated to the work. They exist because an operating system that

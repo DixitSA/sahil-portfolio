@@ -12,6 +12,7 @@ import Desktop from "@/components/os/Desktop";
 import Dock from "@/components/os/Dock";
 import Spotlight from "@/components/os/Spotlight";
 import Screensaver from "@/components/os/Screensaver";
+import Hints from "@/components/os/Hints";
 import WindowManager from "@/components/os/WindowManager";
 
 import AboutBody from "./about/page";
@@ -132,6 +133,7 @@ export default function RootLayout({
           <MenuBar />
           <Spotlight />
           <BootScreen />
+          <Hints />
           <Screensaver />
         </MotionProvider>
       </body>

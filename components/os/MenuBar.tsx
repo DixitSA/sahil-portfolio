@@ -251,6 +251,7 @@ export default function MenuBar({ onOpen }: MenuBarProps) {
       </div>
 
       <div className="flex items-center gap-3">
+        <SpotlightButton onOpen={() => setSpotlight(true)} />
         <Availability available={profile.available} reduce={Boolean(reduce)} />
         <Clock />
       </div>
@@ -405,6 +406,47 @@ function MenuTitle({
 }
 
 /* ── Status items ──────────────────────────────────────────────────── */
+
+/**
+ * Spotlight affordance.
+ *
+ * macOS keeps search in the menu bar, and this doubles as the only permanent
+ * instruction on the page: the shortcut is printed next to the glyph, so a
+ * visitor learns the most useful key without being told anything.
+ */
+function SpotlightButton({ onOpen }: { onOpen: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onOpen}
+      aria-label="Search. Keyboard shortcut Command K"
+      className="flex items-center gap-1.5 px-1.5 py-0.5"
+      style={{ borderRadius: "var(--radius-sm)" }}
+    >
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle
+          cx="11"
+          cy="11"
+          r="6.5"
+          stroke="var(--color-ink-subtle)"
+          strokeWidth="1.6"
+        />
+        <path
+          d="M16 16l4.5 4.5"
+          stroke="var(--color-ink-subtle)"
+          strokeWidth="1.6"
+          strokeLinecap="round"
+        />
+      </svg>
+      <span
+        className="hidden font-mono text-[10px] tracking-[0.1em] md:inline"
+        style={{ color: "var(--color-ink-faint)" }}
+      >
+        ⌘K
+      </span>
+    </button>
+  );
+}
 
 function Availability({ available, reduce }: { available: boolean; reduce: boolean }) {
   return (
