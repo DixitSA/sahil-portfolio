@@ -1,8 +1,23 @@
 import type { Metadata } from "next";
 import { Geist, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+
+import { projects, roles } from "@/content";
 import CustomCursor from "@/components/CustomCursor";
 import MotionProvider from "@/components/MotionProvider";
+import JsonLd from "@/components/JsonLd";
+import BootScreen from "@/components/BootScreen";
+
+import MenuBar from "@/components/os/MenuBar";
+import Desktop from "@/components/os/Desktop";
+import Dock from "@/components/os/Dock";
+import Spotlight from "@/components/os/Spotlight";
+import WindowManager from "@/components/os/WindowManager";
+
+import AboutBody from "./about/page";
+import WorkBody from "./work/page";
+import ExperienceBody from "./experience/page";
+import ContactBody from "./contact/page";
 
 /* Self-hosted via next/font. No runtime request to Google. */
 const jetbrainsMono = JetBrains_Mono({
@@ -21,15 +36,27 @@ const geist = Geist({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://sahildixit.dev"),
-  title: "Sahil Dixit — Strategist. Builder.",
+  title: {
+    default: "Sahil Dixit — Strategist. Builder.",
+    template: "%s",
+  },
   description:
     "Strategy & Management Consultant at Bank of America. I coordinate AI compliance initiatives, analyze consumer strategy, and ship indie products at night.",
   openGraph: {
     title: "Sahil Dixit — Strategist. Builder.",
     description:
-      "Strategy & Management Consultant at Bank of America. AI tools by day. Indie SaaS by night.",
+      "Strategy & Management Consultant at Bank of America. AI tools by day. Indie products by night.",
     type: "website",
   },
+};
+
+/**
+ * Title bar text for routes that are not statically registered. Plain object
+ * so it can cross the server/client boundary into WindowManager.
+ */
+const dynamicTitles: Record<string, string> = {
+  ...Object.fromEntries(projects.map((p) => [`/work/${p.slug}`, p.name])),
+  ...Object.fromEntries(roles.map((r) => [`/experience/${r.id}`, r.company])),
 };
 
 export default function RootLayout({
@@ -44,10 +71,49 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
     >
       <body className="min-h-full antialiased">
-        <a href="#hero" className="skip-to-content">SKIP_TO_CONTENT</a>
-        <CustomCursor />
+        <JsonLd />
+        <a href="#main" className="skip-to-content">
+          SKIP_TO_CONTENT
+        </a>
+
         <MotionProvider>
-          {children}
+          {/*
+            Chrome order matters. The window layer is z 100, dock 900, menu
+            bar 1000, spotlight 1100, so these must be root-level siblings
+            rather than nested inside the window layer.
+          */}
+          <Desktop />
+
+          <main id="main">
+            <WindowManager
+              currentContent={children}
+              titles={dynamicTitles}
+              windows={[
+                { route: "/about", title: "About.md", content: <AboutBody />, w: 720, h: 520 },
+                { route: "/work", title: "Work", content: <WorkBody />, w: 840, h: 560 },
+                {
+                  route: "/experience",
+                  title: "Experience",
+                  content: <ExperienceBody />,
+                  w: 760,
+                  h: 560,
+                },
+                {
+                  route: "/contact",
+                  title: "Contact.app",
+                  content: <ContactBody />,
+                  w: 560,
+                  h: 440,
+                },
+              ]}
+            />
+          </main>
+
+          <Dock />
+          <MenuBar />
+          <Spotlight />
+          <BootScreen />
+          <CustomCursor />
         </MotionProvider>
       </body>
     </html>
