@@ -1,5 +1,5 @@
 import { profile } from "@/content";
-import { Widget } from "./KaalWidget";
+import Widget from "./Widget";
 
 /**
  * "Now" tile.

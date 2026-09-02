@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, JetBrains_Mono } from "next/font/google";
+import { Geist, JetBrains_Mono, Playfair_Display, Quattrocento_Sans } from "next/font/google";
 import "./globals.css";
 
 import { projects, roles } from "@/content";
@@ -18,6 +18,7 @@ import AboutBody from "./about/page";
 import WorkBody from "./work/page";
 import ExperienceBody from "./experience/page";
 import ContactBody from "./contact/page";
+import KaalBody from "./kaal/page";
 
 /* Self-hosted via next/font. No runtime request to Google. */
 const jetbrainsMono = JetBrains_Mono({
@@ -31,6 +32,23 @@ const geist = Geist({
   subsets: ["latin"],
   weight: ["400", "500"],
   variable: "--font-geist",
+  display: "swap",
+});
+
+/* Kaal's own faces. The app window renders in the product's identity, not
+   the portfolio's, the way two apps on a Mac look nothing alike. */
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  style: ["normal", "italic"],
+  variable: "--font-kaal-serif",
+  display: "swap",
+});
+
+const quattrocento = Quattrocento_Sans({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-kaal-sans",
   display: "swap",
 });
 
@@ -67,7 +85,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`h-full ${jetbrainsMono.variable} ${geist.variable}`}
+      className={`h-full ${jetbrainsMono.variable} ${geist.variable} ${playfair.variable} ${quattrocento.variable}`}
       data-scroll-behavior="smooth"
     >
       <body className="min-h-full antialiased">
@@ -105,6 +123,7 @@ export default function RootLayout({
                   w: 560,
                   h: 440,
                 },
+                { route: "/kaal", title: "Kaal", content: <KaalBody />, w: 620, h: 660 },
               ]}
             />
           </main>

@@ -41,5 +41,8 @@ export const desktop: FSNode[] = [
     href: "/Sahil_Dixit_Resume.pdf",
     external: true,
   },
+  // Kaal is a real application rather than portfolio content: it renders in
+  // the product's own identity and computes against the production engine.
+  { kind: "window", name: "Kaal.app", route: "/kaal" },
   { kind: "window", name: "Contact.app", route: "/contact" },
 ];

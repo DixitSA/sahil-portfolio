@@ -57,6 +57,9 @@ export const OS_APPS: WindowTarget[] = [
     h: 560,
   },
   { kind: "window", id: "/contact", title: "Contact", route: "/contact", w: 560, h: 420 },
+  // Kaal is a real application, not portfolio content: it renders in the
+  // product's own identity and computes against the production engine.
+  { kind: "window", id: "/kaal", title: "Kaal", route: "/kaal", w: 620, h: 640 },
 ];
 
 /** Must match the file in /public and the Resume.pdf node in content/fs.ts. */
@@ -223,6 +226,7 @@ const DOCK_ICONS: Record<string, MacIconName> = {
   "/work": "folder",
   "/experience": "timeline",
   "/contact": "mail",
+  "/kaal": "grid",
 };
 
 const DOCK_GLYPHS: Record<string, GlyphName> = {
