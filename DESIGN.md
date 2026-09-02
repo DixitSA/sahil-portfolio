@@ -448,8 +448,18 @@ Pure `#ffffff` is not in the system. On a near-black canvas it vibrates, and `{c
 
 Two faces, down from three.
 
-1. **JetBrains Mono** (300 / 400) carries display, navigation, labels, indices, status, tags, captions, and code. It is the voice of the site.
-2. **Geist** (400 / 500) carries body copy only, and only where a passage runs longer than a single line. It is a utility, not a personality.
+1. **Geist** (400 / 500) carries display, body, section headings, and links. It is the voice of the site.
+2. **JetBrains Mono** (300 / 400) carries technical values only: tags, status, indices, periods, paths, metrics, and code.
+
+**The roles were swapped once the shell became macOS.** The original system ran
+monospace everywhere, which was right for a terminal page and wrong inside Mac
+chrome: uppercase mono headlines read as a different application from the
+window they sit in. macOS uses one humanist sans throughout and reserves mono
+for code, so this does the same. Display type is sentence case at weight 500
+with negative tracking, not uppercase at weight 300.
+
+Mono did not disappear. It still carries everything that is a value rather than
+a sentence, which is what keeps the systems register in the writing.
 
 Both are self-hosted through the framework's font pipeline. Neither is requested from a third-party stylesheet at runtime.
 
@@ -476,10 +486,10 @@ Both are self-hosted through the framework's font pipeline. Neither is requested
 
 ### Principles
 
-- **Display sets at weight 300, never bold.** Confidence at large sizes comes from scale and negative tracking, not from mass. This is the Warp lesson: a light hero reads as assured, a heavy one reads as shouting.
+- **Display sets at weight 500 in sentence case.** Confidence comes from scale and negative tracking, not from mass or from shouting in uppercase.
 - **Negative tracking scales with size.** `-0.045em` at hero, relaxing to `0` by body. Monospace needs this more than a proportional face does, because its default fit is loose by construction.
 - **Positive tracking is for uppercase micro-type only.** Eyebrows, captions, and indices. Never on sentence-case text at any size.
-- **Uppercase above 34px, sentence case below.** The break point is the display-md / display-lg boundary.
+- **Sentence case everywhere except micro-labels.** Uppercase is for 10-11px mono labels, status strings, and chips.
 - **Never letter-space body copy.** Not for effect, not for hierarchy, not at all.
 
 ### ASCII as icon system
@@ -666,7 +676,15 @@ document surfaces.
    made the first pass read as a toolbar rather than a dock. The 1px stroke rule
    still governs every other icon on the site.
 
-3. **Desktop and dock icons are drawn macOS shapes, not strokes.** `MacIcon.tsx`
+3. **Window content is grouped, not flat.** `DocChrome.tsx` provides the content
+   primitives: a consistent inset, a real header, and macOS-style inset group
+   boxes at `--radius-group` 8px with hairline row dividers. Content used to sit
+   flush against the title bar as undifferentiated prose, which read as a text
+   file dropped into a window. The sharp-corner rule is relaxed for these group
+   boxes only, for the same reason the frame is rounded: square blocks read as
+   foreign inside Mac chrome.
+
+4. **Desktop and dock icons are drawn macOS shapes, not strokes.** `MacIcon.tsx`
    renders folders with a tab, documents with a folded corner, and squircle app
    tiles, each with a gradient and a bright top edge. Apple's own icon artwork
    and marks are copyrighted, and SF Symbols are licensed for Apple platforms

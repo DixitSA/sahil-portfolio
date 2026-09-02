@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { roles, getRole } from "@/content";
+import { Doc, DocHeader, Group, body, mono } from "@/components/os/DocChrome";
 
 export function generateStaticParams() {
   return roles.map((r) => ({ id: r.id }));
@@ -26,52 +27,24 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   if (!role) notFound();
 
   return (
-    <div className="mx-auto w-full max-w-3xl px-6 py-16">
-      <p className="mb-4 text-[11px] uppercase" style={eyebrow}>
-        {"// ROLE"}
-      </p>
+    <Doc>
+      <DocHeader
+        heading={role.company}
+        subtitle={role.location ? `${role.title} · ${role.location}` : role.title}
+        meta={<span style={{ ...mono, fontSize: 11 }}>{role.period}</span>}
+      />
 
-      <h1
-        className="mb-2 uppercase"
-        style={{
-          fontFamily: "var(--font-display)",
-          fontWeight: 300,
-          fontSize: "clamp(34px, 5vw, 60px)",
-          lineHeight: 1,
-          letterSpacing: "-0.035em",
-          color: "var(--color-ink)",
-        }}
-      >
-        {role.company}
-      </h1>
-
-      <p className="mb-10" style={{ ...mono, color: "var(--color-ink-subtle)" }}>
-        {`[${role.period}] · ${role.title} · ${role.location}`}
-      </p>
-
-      <ul className="space-y-4">
+      <Group>
         {role.bullets.map((b, i) => (
-          <li key={i} className="flex gap-3" style={body}>
-            <span aria-hidden="true" style={{ color: "var(--color-label)" }}>
-              {"→"}
-            </span>
-            <span>{b}</span>
-          </li>
+          <div
+            key={i}
+            className="px-4 py-3 first:border-t-0"
+            style={{ borderTop: "1px solid var(--color-row-divider)" }}
+          >
+            <p style={{ ...body, fontSize: 14 }}>{b}</p>
+          </div>
         ))}
-      </ul>
-    </div>
+      </Group>
+    </Doc>
   );
 }
-
-const mono: React.CSSProperties = { fontFamily: "var(--font-mono)", fontSize: 12 };
-const eyebrow: React.CSSProperties = {
-  fontFamily: "var(--font-mono)",
-  color: "var(--color-label)",
-  letterSpacing: "0.22em",
-};
-const body: React.CSSProperties = {
-  fontFamily: "var(--font-body)",
-  fontSize: 16,
-  lineHeight: 1.7,
-  color: "var(--color-ink-muted)",
-};

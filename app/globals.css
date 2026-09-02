@@ -100,6 +100,17 @@
      reads as a surface. ink-muted holds 6.6:1 on this, ink holds 15.1:1. */
   --color-window-body: #131317;
 
+  /* Content grouping inside a window. macOS groups settings and list rows
+     into inset rounded boxes; sharp-cornered blocks read as foreign inside
+     Mac chrome. Scoped to window content, not to the site's own surfaces. */
+  --radius-group: 8px;
+  /* macOS link blue, matched to the dock tiles. Distinct from the terminal
+     green, which stays reserved for live state. */
+  --link-accent: #6cb0ff;
+  --color-group: rgba(255, 255, 255, 0.035);
+  --color-group-border: rgba(255, 255, 255, 0.08);
+  --color-row-divider: rgba(255, 255, 255, 0.06);
+
   /* Desktop icon tints. */
   --icon-folder: #63b3f5;
   --icon-file: #d7dae0;

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { roles } from "@/content";
+import { Doc, DocHeader, Group, body, mono, sectionTitle } from "@/components/os/DocChrome";
 
 export const metadata: Metadata = {
   title: "Experience — Sahil Dixit",
@@ -9,78 +10,40 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <div className="mx-auto w-full max-w-3xl px-6 py-16">
-      <h1 className="mb-8 text-[11px] uppercase" style={eyebrow}>
-        {"// EXPERIENCE"}
-      </h1>
+    <Doc>
+      <DocHeader heading="Experience" subtitle="Strategy, analytics, and AI governance." />
 
-      <ol className="relative" style={{ paddingLeft: 40 }}>
-        {/* Timeline rail */}
-        <span
-          aria-hidden="true"
-          className="absolute top-2 bottom-2 left-0 w-px"
-          style={{ background: "var(--color-hairline-strong)" }}
-        />
-
+      <Group>
         {roles.map((role) => (
-          <li key={role.id} className="relative pb-10 last:pb-0">
-            <span
-              aria-hidden="true"
-              className="absolute"
-              style={{
-                left: -44,
-                top: 6,
-                width: 7,
-                height: 7,
-                borderRadius: 9999,
-                border: `1px solid var(--color-label-dim, var(--color-label))`,
-                background: "var(--color-canvas)",
-              }}
-            />
+          <div
+            key={role.id}
+            className="px-4 py-5 first:border-t-0"
+            style={{ borderTop: "1px solid var(--color-row-divider)" }}
+          >
+            <div className="mb-1 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+              <h2 style={sectionTitle}>{role.company}</h2>
+              <span style={{ ...mono, fontSize: 11 }}>{role.period}</span>
+            </div>
 
-            <h2
-              style={{
-                fontFamily: "var(--font-display)",
-                fontWeight: 400,
-                fontSize: "clamp(24px, 3vw, 36px)",
-                lineHeight: 1.1,
-                letterSpacing: "-0.02em",
-                color: "var(--color-ink)",
-              }}
-            >
-              {role.company}
-            </h2>
-
-            <p className="mt-1 mb-4" style={{ ...mono, color: "var(--color-ink-subtle)" }}>
-              {`[${role.period}] · ${role.title} · ${role.location}`}
+            <p className="mb-3" style={{ ...body, fontSize: 14, color: "var(--color-ink-subtle)" }}>
+              {role.location ? `${role.title} · ${role.location}` : role.title}
             </p>
 
             <ul className="space-y-2">
               {role.bullets.map((b, i) => (
-                <li key={i} className="flex gap-3" style={body}>
-                  <span aria-hidden="true" style={{ color: "var(--color-label)" }}>
-                    {"→"}
-                  </span>
+                <li key={i} className="flex gap-3" style={{ ...body, fontSize: 14 }}>
+                  <span
+                    aria-hidden="true"
+                    className="mt-[9px] h-[3px] w-[3px] shrink-0 rounded-full"
+                    style={{ background: "var(--color-ink-faint)" }}
+                  />
                   <span>{b}</span>
                 </li>
               ))}
             </ul>
-          </li>
+          </div>
         ))}
-      </ol>
-    </div>
+      </Group>
+    </Doc>
   );
 }
-
-const mono: React.CSSProperties = { fontFamily: "var(--font-mono)", fontSize: 12 };
-const eyebrow: React.CSSProperties = {
-  fontFamily: "var(--font-mono)",
-  color: "var(--color-label)",
-  letterSpacing: "0.22em",
-};
-const body: React.CSSProperties = {
-  fontFamily: "var(--font-body)",
-  fontSize: 15,
-  lineHeight: 1.7,
-  color: "var(--color-ink-muted)",
-};
