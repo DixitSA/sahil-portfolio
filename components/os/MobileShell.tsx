@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
-import { desktop, projects, roles } from "@/content";
+import { desktop, profile, projects, roles } from "@/content";
 import type { FSNode } from "@/content/types";
 import { useIsCompact } from "@/lib/os/useIsCompact";
 import MacIcon, { type MacIconName } from "./MacIcon";
@@ -23,7 +23,7 @@ import { useWallpaper } from "./WallpaperMenu";
  * untouched by any of this.
  *
  * Two states:
- *   "/"        home screen. Widgets, then a single app grid.
+ *   "/"        home screen. Identity, then apps, then ambient tiles.
  *   any route  a full-screen app with a nav bar and a back affordance.
  *
  * No fake status bar. The phone already draws a real one directly above this,
@@ -167,28 +167,101 @@ export default function MobileShell({
 
 /* ── Home screen ──────────────────────────────────────────────────── */
 
+/**
+ * Home screen, ordered for the person this site exists to convince.
+ *
+ * The first version led with two tall widgets, which pushed every app icon
+ * below the fold. A recruiter opening this on a phone had to scroll past
+ * ambient content to reach the work. So the order is now identity, then
+ * navigation, then the ambient tiles:
+ *
+ *   1. who this is, and whether he is available. Two seconds of reading.
+ *   2. the apps, all six above the fold on a standard phone.
+ *   3. Now and Watching, for anyone who keeps scrolling.
+ *
+ * Icon order is recruiter priority rather than filesystem order: work and
+ * resume first, since those are what someone screening actually opens.
+ */
+const MOBILE_ORDER = [
+  "/work",
+  "/Sahil_Dixit_Resume.pdf",
+  "/about",
+  "/experience",
+  "/contact",
+  "/kaal",
+];
+
 function HomeScreen({ widgets }: { widgets?: ReactNode }) {
-  const apps = flatten(desktop);
+  const apps = flatten(desktop).sort((a, b) => {
+    const ai = MOBILE_ORDER.indexOf(a.route);
+    const bi = MOBILE_ORDER.indexOf(b.route);
+    return (ai < 0 ? 99 : ai) - (bi < 0 ? 99 : bi);
+  });
 
   return (
     <div
-      className="min-h-full px-5 pb-8"
-      style={{ paddingBottom: "max(env(safe-area-inset-bottom), 24px)" }}
+      className="min-h-full px-5"
+      style={{ paddingBottom: "max(env(safe-area-inset-bottom), 28px)" }}
     >
-      {widgets && <div className="mb-6 flex flex-col items-center gap-3 pt-2">{widgets}</div>}
+      {/* 1. Identity. Small, immediate, no scrolling required. */}
+      <header className="pt-3 pb-6">
+        <h1
+          style={{
+            fontFamily: "var(--font-body)",
+            fontSize: 26,
+            fontWeight: 600,
+            letterSpacing: "-0.02em",
+            color: "#fff",
+            textShadow: "0 1px 6px rgba(0,0,0,0.6)",
+          }}
+        >
+          {profile.name}
+        </h1>
+        <p
+          className="mt-0.5"
+          style={{
+            fontFamily: "var(--font-body)",
+            fontSize: 14,
+            color: "rgba(255,255,255,0.72)",
+            textShadow: "0 1px 4px rgba(0,0,0,0.6)",
+          }}
+        >
+          {profile.title} · {profile.location}
+        </p>
 
-      {/*
-        One grid, four across, the iOS springboard column count.
+        {profile.available && (
+          <span
+            className="mt-3 inline-flex items-center gap-1.5 px-2.5 py-1"
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: 10,
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              color: "var(--color-primary)",
+              background: "rgba(0,255,65,0.12)",
+              border: "1px solid rgba(0,255,65,0.32)",
+              borderRadius: 999,
+            }}
+          >
+            <span
+              aria-hidden="true"
+              className="h-[5px] w-[5px] rounded-full"
+              style={{ background: "var(--color-primary)" }}
+            />
+            Available for work
+          </span>
+        )}
+      </header>
 
-        There is no separate dock. With six destinations a dock would repeat
-        four of them directly under the grid, which reads as a rendering bug
-        rather than as iOS.
-      */}
+      {/* 2. Apps. Four across, the iOS springboard column count. */}
       <div className="grid grid-cols-4 gap-x-3 gap-y-5">
         {apps.map((app) => (
           <AppIcon key={app.route} route={app.route} name={app.name} external={app.external} />
         ))}
       </div>
+
+      {/* 3. Ambient tiles, for anyone who keeps going. */}
+      {widgets && <div className="mt-8 flex flex-col gap-3 pb-2">{widgets}</div>}
     </div>
   );
 }

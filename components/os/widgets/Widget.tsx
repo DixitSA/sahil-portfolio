@@ -17,7 +17,9 @@ export default function Widget({
 }) {
   return (
     <section
-      className="w-[228px] p-3.5"
+      // Full width on a phone, fixed in the desktop widget column. A 228px
+      // card on a 375px screen wastes both margins and makes the text narrow.
+      className="w-full p-3.5 lg:w-[228px]"
       style={{
         background: "var(--color-chrome-window)",
         backdropFilter: "blur(24px) saturate(160%)",
