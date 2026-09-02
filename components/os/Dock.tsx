@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   motion,
@@ -369,6 +369,7 @@ function DockItem({
   isRunning,
   onActivate,
 }: DockItemProps) {
+  const reduceBounce = !magnify;
   const raw = useTransform(
     mouseX,
     [
@@ -383,10 +384,17 @@ function DockItem({
   );
   const scale = useSpring(raw, { stiffness: 400, damping: 28 });
 
+  // macOS bounces a dock icon while an app launches. Nothing here takes long
+  // enough to need a progress cue, so this is purely the acknowledgement.
+  const [bouncing, setBouncing] = useState(false);
+
   return (
     <button
       type="button"
-      onClick={onActivate}
+      onClick={() => {
+        if (!reduceBounce) setBouncing(true);
+        onActivate();
+      }}
       aria-label={
         entry.target.kind === "window"
           ? `Open ${entry.label}${isRunning ? ", running" : ""}`
@@ -402,7 +410,12 @@ function DockItem({
         }}
         className="flex h-12 w-12 items-center justify-center"
       >
-        <MacIcon name={entry.icon} size={48} />
+        <span
+          className={bouncing ? "dock-bounce" : undefined}
+          onAnimationEnd={() => setBouncing(false)}
+        >
+          <MacIcon name={entry.icon} size={48} />
+        </span>
       </motion.span>
 
       {/* Running indicator. Green is live state, which this is. */}

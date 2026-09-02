@@ -3,7 +3,6 @@ import { Geist, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
 import { projects, roles } from "@/content";
-import CustomCursor from "@/components/CustomCursor";
 import MotionProvider from "@/components/MotionProvider";
 import JsonLd from "@/components/JsonLd";
 import BootScreen from "@/components/BootScreen";
@@ -12,6 +11,7 @@ import MenuBar from "@/components/os/MenuBar";
 import Desktop from "@/components/os/Desktop";
 import Dock from "@/components/os/Dock";
 import Spotlight from "@/components/os/Spotlight";
+import Screensaver from "@/components/os/Screensaver";
 import WindowManager from "@/components/os/WindowManager";
 
 import AboutBody from "./about/page";
@@ -113,7 +113,7 @@ export default function RootLayout({
           <MenuBar />
           <Spotlight />
           <BootScreen />
-          <CustomCursor />
+          <Screensaver />
         </MotionProvider>
       </body>
     </html>

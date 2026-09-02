@@ -141,11 +141,23 @@ body {
   background-size: 24px 24px;
   color: var(--color-ink-muted);
   font-family: var(--font-body);
-  cursor: none;
+  /* Native system cursor. On a Mac this IS the macOS pointer, and every
+     visitor gets the arrow, I-beam, hand and resize shapes their own OS
+     draws. A hand-drawn replacement can only be a worse copy of it. */
+  cursor: default;
 }
 
-@media (pointer: coarse) {
-  body { cursor: auto; }
+/* Standard pointer semantics, so the cursor means what it does on a desktop. */
+a,
+button,
+[role="button"],
+[role="menuitem"],
+[role="menuitemradio"] {
+  cursor: pointer;
+}
+
+p, h1, h2, h3, li, article, figcaption {
+  cursor: text;
 }
 
 /* ── Custom scrollbar ────────────────────────────────────────────── */
@@ -202,6 +214,32 @@ body::before {
 }
 .marquee-track         { animation: marquee     40s linear infinite; }
 .marquee-track-reverse { animation: marquee-rev 40s linear infinite; }
+
+/* ── Screensaver ink drift ───────────────────────────────────────── */
+@keyframes ink-drift {
+  0%   { transform: translate3d(0, 0, 0) rotate(0deg); }
+  100% { transform: translate3d(var(--drift, -60px), var(--drift, -60px)) rotate(8deg); }
+}
+.screensaver-mark {
+  animation-name: ink-drift;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  will-change: transform;
+}
+
+/* ── Dock launch bounce ──────────────────────────────────────────── */
+@keyframes dock-bounce {
+  0%   { transform: translateY(0); }
+  30%  { transform: translateY(-16px); }
+  55%  { transform: translateY(0); }
+  72%  { transform: translateY(-7px); }
+  88%  { transform: translateY(0); }
+  100% { transform: translateY(0); }
+}
+.dock-bounce {
+  animation: dock-bounce 0.62s ease-out 1;
+}
 
 /* ── Live status pulse ───────────────────────────────────────────── */
 @keyframes status-pulse {

@@ -635,6 +635,30 @@ Glyphs (`x`, `−`, `⤢`) appear inside the dots only on hover of the traffic-l
 
 Recoloring them to the site palette was considered and rejected: a macOS window with green, green, and green traffic lights reads as a knockoff. Quoting a convention exactly is stronger than half-adopting it.
 
+### Easter eggs
+
+Deliberately unrelated to the work. They exist because an operating system that
+does nothing but hold a resume is not an operating system.
+
+- **Idle screensaver.** After 60 seconds of no input the desktop drifts into an
+  ink field of Devanagari and Gujarati glyphs with the clock over it. Any
+  pointer, key, wheel or touch event wakes it. Disabled outright under
+  `prefers-reduced-motion`, since ambient drift is exactly what that setting is
+  for.
+- **Wallpaper switcher.** Right-click the desktop for five presets: Dusk,
+  Monsoon, Saffron, Ink, After Hours. Persisted per visitor in localStorage,
+  every access wrapped in try/catch because private windows throw.
+- **Dock launch bounce.** Clicking a dock icon bounces it, the way macOS
+  acknowledges a launch. Suppressed under reduced motion.
+
+### The cursor
+
+There is no custom cursor. The native system cursor on a Mac IS the macOS
+pointer, and drawing a replacement can only be a worse copy of it, on top of
+being Apple artwork. Removing it also restores correct semantics for free:
+I-beam over text, pointer over links and buttons, resize arrows on window
+edges. `cursor: none` is gone.
+
 ### The bare desktop
 
 `/` renders no document. macOS does not show a window on login, and a profile
@@ -800,7 +824,7 @@ The site still has to answer, in the first ten seconds, why someone should hire 
 
 - **Grain**: `body::before`, SVG `feTurbulence` fractal noise, `baseFrequency: 0.75`, 4% opacity, fixed, `z-index: 9999`, `pointer-events: none`.
 - **Dot grid**: `radial-gradient` 1px dots at `rgba(255,255,255,0.03)`, 24px pitch, on the canvas.
-- **Custom cursor**: `cursor: none` on body, restored to `auto` under `@media (pointer: coarse)`.
+- **Cursor**: native. See The cursor, above.
 - **Marquee**: dual-track CSS-only infinite scroll, 40s linear. `aria-hidden` on the container. Type in `{colors.ornament}`.
 - **Scanlines, CRT curvature, and glow are banned.** The register is a modern terminal emulator, not a 1980s monitor. This is the line between restrained and costume.
 

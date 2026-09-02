@@ -1,11 +1,12 @@
 "use client";
 
-import { useCallback, useMemo, useRef, type ReactNode } from "react";
+import { useCallback, useMemo, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { desktop, projects, roles } from "@/content";
 import type { FSNode } from "@/content/types";
 import { useOS } from "@/lib/os/store";
 import DesktopIcon from "./DesktopIcon";
+import WallpaperMenu, { useWallpaper } from "./WallpaperMenu";
 import { useOpenWindow, type OpenHandler, type OpenTarget } from "./Dock";
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -51,6 +52,10 @@ export default function Desktop({ onOpen, children }: DesktopProps) {
   const selectIcon = useOS((s) => s.selectIcon);
 
   const nodes = useMemo(() => rootNodes(desktop), []);
+
+  // Right-click the desktop to change the wallpaper, as you would on a Mac.
+  const { wallpaper, choose } = useWallpaper();
+  const [menuAt, setMenuAt] = useState<{ x: number; y: number } | null>(null);
   const refs = useRef<Array<HTMLButtonElement | null>>([]);
 
   const selectedIndex = nodes.findIndex((n) => iconKey(n) === selected);
@@ -90,12 +95,16 @@ export default function Desktop({ onOpen, children }: DesktopProps) {
     <div
       aria-label="Desktop"
       className="fixed inset-0"
+      onContextMenu={(event) => {
+        event.preventDefault();
+        setMenuAt({ x: event.clientX, y: event.clientY });
+      }}
       style={{
         zIndex: "var(--z-desktop)",
         backgroundColor: "var(--color-desktop)",
         /* A real wallpaper, not a flat fill. The dot grid was dropped here:
            it read as a technical backdrop rather than a desktop. */
-        backgroundImage: "var(--wallpaper)",
+        backgroundImage: wallpaper.css,
         backgroundSize: "cover",
       }}
       onPointerDown={(event) => {
@@ -143,6 +152,15 @@ export default function Desktop({ onOpen, children }: DesktopProps) {
       </ul>
 
       {children}
+
+      {menuAt && (
+        <WallpaperMenu
+          at={menuAt}
+          currentId={wallpaper.id}
+          onChoose={choose}
+          onClose={() => setMenuAt(null)}
+        />
+      )}
     </div>
     </>
   );
