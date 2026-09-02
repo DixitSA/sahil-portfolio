@@ -295,8 +295,13 @@ export function Window({ window: win, children }: WindowProps) {
         top: 0,
         left: 0,
         willChange: "transform, opacity",
+        // Chrome elevation exception. DESIGN.md bans box-shadow for content,
+        // and that still holds inside the window. A floating macOS window
+        // without a shadow reads as pasted on rather than lifted, so the
+        // frame itself is the one place a shadow is licensed.
+        boxShadow: "var(--shadow-window)",
       }}
-      className={`pointer-events-auto flex flex-col overflow-hidden rounded-window border bg-chrome-window backdrop-blur-[24px] ${
+      className={`pointer-events-auto flex flex-col overflow-hidden rounded-window border bg-chrome-window backdrop-blur-[32px] ${
         focused ? "border-chrome-border-focused" : "border-chrome-border"
       }`}
     >
@@ -328,7 +333,12 @@ export function Window({ window: win, children }: WindowProps) {
       </div>
 
       {/* Body. Sharp corners: the frame is round, the content is not. */}
-      <div className="min-h-0 flex-1 overflow-y-auto rounded-none bg-canvas">{children}</div>
+      <div
+        className="min-h-0 flex-1 overflow-y-auto rounded-none"
+        style={{ backgroundColor: "var(--color-window-body)" }}
+      >
+        {children}
+      </div>
 
       {/* Resize handles. Invisible, pointer-only, kept out of the tab order. */}
       {!win.zoomed &&

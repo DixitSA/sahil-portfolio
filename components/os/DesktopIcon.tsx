@@ -69,7 +69,14 @@ export default function DesktopIcon({
       <span
         className="flex h-[72px] w-[72px] items-center justify-center"
         style={{
-          color: "var(--color-ink-muted)",
+          // macOS desktop icons are tinted, not monochrome outlines: folders
+          // blue, documents pale. Keeps the 1px stroke rule, drops the grey.
+          color:
+            node.kind === "folder"
+              ? "var(--icon-folder)"
+              : node.kind === "file"
+                ? "var(--icon-file)"
+                : "var(--icon-app)",
           backgroundColor: selected ? "var(--color-selection)" : "transparent",
           border: selected
             ? "1px solid var(--color-selection-border)"

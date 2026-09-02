@@ -72,10 +72,10 @@ export default function Desktop({ onOpen, children }: DesktopProps) {
       style={{
         zIndex: "var(--z-desktop)",
         backgroundColor: "var(--color-desktop)",
-        /* 24px dot grid, derived from the ink token so no colour is hardcoded. */
-        backgroundImage:
-          "radial-gradient(color-mix(in srgb, var(--color-ink) 3%, transparent) 1px, transparent 1px)",
-        backgroundSize: "24px 24px",
+        /* A real wallpaper, not a flat fill. The dot grid was dropped here:
+           it read as a technical backdrop rather than a desktop. */
+        backgroundImage: "var(--wallpaper)",
+        backgroundSize: "cover",
       }}
       onPointerDown={(event) => {
         const hitIcon = (event.target as HTMLElement).closest("[data-desktop-icon]");

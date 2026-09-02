@@ -29,7 +29,7 @@
   --color-ornament: #2a2a2a;         /*  non-text */
 
   /* ── OS chrome ─────────────────────────────────────────────────── */
-  --color-desktop: #070707;
+  --color-desktop: #0b0a14;
   --color-chrome-menubar: rgba(14, 14, 14, 0.72);
   --color-chrome-window: rgba(17, 17, 17, 0.88);
   --color-chrome-titlebar: #161616;
@@ -70,6 +70,40 @@
   /* ── Motion ────────────────────────────────────────────────────── */
   --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+}
+
+/* ── Wallpaper ───────────────────────────────────────────────────
+   A flat fill does not read as a desktop. macOS leans on a single
+   vivid gradient, so this is a dark-mode take on that: layered radial
+   pools over a deep base, no image asset and no network request.
+   ──────────────────────────────────────────────────────────────── */
+:root {
+  --wallpaper:
+    radial-gradient(1100px 780px at 16% 10%, #1e2f6b 0%, transparent 62%),
+    radial-gradient(980px 860px at 84% 20%, #5b2a72 0%, transparent 60%),
+    radial-gradient(1300px 900px at 62% 96%, #86304f 0%, transparent 60%),
+    radial-gradient(700px 600px at 96% 78%, #1d4f6b 0%, transparent 62%),
+    linear-gradient(160deg, #0b1024 0%, #130b20 46%, #1a0f1d 100%);
+
+  /* Chrome elevation. Floating windows and the dock need a real shadow to
+     read as floating; content inside them still uses hairlines only. */
+  --shadow-window:
+    0 22px 70px rgba(0, 0, 0, 0.62),
+    0 6px 18px rgba(0, 0, 0, 0.45);
+  --shadow-dock: 0 12px 40px rgba(0, 0, 0, 0.5);
+
+  /* Window body. Opaque on purpose.
+     Vibrancy belongs on chrome, not on content: in macOS the title bar and
+     sidebar are translucent while the content area is solid. Letting the
+     wallpaper through here stacked two translucent layers and washed the
+     case-study text out. Slightly lifted off the canvas so a window still
+     reads as a surface. ink-muted holds 6.6:1 on this, ink holds 15.1:1. */
+  --color-window-body: #131317;
+
+  /* Desktop icon tints. */
+  --icon-folder: #63b3f5;
+  --icon-file: #d7dae0;
+  --icon-app: #8fb8ff;
 }
 
 /* ── z-index scale. Kept out of @theme so it stays readable. ─────── */

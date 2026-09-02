@@ -625,6 +625,39 @@ Glyphs (`x`, `−`, `⤢`) appear inside the dots only on hover of the traffic-l
 
 Recoloring them to the site palette was considered and rejected: a macOS window with green, green, and green traffic lights reads as a knockoff. Quoting a convention exactly is stronger than half-adopting it.
 
+### Wallpaper and chrome finish
+
+The desktop is a wallpaper, not a flat fill. `{colors.desktop}` alone read as a
+dark page with icons on it rather than an operating system, so the ground is a
+layered radial gradient in `--wallpaper`: deep blue into violet into warm
+magenta. Pure CSS, no image asset and no network request. The 24px dot grid was
+removed from the desktop, where it fought the metaphor. It still belongs on
+document surfaces.
+
+**Three rules are relaxed here, each scoped to chrome and each with a reason.**
+
+1. **Chrome may cast a shadow.** `--shadow-window` and `--shadow-dock` exist. A
+   floating macOS window with no shadow reads as pasted on rather than lifted.
+   The ban still holds everywhere else: nothing inside a window gets a shadow,
+   and elevation between content elements is still hairlines and surface steps.
+
+2. **Dock icons are saturated rounded squares, not 1px monochrome.** Each app
+   tile carries its own gradient behind a white glyph at ~23% corner radius,
+   which is the squircle macOS uses. Monochrome outline tiles are most of what
+   made the first pass read as a toolbar rather than a dock. The 1px stroke rule
+   still governs every other icon on the site.
+
+3. **Desktop icons are tinted.** Folders blue, documents pale. The stroke weight
+   rule is unchanged; only the grey is dropped.
+
+**Vibrancy goes on chrome, never on content.** Title bars, the menu bar, the
+dock, and spotlight are translucent with backdrop blur. Window bodies are
+opaque `--color-window-body`. Letting the wallpaper through a window body
+stacked two translucent layers and washed the case-study text out. In macOS the
+toolbar and sidebar are vibrant while the content area is solid, so this is the
+accurate behavior as well as the readable one. `ink-muted` holds 6.6:1 on the
+window body and `ink` holds 15.1:1.
+
 ### Menu bar
 
 Fixed top, `{spacing.menubar-height}` 28px, translucent with `blur(20px) saturate(180%)`. The saturation boost is what makes backdrop blur read as macOS rather than as a gray panel.
@@ -819,7 +852,7 @@ document that preceded it.
 
 ### Don't
 - Don't use Inter or Bebas Neue anywhere.
-- Don't add a `box-shadow`, however subtle.
+- Don't add a `box-shadow` to content. Window and dock chrome are the licensed exceptions.
 - Don't round a corner past 4px.
 - Don't put green on anything that is not currently happening.
 - Don't set a headline in bold. Weight 300 is the voice.
@@ -831,6 +864,7 @@ document that preceded it.
 - Don't use the traffic-light colors anywhere except traffic lights.
 - Don't round the content inside a window. The frame is round, the content is sharp.
 - Don't simulate hardware you do not have. No fake battery, no fake wifi.
+- Don't let the wallpaper through a window body. Vibrancy is for chrome; content is opaque.
 - Don't boot on a deep link, and don't boot a returning visitor twice.
 - Don't build a calculator, a music player, a working terminal, or a trash can. Build windows that hold case studies.
 - Don't stack more than four blurred surfaces at once.

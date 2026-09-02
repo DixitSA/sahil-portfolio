@@ -120,7 +120,15 @@ export type GlyphName =
   | "window"
   | "app";
 
-export function Glyph({ name, size = 22 }: { name: GlyphName; size?: number }) {
+export function Glyph({
+  name,
+  size = 22,
+  strokeWidth = 1,
+}: {
+  name: GlyphName;
+  size?: number;
+  strokeWidth?: number;
+}) {
   return (
     <svg
       width={size}
@@ -128,7 +136,7 @@ export function Glyph({ name, size = 22 }: { name: GlyphName; size?: number }) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth={1}
+      strokeWidth={strokeWidth}
       strokeLinecap="square"
       strokeLinejoin="miter"
       aria-hidden="true"
@@ -203,9 +211,24 @@ export interface DockEntry {
   label: string;
   glyph: GlyphName;
   target: OpenTarget;
+  /**
+   * Icon tile fill. macOS dock icons are saturated rounded squares, not
+   * monochrome outlines, and that is most of what makes a dock read as a
+   * dock. Each app gets its own gradient the way a real dock does.
+   */
+  tint: string;
   /** Trailing group sits after the separator rule. */
   trailing?: boolean;
 }
+
+const DOCK_TINTS: Record<string, string> = {
+  "/about": "linear-gradient(160deg, #4c8dff 0%, #1e5bd6 100%)",
+  "/work": "linear-gradient(160deg, #63c2ff 0%, #2a7fd4 100%)",
+  "/experience": "linear-gradient(160deg, #ffb340 0%, #e8802b 100%)",
+  "/contact": "linear-gradient(160deg, #56b6ff 0%, #2563eb 100%)",
+  resume: "linear-gradient(160deg, #f4f4f5 0%, #c9ccd2 100%)",
+  github: "linear-gradient(160deg, #4a4a52 0%, #232329 100%)",
+};
 
 const DOCK_GLYPHS: Record<string, GlyphName> = {
   "/about": "user",
@@ -220,12 +243,14 @@ export const DOCK_ENTRIES: DockEntry[] = [
     label: app.title,
     glyph: DOCK_GLYPHS[app.id] ?? "window",
     target: app,
+    tint: DOCK_TINTS[app.id] ?? DOCK_TINTS["/about"],
   })),
   {
     key: "resume",
     label: "Resume",
     glyph: "doc",
     target: { kind: "link", href: RESUME_HREF },
+    tint: DOCK_TINTS.resume,
     trailing: true,
   },
   {
@@ -233,6 +258,7 @@ export const DOCK_ENTRIES: DockEntry[] = [
     label: "GitHub",
     glyph: "terminal",
     target: { kind: "link", href: githubHref },
+    tint: DOCK_TINTS.github,
     trailing: true,
   },
 ];
@@ -302,8 +328,9 @@ export default function Dock({ onOpen }: DockProps) {
           backgroundColor: "var(--color-chrome-dock)",
           backdropFilter: "blur(28px) saturate(180%)",
           WebkitBackdropFilter: "blur(28px) saturate(180%)",
-          border: "1px solid var(--color-hairline-strong)",
+          border: "1px solid rgba(255,255,255,0.12)",
           borderRadius: "var(--radius-dock)",
+          boxShadow: "var(--shadow-dock)",
         }}
       >
         {DOCK_ENTRIES.map((entry, i) => (
@@ -376,18 +403,21 @@ function DockItem({
         style={{
           scale: magnify ? scale : 1,
           transformOrigin: "bottom center",
-          backgroundColor: "var(--color-surface-2)",
-          border: "1px solid var(--color-hairline-strong)",
+          backgroundImage: entry.tint,
+          // ~23% is the squircle approximation macOS uses for app tiles.
+          borderRadius: 11,
+          border: "1px solid rgba(255,255,255,0.16)",
+          color: entry.key === "resume" ? "#1c1c1f" : "#ffffff",
         }}
-        className="flex h-12 w-12 items-center justify-center rounded-full text-ink-muted transition-colors duration-150 group-hover:text-ink group-focus-visible:text-ink"
+        className="flex h-12 w-12 items-center justify-center"
       >
-        <Glyph name={entry.glyph} />
+        <Glyph name={entry.glyph} size={25} strokeWidth={1.6} />
       </motion.span>
 
       {/* Running indicator. Green is live state, which this is. */}
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-[-6px] left-1/2 h-[3px] w-[3px] -translate-x-1/2 rounded-full"
+        className="pointer-events-none absolute bottom-[-7px] left-1/2 h-[4px] w-[4px] -translate-x-1/2 rounded-full"
         style={{
           backgroundColor: "var(--color-primary)",
           opacity: isRunning ? 1 : 0,
