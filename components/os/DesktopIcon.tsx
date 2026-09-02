@@ -16,7 +16,13 @@ import MacIcon, { type MacIconName } from "./MacIcon";
 export function glyphFor(node: FSNode): MacIconName {
   if (node.kind === "folder") return "folder";
   const name = node.name.toLowerCase();
-  if (name.endsWith(".app")) return "grid";
+  if (name.endsWith(".app")) {
+    // Applications get their own mark. Falling through to a generic tile made
+    // Kaal.app and Contact.app identical on the desktop.
+    if (name.startsWith("kaal")) return "kaal";
+    if (name.startsWith("contact")) return "mail";
+    return "grid";
+  }
   if (name.endsWith(".pdf")) return "pdf";
   if (name.endsWith(".md") || name.endsWith(".txt")) return "document";
   if (node.kind === "file") return "document";

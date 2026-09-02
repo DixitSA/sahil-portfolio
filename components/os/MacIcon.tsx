@@ -22,6 +22,7 @@ export type MacIconName =
   | "timeline"
   | "mail"
   | "terminal"
+  | "kaal"
   | "grid";
 
 /** Per-icon gradient stops. Cool blues for containers, warm for time. */
@@ -33,6 +34,9 @@ const RAMP: Record<MacIconName, [string, string]> = {
   timeline: ["#ffc056", "#e8802b"],
   mail: ["#5fb8ff", "#2563eb"],
   terminal: ["#4c4c55", "#1f1f25"],
+  // Kaal carries its own brand, not the portfolio's. A cream tile among blue
+  // ones reads as a third-party app, which is exactly what it is.
+  kaal: ["#f7f3ec", "#e2d8c6"],
   grid: ["#8fb8ff", "#3f6fd8"],
 };
 
@@ -138,8 +142,13 @@ export default function MacIcon({
             )}
             {name === "mail" && (
               <>
-                <rect x="13" y="17" width="22" height="15" rx="2.5" />
-                <path d="M13.5 19l10.5 7.5L34.5 19" />
+                <rect x="12" y="16" width="24" height="17" rx="2.5" fill="#ffffff" stroke="none" />
+                <path
+                  d="M12.8 17.6 24 26.4l11.2-8.8"
+                  stroke="#2563eb"
+                  strokeWidth="2.1"
+                  fill="none"
+                />
               </>
             )}
             {name === "terminal" && (
@@ -147,6 +156,13 @@ export default function MacIcon({
                 <path d="M16 19l5 5-5 5" />
                 <path d="M25 30h8" />
               </>
+            )}
+            {name === "kaal" && (
+              <g stroke="#b5563e" strokeWidth="1.6">
+                <rect x="13" y="13" width="22" height="22" />
+                <path d="M24 13 35 24 24 35 13 24Z" />
+                <path d="M13 13 35 35M35 13 13 35" />
+              </g>
             )}
             {name === "grid" && (
               <>

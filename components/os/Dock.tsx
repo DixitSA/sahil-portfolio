@@ -226,7 +226,7 @@ const DOCK_ICONS: Record<string, MacIconName> = {
   "/work": "folder",
   "/experience": "timeline",
   "/contact": "mail",
-  "/kaal": "grid",
+  "/kaal": "kaal",
 };
 
 const DOCK_GLYPHS: Record<string, GlyphName> = {
