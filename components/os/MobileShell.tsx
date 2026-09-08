@@ -179,7 +179,7 @@ export default function MobileShell({
  *
  *   1. who this is, and whether he is available. Two seconds of reading.
  *   2. the apps, all six above the fold on a standard phone.
- *   3. Now and Watching, for anyone who keeps scrolling.
+ *   3. the working-on and watching tiles, for anyone who keeps scrolling.
  *
  * Icon order is recruiter priority rather than filesystem order: the guide,
  * then work and resume, since those are what someone screening actually opens.

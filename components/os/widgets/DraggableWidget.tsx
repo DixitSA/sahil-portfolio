@@ -84,7 +84,7 @@ export default function DraggableWidget({
    * column and "corrected" the widget into it on mount, applying a bogus
    * transform of roughly (502, 140). In development the offset was absorbed;
    * in the production build it centred both widgets and stacked them on top
-   * of each other, so Now was completely hidden behind Watching.
+   * of each other, so the first tile was completely hidden behind the second.
    *
    * Nothing constrains the drag now. Widgets still cannot be lost, because
    * the position is clamped to the viewport at the moment it is saved.

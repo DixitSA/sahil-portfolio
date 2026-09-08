@@ -2,18 +2,22 @@ import { profile } from "@/content";
 import Widget from "./Widget";
 
 /**
- * "Now" tile.
+ * "What I'm working on" tile.
  *
  * What is being worked on this month. A static portfolio cannot prove
  * freshness; a dated line can. Content lives in content/profile.ts so it is
  * edited in one place, next to everything else that is true about the owner.
+ *
+ * Titled as a sentence rather than as "Now", which is a convention borrowed
+ * from personal sites and means nothing to a recruiter who has not seen one.
+ * The tile has to say what it is holding before anyone decides to read it.
  */
 export default function NowWidget() {
   const now = profile.now;
   if (!now) return null;
 
   return (
-    <Widget title="Now" subtitle={now.updated}>
+    <Widget title="What I'm working on" subtitle={now.updated}>
       <ul className="space-y-2.5">
         {now.items.map((item, i) => (
           <li key={i} className="flex gap-2.5">
