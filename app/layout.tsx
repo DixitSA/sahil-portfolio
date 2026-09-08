@@ -20,6 +20,7 @@ import NowWidget from "@/components/os/widgets/NowWidget";
 import WatchingWidget from "@/components/os/widgets/WatchingWidget";
 import WindowManager from "@/components/os/WindowManager";
 
+import StartBody from "./start/page";
 import AboutBody from "./about/page";
 import WorkBody from "./work/page";
 import ExperienceBody from "./experience/page";
@@ -134,6 +135,13 @@ export default function RootLayout({
               currentContent={children}
               titles={dynamicTitles}
               windows={[
+                {
+                  route: "/start",
+                  title: "Start Here.md",
+                  content: <StartBody />,
+                  w: 720,
+                  h: 620,
+                },
                 { route: "/about", title: "About.md", content: <AboutBody />, w: 720, h: 520 },
                 { route: "/work", title: "Work", content: <WorkBody />, w: 840, h: 560 },
                 {

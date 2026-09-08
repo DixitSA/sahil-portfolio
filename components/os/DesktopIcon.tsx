@@ -24,6 +24,10 @@ export function glyphFor(node: FSNode): MacIconName {
     return "grid";
   }
   if (name.endsWith(".pdf")) return "pdf";
+  // The guide is a .md like About.md, but it is the one icon that has to be
+  // findable at a glance among six others. A compass among plain documents is
+  // what makes it the thing the eye lands on first.
+  if (name.startsWith("start here")) return "guide";
   if (name.endsWith(".md") || name.endsWith(".txt")) return "document";
   if (node.kind === "file") return "document";
   return "document";
@@ -34,6 +38,12 @@ export interface DesktopIconProps {
   selected: boolean;
   /** Roving tabindex. Exactly one icon in the column carries 0. */
   tabIndex?: number;
+  /**
+   * Draws the breathing halo. Reserved for the guide on a first visit: an
+   * indicator that appears on more than one icon at a time is not an
+   * indicator, it is decoration.
+   */
+  attention?: boolean;
   onSelect: () => void;
   onOpen: () => void;
   ref?: Ref<HTMLButtonElement>;
@@ -43,6 +53,7 @@ export default function DesktopIcon({
   node,
   selected,
   tabIndex = -1,
+  attention = false,
   onSelect,
   onOpen,
   ref,
@@ -75,7 +86,7 @@ export default function DesktopIcon({
       className="flex w-24 flex-col items-center gap-1"
     >
       <span
-        className="flex h-[72px] w-[72px] items-center justify-center"
+        className="relative flex h-[72px] w-[72px] items-center justify-center"
         style={{
           backgroundColor: selected ? "var(--color-selection)" : "transparent",
           border: selected
@@ -84,7 +95,12 @@ export default function DesktopIcon({
           borderRadius: "var(--radius-sm)",
         }}
       >
-        <MacIcon name={glyphFor(node)} size={46} />
+        {/* Behind the tile, never over it: the icon stays the thing you see,
+            the halo is only what makes you look there. */}
+        {attention && <span aria-hidden="true" className="icon-attention" />}
+        <span className="relative">
+          <MacIcon name={glyphFor(node)} size={46} />
+        </span>
       </span>
 
       <span

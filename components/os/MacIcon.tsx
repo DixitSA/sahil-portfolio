@@ -27,6 +27,7 @@ export type MacIconName =
   | "mail"
   | "terminal"
   | "kaal"
+  | "guide"
   | "grid";
 
 /** Per-icon gradient stops. Cool blues for containers, warm for time. */
@@ -41,6 +42,9 @@ const RAMP: Record<MacIconName, [string, string]> = {
   // Kaal carries its own brand, not the portfolio's. A cream tile among blue
   // ones reads as a third-party app, which is exactly what it is.
   kaal: ["#f7f3ec", "#e2d8c6"],
+  // Violet so the guide is the one tile that is not a blue container, and so
+  // it borrows nothing from the terminal green, which stays live state only.
+  guide: ["#b79cff", "#6d4bd6"],
   grid: ["#8fb8ff", "#3f6fd8"],
 };
 
@@ -175,6 +179,18 @@ export default function MacIcon({
                 <path d="M24 13 35 24 24 35 13 24Z" />
                 <path d="M13 13 35 35M35 13 13 35" />
               </g>
+            )}
+            {/* A compass. The one glyph that reads as "you are being pointed
+                somewhere" without a word of copy under it. */}
+            {name === "guide" && (
+              <>
+                <circle cx="24" cy="24" r="10.5" />
+                <path
+                  d="M29.6 18.4 26.6 26.6 18.4 29.6 21.4 21.4Z"
+                  fill="#ffffff"
+                  stroke="none"
+                />
+              </>
             )}
             {name === "grid" && (
               <>

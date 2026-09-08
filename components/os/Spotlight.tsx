@@ -33,6 +33,21 @@ interface Result {
   run: () => void;
 }
 
+/**
+ * Extra search terms per section, since a section's own name is rarely what
+ * someone types. Nobody looking for the guide searches "start" — they search
+ * "help", "how do I", or "navigate", and a palette that returns nothing for
+ * those is a palette that failed the one visitor who most needed it.
+ */
+const SECTION_KEYWORDS: Record<string, string> = {
+  "/start": "help guide how to use this site navigate instructions readme orientation where to begin lost",
+  "/about": "bio background thesis who is this",
+  "/work": "projects case studies portfolio builds finder",
+  "/experience": "roles jobs career history employment cv",
+  "/contact": "email hire hiring availability reach out",
+  "/kaal": "app product astrology decision engine",
+};
+
 export interface SpotlightProps {
   /** Route-aware activation. Falls back to the window store. */
   onOpen?: OpenHandler;
@@ -84,7 +99,7 @@ function Panel({ onOpen }: SpotlightProps) {
       label: app.title,
       detail: app.route,
       category: "SECTION",
-      keywords: `${app.title} ${app.route} section window`,
+      keywords: `${app.title} ${app.route} section window ${SECTION_KEYWORDS[app.id] ?? ""}`,
       run: () => activate(app),
     }));
 

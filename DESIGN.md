@@ -580,6 +580,7 @@ Every openable surface owns a real route that server-renders its content:
 
 ```
 /                 desktop, no windows open
+/start            desktop + Start Here, the reading path, open and focused
 /about            desktop + About window open and focused
 /work             desktop + Work (Finder) window open
 /work/kaal        desktop + the Kaal case study window open
@@ -693,32 +694,85 @@ it covers the real one. Everywhere else the phone draws its own.
 
 ### Guiding the visitor
 
-A desktop is only intuitive to people who already know desktops. Two things
-here are not guessable by looking: files open on double click, and the fastest
-route anywhere is Command K. A visitor who single-clicks an icon, sees nothing
-happen, and leaves is the most expensive failure this design can produce.
+A desktop is only intuitive to people who already know desktops, and it assumes
+a visitor willing to explore. The primary audience is neither. Two things here
+are not guessable by looking — files open on double click, and the fastest
+route anywhere is Command K — and beneath both sits a worse question the
+gestures do not answer: *which window should I open first?* A recruiter who
+single-clicks an icon, sees nothing happen, and leaves is the most expensive
+failure this design can produce. A recruiter who works out the gestures and
+still cannot find the resume is the second.
 
-Two affordances, both restrained.
+Three affordances, all restrained.
 
-**A permanent hint bar** above the dock names double click, Command K and right
-click. It does not time out. A hint that disappears has only helped the
-visitors who happened to be looking, and the cost of someone never working out
-how to open a file is losing them entirely.
+**`Start Here.md`, the reading path.** A real route at `/start`, first in the
+icon column and first in the dock, carrying three things in the order they get
+asked: what to open and in what order, with a time cost against each step; how
+to drive the desktop; and the resume, email and GitHub for someone who has
+sixty seconds and no interest in any of the above. The path is derived from
+`content/`, so a new featured project appears in it without anyone remembering.
+
+It is a route rather than a modal for the same reason every window is: a guide
+that cannot be linked to is a guide a recruiter cannot forward to the hiring
+manager.
+
+Being first is not the same as being seen, so on a first visit the icon is
+pointed at, in the two ways Apple points at things and in neither of the ways
+it does not. There is no badge, no red dot, no ribbon, and no colour borrowed
+from something that already means something else.
+
+- **A breathing halo behind the icon.** A soft radial glow in the tile's own
+  violet, lifted most of the way to white because the wallpaper presets are
+  themselves purple in places and a saturated violet glow on a violet ground is
+  invisible exactly where it is needed. It breathes three times and then rests
+  at the low end of its own cycle. An indicator that pulses forever stops
+  reading as guidance and starts reading as a rave, on a desktop somebody is
+  trying to use.
+- **A popover with a tail.** macOS chrome material, one line of copy, one
+  button, aimed at the icon. It scales up from its tail rather than fading in,
+  so it reads as coming out of the thing it is talking about.
+
+Both are held to the same line as everything else here. The popover is
+`pointer-events: none` except for its two buttons, so every icon underneath
+stays clickable through it. It retires on its own after eleven seconds, on the
+first pointer down anywhere, and on opening the guide. It appears once per
+browser rather than once per load, because a recruiter who came back to check a
+number does not need the tour again. It waits out the lock screen, so the
+entrance is not spent on nobody. It never appears on a deep link or below `lg`,
+where the springboard already leads with the same guide and a home screen has a
+reading order a bare wallpaper does not.
+
+Under reduced motion the global rule collapses both animations to their fill
+state. The glow and the popover still arrive with the same information; they
+simply arrive already there. Every resting value therefore lives in a keyframe
+rather than in JS.
+
+The unmount is a timeout and never an `animationend`, for the reason the lock
+screen documents: an exit that never fires must not be able to strand a panel
+on screen.
+
+**A permanent hint bar** above the dock leads with Start Here, then names
+double click, Command K and right click. It does not time out. A hint that
+disappears has only helped the visitors who happened to be looking, and the
+cost of someone never working out how to open a file is losing them entirely.
 
 The Command K hint is itself the button, so a visitor who does not want to
 learn a shortcut can click it. That is why the menu bar carries no separate
 search affordance: one control, in one place.
 
 It is hidden on deep links, where the visitor came for a specific case study
-rather than a tour, and below `lg`, where the springboard replaces the desktop
-and none of it applies.
+rather than an orientation, and below `lg`, where the springboard replaces the
+desktop and none of it applies. On a phone the springboard leads with the same
+guide, since there is no menu bar or dock to fall back on.
 
 **The menu bar's active application is a control.** With nothing focused it
 reads Finder and opens Work, which is the file browser this desktop has. It was
 inert text, so clicking it did nothing and read as broken.
 
-No modal, no tour, nothing to dismiss. A visitor who ignores the bar still
-reaches every route from the dock, the menu bar and the hidden navigation.
+No modal, no tour, nothing that blocks the desktop or has to be dismissed
+before it can be used. Start Here is offered in four places, pointed at once,
+and forced in none, and a visitor who ignores all of it still reaches every
+route from the dock, the menu bar and the hidden navigation.
 
 ### Easter eggs
 
@@ -812,7 +866,7 @@ window body and `ink` holds 15.1:1.
 
 Fixed top, `{spacing.menubar-height}` 28px, translucent with `blur(20px) saturate(180%)`. The saturation boost is what makes backdrop blur read as macOS rather than as a gray panel.
 
-- **Left:** monogram, then the active window's name in medium weight, then menus. Menus are repurposed, not decorative: `File` holds Resume and Contact, `View` toggles desktop arrangement, `Go` jumps to sections, `Help` opens the keyboard shortcut list.
+- **Left:** monogram, then the active window's name in medium weight, then menus. Menus are repurposed, not decorative: the monogram holds the palette and every app, `About` holds the resume and GitHub, `Work` lists the case studies, `Contact` holds the email address, and `Help` sits last where macOS puts it — the guide, the search shortcut, and the resume, which are the three things someone reaches for the moment a desktop stops behaving like the page they expected.
 - **Right:** status items in `{typography.mono-sm}` — the live availability dot in `{colors.primary}`, and a local clock ticking in real time. The clock is the cheapest possible proof the thing is alive. Update it on a one-second interval, and clear the interval on unmount.
 - No fake battery or wifi icons. Simulating hardware you do not have is where an OS portfolio tips from clever into costume.
 
@@ -834,10 +888,14 @@ Model the content as an actual tree rather than a flat list, because the Finder 
 
 ```
 ~/
+  Start Here.md  the reading path. First, and the only icon that is not a
+                 plain document or a folder: a compass tile, so it is what
+                 the eye lands on before it starts guessing
   Work/          one file per project, opens a case study window
   Experience/    one file per role
   About.md
   Resume.pdf     opens a real PDF, does not simulate one
+  Kaal.app
   Contact.app
 ```
 
@@ -863,8 +921,11 @@ build untouched by anything done for phones.
 
 Two states:
 
-- **Home.** Widgets stacked, then one app grid four across. There is no
-  separate dock: with six destinations a dock repeats four of them directly
+- **Home.** Identity, then one app grid four across, then the ambient widgets.
+  That order is recruiter priority: leading with two tall widgets pushed every
+  icon below the fold. `Start Here` leads the grid, then Work and the resume,
+  since a phone has no menu bar and no dock to orient anyone. There is no
+  separate dock: with seven destinations a dock repeats four of them directly
   under the grid, which reads as a rendering bug rather than as iOS.
 - **App.** A translucent nav bar with a back chevron naming the parent route,
   a centred title, and the route body below. Navigation is hierarchical, so

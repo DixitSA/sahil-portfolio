@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { useOS } from "@/lib/os/store";
+import { START_APP, useOpenWindow } from "./Dock";
 
 /**
  * Permanent hint bar.
@@ -13,17 +14,24 @@ import { useOS } from "@/lib/os/store";
  * failure this design can produce, so the guidance stays on screen rather than
  * timing out.
  *
- * It also carries the Command K affordance itself: the search hint is a real
- * button, so a visitor who does not want to learn a shortcut can just click
- * it. That is why the menu bar no longer duplicates it.
+ * The mechanics are only half of it. Knowing how to open a window does not
+ * tell a recruiter which window to open first, so the bar leads with the
+ * guide: one click to a reading path, ahead of the gestures. It is a button to
+ * a real route, not a tour that runs at you — nothing here has to be
+ * dismissed before the desktop can be used.
+ *
+ * The Command K hint is likewise the affordance itself, so a visitor who does
+ * not want to learn a shortcut can just click it. That is why the menu bar
+ * carries no separate search control.
  *
  * Hidden on deep links, where the visitor came for a specific case study
- * rather than a tour, and below `lg`, where the springboard replaces the
- * desktop entirely and none of this applies.
+ * rather than an orientation, and below `lg`, where the springboard replaces
+ * the desktop entirely and none of this applies.
  */
 export default function Hints() {
   const pathname = usePathname();
   const setSpotlight = useOS((s) => s.setSpotlight);
+  const activate = useOpenWindow();
 
   if (pathname !== "/") return null;
 
@@ -47,6 +55,21 @@ export default function Hints() {
           borderRadius: 999,
         }}
       >
+        {/* Brighter than the gestures beside it. Of the four things on this
+            bar, this is the one worth clicking first. */}
+        <button
+          type="button"
+          onClick={() => activate(START_APP)}
+          className="flex items-center gap-1"
+          aria-label="Open Start Here, a guided path through this site"
+          style={{ color: "var(--color-ink)" }}
+        >
+          New here?
+          <span style={{ color: "var(--link-accent)" }}>Start here</span>
+        </button>
+
+        <Dot />
+
         <span>Double-click a file to open it</span>
 
         <Dot />

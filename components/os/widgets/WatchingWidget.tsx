@@ -2,7 +2,9 @@ import { profile } from "@/content";
 import Widget from "./Widget";
 
 /**
- * "Watching" tile. The latest from a curated set of AI and tech channels.
+ * "What I'm watching" tile. The latest from a curated set of AI and tech
+ * channels. Titled as a sentence to match the tile above it, and because
+ * "Watching" alone could as easily be a stock ticker as a video feed.
  *
  * A server component, so the feed is fetched and cached on the server rather
  * than from the visitor's browser: no API key, no CORS, no client waterfall,
@@ -98,7 +100,7 @@ export default async function WatchingWidget() {
   if (!videos.length) return null;
 
   return (
-    <Widget title="Watching" subtitle="AI · tech · markets">
+    <Widget title="What I'm watching" subtitle="AI · tech · markets">
       <ul className="space-y-2.5">
         {videos.map((v) => (
           <li key={v.url}>

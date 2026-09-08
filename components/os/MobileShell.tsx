@@ -31,6 +31,7 @@ import { useWallpaper } from "./WallpaperMenu";
  */
 
 const APP_ICON: Record<string, MacIconName> = {
+  "/start": "guide",
   "/work": "folder",
   "/experience": "timeline",
   "/about": "document",
@@ -46,6 +47,7 @@ function titleFor(pathname: string): string {
   const role = roles.find((r) => `/experience/${r.id}` === pathname);
   if (role) return role.company;
   const map: Record<string, string> = {
+    "/start": "Start Here",
     "/about": "About",
     "/work": "Work",
     "/experience": "Experience",
@@ -177,12 +179,15 @@ export default function MobileShell({
  *
  *   1. who this is, and whether he is available. Two seconds of reading.
  *   2. the apps, all six above the fold on a standard phone.
- *   3. Now and Watching, for anyone who keeps scrolling.
+ *   3. the working-on and watching tiles, for anyone who keeps scrolling.
  *
- * Icon order is recruiter priority rather than filesystem order: work and
- * resume first, since those are what someone screening actually opens.
+ * Icon order is recruiter priority rather than filesystem order: the guide,
+ * then work and resume, since those are what someone screening actually opens.
+ * Start Here leads because a phone hides the menu bar and the dock, so this
+ * grid is the only orientation a mobile visitor gets.
  */
 const MOBILE_ORDER = [
+  "/start",
   "/work",
   "/Sahil_Dixit_Resume.pdf",
   "/about",

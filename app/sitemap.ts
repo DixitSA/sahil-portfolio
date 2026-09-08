@@ -12,7 +12,14 @@ const BASE = SITE_URL;
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
-  const staticRoutes = ["", "/about", "/work", "/experience", "/contact"].map((path) => ({
+  const staticRoutes = [
+    "",
+    "/start",
+    "/about",
+    "/work",
+    "/experience",
+    "/contact",
+  ].map((path) => ({
     url: `${BASE}${path}`,
     lastModified: now,
     changeFrequency: "monthly" as const,

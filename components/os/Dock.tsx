@@ -10,7 +10,7 @@ import {
   useTransform,
   type MotionValue,
 } from "framer-motion";
-import { profile } from "@/content";
+import { githubUrl, profile } from "@/content";
 import { useOS } from "@/lib/os/store";
 import MacIcon, { type MacIconName } from "./MacIcon";
 
@@ -44,8 +44,12 @@ export interface LinkTarget {
 export type OpenTarget = WindowTarget | LinkTarget;
 export type OpenHandler = (target: OpenTarget) => void;
 
-/** The four section applications. Shared by dock, menu bar and spotlight. */
+/** The section applications. Shared by dock, menu bar and spotlight. */
 export const OS_APPS: WindowTarget[] = [
+  // First, deliberately. The rest of the site assumes a visitor who will poke
+  // at a desktop to find out what it does; a recruiter screening portfolios
+  // will not, and this is the one surface that tells them where to look.
+  { kind: "window", id: "/start", title: "Start Here", route: "/start", w: 720, h: 620 },
   { kind: "window", id: "/about", title: "About", route: "/about", w: 720, h: 520 },
   { kind: "window", id: "/work", title: "Work", route: "/work", w: 840, h: 560 },
   {
@@ -65,9 +69,11 @@ export const OS_APPS: WindowTarget[] = [
 /** Must match the file in /public and the Resume.pdf node in content/fs.ts. */
 export const RESUME_HREF = "/Sahil_Dixit_Resume.pdf";
 export const emailHref = `mailto:${profile.email}`;
-export const githubHref = profile.github.startsWith("http")
-  ? profile.github
-  : `https://github.com/${profile.github.replace(/^@/, "")}`;
+/** Normalized once in content/profile.ts; re-exported here for chrome. */
+export const githubHref = githubUrl;
+
+/** The guide. Named so the hint bar and the Help menu cannot drift from it. */
+export const START_APP: WindowTarget = OS_APPS.find((app) => app.id === "/start")!;
 
 /**
  * Activation.
@@ -222,6 +228,7 @@ export interface DockEntry {
 }
 
 const DOCK_ICONS: Record<string, MacIconName> = {
+  "/start": "guide",
   "/about": "person",
   "/work": "folder",
   "/experience": "timeline",
@@ -230,6 +237,7 @@ const DOCK_ICONS: Record<string, MacIconName> = {
 };
 
 const DOCK_GLYPHS: Record<string, GlyphName> = {
+  "/start": "doc",
   "/about": "user",
   "/work": "folder",
   "/experience": "timeline",

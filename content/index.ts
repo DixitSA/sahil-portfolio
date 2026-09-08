@@ -23,6 +23,6 @@ export {
 
 export { roles, getRole } from "./experience";
 
-export { profile } from "./profile";
+export { profile, githubUrl, githubHandle } from "./profile";
 
 export { desktop } from "./fs";

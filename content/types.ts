@@ -69,10 +69,13 @@ export interface Profile {
     graduated: string;
   };
   stats: { label: string; value: string; sub: string }[];
-  /** "Now" tile. Freshness is the one thing a static portfolio cannot fake. */
+  /**
+   * "What I'm working on" tile. Freshness is the one thing a static
+   * portfolio cannot fake.
+   */
   now?: { updated: string; items: string[] };
   /**
-   * YouTube channels the Watching tile pulls from. Channel names are read
+   * YouTube channels the "What I'm watching" tile pulls from. Names are read
    * from the feed itself rather than stored here, so the tile cannot
    * mislabel a channel.
    */

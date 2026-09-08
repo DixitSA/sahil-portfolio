@@ -21,19 +21,33 @@ export const profile: Profile = {
     "I build at night because I do not think you can govern systems you have never shipped. Kaal is a decision engine live on web and iOS that is deliberately deterministic rather than generative, because a product people return to cannot contradict itself. Axira runs three LLM agents through an outreach pipeline behind a human approval gate, on a home server costing close to nothing.",
     "I am most useful where finance, regulation, and working software all have to agree with each other.",
   ],
+  /**
+   * The "What I'm working on" tile.
+   *
+   * Named themes first, evidence second. A recruiter scanning a desktop tile
+   * is pattern-matching for a discipline, not reading prose, so each line
+   * leads with the thing being practised and then earns it with something
+   * specific from the resume.
+   *
+   * Deliberately not a second copy of `stats` or of `bio`. The numbers those
+   * four tiles own (~80% ahead of deadline, ~15 minute slide turnaround) are
+   * left to them, and the Axira line is angled at the handoff between agents
+   * rather than at the home server, which the bio already covers. One line of
+   * the site should never read as a paraphrase of another.
+   */
   now: {
     updated: "September 2026",
     items: [
-      "Carrying a second wave of AI complaint-handling models through model-risk review.",
-      "Rebuilding this site as a working desktop, because a portfolio should demonstrate the thing it claims.",
-      "Teaching Kaal to explain its own reasoning without becoming generative.",
+      "Multi-agent orchestration. Three LLM agents handing research to drafting to follow-up in one Axira pipeline, with a human gate before anything sends.",
+      "Applied AI strategy. A governed Copilot prompt framework that turns rough inputs into source-backed executive slides, adopted teamwide.",
+      "AI/ML model-risk governance. Carrying AI complaint-handling models through active model risk review across 3 workstreams.",
     ],
   },
   /**
-   * Sources for the Watching tile. Curated on purpose: a live feed of
-   * arbitrary trending video would eventually surface something you would not
-   * choose to put in front of a recruiter. Picking the channels keeps the
-   * freshness without the surprise.
+   * Sources for the "What I'm watching" tile. Curated on purpose: a live
+   * feed of arbitrary trending video would eventually surface something you
+   * would not choose to put in front of a recruiter. Picking the channels
+   * keeps the freshness without the surprise.
    *
    * Verified against each feed. Note these are the AI and tech channels the
    * author selected, not a claim about what the owner watches. Swap them.
@@ -101,3 +115,19 @@ export const profile: Profile = {
     },
   ],
 };
+
+/**
+ * The GitHub profile as a link, normalized once.
+ *
+ * `profile.github` already carries a protocol, but three surfaces wrapped it in
+ * another `https://` of their own. The contact card and the structured data
+ * both pointed at `https://https://github.com/...`, which is a dead link on the
+ * one row a recruiter is most likely to click. Everything that renders the
+ * profile link reads this instead.
+ */
+export const githubUrl: string = profile.github.startsWith("http")
+  ? profile.github
+  : `https://github.com/${profile.github.replace(/^@/, "")}`;
+
+/** Same value without the scheme, for display. */
+export const githubHandle: string = githubUrl.replace(/^https?:\/\//, "");

@@ -115,6 +115,17 @@
   --icon-folder: #63b3f5;
   --icon-file: #d7dae0;
   --icon-app: #8fb8ff;
+  --icon-guide: #b79cff;
+
+  /* Attention halo behind the guide icon. Violet, after the tile it sits
+     under, but lifted most of the way to white: the wallpaper presets are
+     themselves purple in places, and a saturated violet glow on a violet
+     ground is invisible exactly where it most needs to be seen. The outer
+     stop carries the same hue at zero alpha, because `transparent` fades
+     through black and leaves a grey ring. */
+  --glow-guide: rgba(226, 214, 255, 0.72);
+  --glow-guide-mid: rgba(183, 156, 255, 0.34);
+  --glow-guide-out: rgba(183, 156, 255, 0);
 }
 
 /* ── z-index scale. Kept out of @theme so it stays readable. ─────── */
@@ -275,6 +286,59 @@ body::before {
 }
 .dock-bounce {
   animation: dock-bounce 0.62s ease-out 1;
+}
+
+/* ── Attention: the guide icon and its callout ─────────────────
+   Apple's way of saying "this one" is a soft halo and a popover that grows
+   out of the thing it is pointing at. Neither carries a badge, a colour that
+   already means something, or a number.
+
+   The halo breathes three times and then rests at the low end of its own
+   cycle, which `both` leaves painted. An indicator that pulses forever stops
+   reading as guidance and starts reading as a rave, and this one has to sit
+   on a desktop someone is trying to use.
+
+   Under reduced motion the global rule below collapses both animations to
+   their fill state, which is why every resting value lives in a keyframe
+   rather than in JS: the glow and the popover still arrive, they simply
+   arrive already there.
+   ──────────────────────────────────────────────────────────── */
+@keyframes icon-breathe {
+  0%, 100% { opacity: 0.24; transform: scale(0.94); }
+  50%      { opacity: 0.72; transform: scale(1.07); }
+}
+.icon-attention {
+  position: absolute;
+  inset: -7px;
+  border-radius: 16px;
+  background: radial-gradient(
+    circle at 50% 46%,
+    var(--glow-guide) 0%,
+    var(--glow-guide-mid) 42%,
+    var(--glow-guide-out) 72%
+  );
+  animation: icon-breathe 2.6s var(--ease-standard) 3 both;
+  pointer-events: none;
+}
+
+/* The popover grows from its tail, so it reads as coming out of the icon it
+   points at rather than as a panel that faded in over the wallpaper. */
+@keyframes callout-in {
+  0%   { opacity: 0; transform: translateY(-50%) scale(0.84); }
+  62%  { opacity: 1; transform: translateY(-50%) scale(1.025); }
+  100% { opacity: 1; transform: translateY(-50%) scale(1); }
+}
+@keyframes callout-out {
+  to { opacity: 0; transform: translateY(-50%) scale(0.96); }
+}
+.callout-in {
+  transform-origin: right center;
+  animation: callout-in 340ms var(--ease-standard) both;
+}
+.callout-out {
+  transform-origin: right center;
+  animation: callout-out 200ms var(--ease-exit) both;
+  pointer-events: none;
 }
 
 /* ── Live status pulse ───────────────────────────────────────────── */

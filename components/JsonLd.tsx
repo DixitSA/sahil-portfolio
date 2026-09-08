@@ -1,4 +1,4 @@
-import { profile, projects } from "@/content";
+import { githubUrl, profile, projects } from "@/content";
 import { SITE_URL } from "@/lib/site";
 
 const BASE = SITE_URL;
@@ -18,7 +18,7 @@ export default function JsonLd() {
         jobTitle: profile.title,
         email: `mailto:${profile.email}`,
         url: BASE,
-        sameAs: [`https://${profile.github}`],
+        sameAs: [githubUrl],
         address: {
           "@type": "PostalAddress",
           addressLocality: profile.location,
