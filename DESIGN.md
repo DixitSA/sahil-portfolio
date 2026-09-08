@@ -716,6 +716,41 @@ It is a route rather than a modal for the same reason every window is: a guide
 that cannot be linked to is a guide a recruiter cannot forward to the hiring
 manager.
 
+Being first is not the same as being seen, so on a first visit the icon is
+pointed at, in the two ways Apple points at things and in neither of the ways
+it does not. There is no badge, no red dot, no ribbon, and no colour borrowed
+from something that already means something else.
+
+- **A breathing halo behind the icon.** A soft radial glow in the tile's own
+  violet, lifted most of the way to white because the wallpaper presets are
+  themselves purple in places and a saturated violet glow on a violet ground is
+  invisible exactly where it is needed. It breathes three times and then rests
+  at the low end of its own cycle. An indicator that pulses forever stops
+  reading as guidance and starts reading as a rave, on a desktop somebody is
+  trying to use.
+- **A popover with a tail.** macOS chrome material, one line of copy, one
+  button, aimed at the icon. It scales up from its tail rather than fading in,
+  so it reads as coming out of the thing it is talking about.
+
+Both are held to the same line as everything else here. The popover is
+`pointer-events: none` except for its two buttons, so every icon underneath
+stays clickable through it. It retires on its own after eleven seconds, on the
+first pointer down anywhere, and on opening the guide. It appears once per
+browser rather than once per load, because a recruiter who came back to check a
+number does not need the tour again. It waits out the lock screen, so the
+entrance is not spent on nobody. It never appears on a deep link or below `lg`,
+where the springboard already leads with the same guide and a home screen has a
+reading order a bare wallpaper does not.
+
+Under reduced motion the global rule collapses both animations to their fill
+state. The glow and the popover still arrive with the same information; they
+simply arrive already there. Every resting value therefore lives in a keyframe
+rather than in JS.
+
+The unmount is a timeout and never an `animationend`, for the reason the lock
+screen documents: an exit that never fires must not be able to strand a panel
+on screen.
+
 **A permanent hint bar** above the dock leads with Start Here, then names
 double click, Command K and right click. It does not time out. A hint that
 disappears has only helped the visitors who happened to be looking, and the
@@ -734,10 +769,10 @@ guide, since there is no menu bar or dock to fall back on.
 reads Finder and opens Work, which is the file browser this desktop has. It was
 inert text, so clicking it did nothing and read as broken.
 
-No modal, no tour, nothing that runs at the visitor or has to be dismissed
-before the desktop can be used. Start Here is offered in four places and forced
-in none, and a visitor who ignores all of them still reaches every route from
-the dock, the menu bar and the hidden navigation.
+No modal, no tour, nothing that blocks the desktop or has to be dismissed
+before it can be used. Start Here is offered in four places, pointed at once,
+and forced in none, and a visitor who ignores all of it still reaches every
+route from the dock, the menu bar and the hidden navigation.
 
 ### Easter eggs
 

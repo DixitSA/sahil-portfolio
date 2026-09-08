@@ -7,7 +7,8 @@ import type { FSNode } from "@/content/types";
 import { useOS } from "@/lib/os/store";
 import DesktopIcon from "./DesktopIcon";
 import WallpaperMenu, { useWallpaper } from "./WallpaperMenu";
-import { useOpenWindow, type OpenHandler, type OpenTarget } from "./Dock";
+import StartCallout, { useStartCallout } from "./StartCallout";
+import { START_APP, useOpenWindow, type OpenHandler, type OpenTarget } from "./Dock";
 
 /* ═══════════════════════════════════════════════════════════════════
    Desktop. The wallpaper ground plus the icon column.
@@ -57,6 +58,11 @@ export default function Desktop({ onOpen, children, widgets }: DesktopProps) {
   const selectIcon = useOS((s) => s.selectIcon);
 
   const nodes = useMemo(() => rootNodes(desktop), []);
+
+  // First visit only: a halo on the guide icon and a popover pointing at it.
+  // See StartCallout.tsx for why this is allowed to exist on a desktop that
+  // otherwise refuses to run anything at the visitor.
+  const callout = useStartCallout();
 
   // Right-click the desktop to change the wallpaper, as you would on a Mac.
   const { wallpaper, choose } = useWallpaper();
@@ -141,8 +147,21 @@ export default function Desktop({ onOpen, children, widgets }: DesktopProps) {
       >
         {nodes.map((node, i) => {
           const key = iconKey(node);
+          const isGuide = key === START_APP.route;
           return (
-            <li key={key} className="flex justify-center">
+            // Relative only on the guide, which is what the callout anchors
+            // its tail to.
+            <li key={key} className={`flex justify-center ${isGuide ? "relative" : ""}`}>
+              {isGuide && (
+                <StartCallout
+                  phase={callout.phase}
+                  onOpen={() => {
+                    callout.dismiss();
+                    activate(START_APP);
+                  }}
+                  onDismiss={callout.dismiss}
+                />
+              )}
               <DesktopIcon
                 ref={(el) => {
                   refs.current[i] = el;
@@ -150,8 +169,12 @@ export default function Desktop({ onOpen, children, widgets }: DesktopProps) {
                 node={node}
                 selected={selected === key}
                 tabIndex={i === rovingIndex ? 0 : -1}
+                attention={isGuide && callout.attention}
                 onSelect={() => selectIcon(key)}
-                onOpen={() => activate(targetFor(node))}
+                onOpen={() => {
+                  callout.dismiss();
+                  activate(targetFor(node));
+                }}
               />
             </li>
           );
