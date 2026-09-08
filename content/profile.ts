@@ -101,3 +101,19 @@ export const profile: Profile = {
     },
   ],
 };
+
+/**
+ * The GitHub profile as a link, normalized once.
+ *
+ * `profile.github` already carries a protocol, but three surfaces wrapped it in
+ * another `https://` of their own. The contact card and the structured data
+ * both pointed at `https://https://github.com/...`, which is a dead link on the
+ * one row a recruiter is most likely to click. Everything that renders the
+ * profile link reads this instead.
+ */
+export const githubUrl: string = profile.github.startsWith("http")
+  ? profile.github
+  : `https://github.com/${profile.github.replace(/^@/, "")}`;
+
+/** Same value without the scheme, for display. */
+export const githubHandle: string = githubUrl.replace(/^https?:\/\//, "");

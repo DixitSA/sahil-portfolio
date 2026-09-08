@@ -7,6 +7,7 @@ import { roles } from "./experience";
  * so neither can drift from the project and role data.
  *
  * ~/
+ *   Start Here.md  the reading path, first because a recruiter reads top down
  *   Work/          one window per project
  *   Experience/    one window per role
  *   About.md
@@ -14,6 +15,10 @@ import { roles } from "./experience";
  *   Contact.app
  */
 export const desktop: FSNode[] = [
+  // First icon in the column and first app in the dock. A desktop assumes a
+  // visitor willing to explore; the person this site exists to convince is
+  // not, so the guide has to be the thing their eye lands on first.
+  { kind: "window", name: "Start Here.md", route: "/start" },
   {
     kind: "folder",
     name: "Work",

@@ -80,6 +80,7 @@ export default function Desktop({ onOpen, children, widgets }: DesktopProps) {
     <>
     <nav aria-label="Site" className="sr-only">
       <ul>
+        <li><Link href="/start">Start Here</Link></li>
         <li><Link href="/about">About</Link></li>
         <li><Link href="/work">Work</Link></li>
         <li><Link href="/experience">Experience</Link></li>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { profile } from "@/content";
+import { githubHandle, githubUrl, profile } from "@/content";
 import { Doc, DocHeader, Group, Row, DocLink, Status, body } from "@/components/os/DocChrome";
 
 export const metadata: Metadata = {
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function Page() {
   const links = [
     { label: "Email", value: profile.email, href: `mailto:${profile.email}`, external: false },
-    { label: "GitHub", value: profile.github, href: `https://${profile.github}`, external: true },
+    { label: "GitHub", value: githubHandle, href: githubUrl, external: true },
     {
       label: "Resume",
       value: "Sahil_Dixit_Resume.pdf",

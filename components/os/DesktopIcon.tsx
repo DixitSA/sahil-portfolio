@@ -24,6 +24,10 @@ export function glyphFor(node: FSNode): MacIconName {
     return "grid";
   }
   if (name.endsWith(".pdf")) return "pdf";
+  // The guide is a .md like About.md, but it is the one icon that has to be
+  // findable at a glance among six others. A compass among plain documents is
+  // what makes it the thing the eye lands on first.
+  if (name.startsWith("start here")) return "guide";
   if (name.endsWith(".md") || name.endsWith(".txt")) return "document";
   if (node.kind === "file") return "document";
   return "document";

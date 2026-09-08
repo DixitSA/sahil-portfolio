@@ -162,6 +162,36 @@ export default function MenuBar({ onOpen }: MenuBarProps) {
           },
         ],
       },
+      /*
+        Help sits last, where macOS puts it, and is where someone goes the
+        moment a desktop stops behaving like the page they expected. It holds
+        the guide and the two things the guide would otherwise have to be
+        opened to learn: the search shortcut, and where the resume is.
+      */
+      {
+        id: "help",
+        label: "Help",
+        items: [
+          {
+            kind: "action",
+            label: "Start Here",
+            hint: "5 min",
+            run: openApp("/start"),
+          },
+          {
+            kind: "action",
+            label: "Search the site",
+            hint: "⌘K",
+            run: () => setSpotlight(true),
+          },
+          { kind: "separator" },
+          {
+            kind: "action",
+            label: "Resume.pdf",
+            run: () => activate({ kind: "link", href: RESUME_HREF }),
+          },
+        ],
+      },
     ];
   }, [activate, closeAll, setSpotlight]);
 
