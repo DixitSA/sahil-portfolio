@@ -8,6 +8,7 @@ import type { Project } from "@/content";
 import Reveal, { SectionHead } from "./Reveal";
 import AgentPipeline from "./AgentPipeline";
 import KaalVisual from "./KaalVisual";
+import VazaarVisual from "./VazaarVisual";
 
 function onSpot(e: PointerEvent<HTMLElement>) {
   const el = e.currentTarget;
@@ -17,14 +18,15 @@ function onSpot(e: PointerEvent<HTMLElement>) {
 }
 
 function Visual({ slug }: { slug: string }) {
-  if (slug === "axira") return <AgentPipeline />;
+  if (slug === "vazaar") return <VazaarVisual />;
   if (slug === "kaal") return <KaalVisual />;
+  if (slug === "mixxx-mcp") return <AgentPipeline />;
   return null;
 }
 
 function FeaturedCard({ project, n }: { project: Project; n: number }) {
   const live = project.status === "LIVE";
-  const flip = n % 2 === 0; // second card: visual on the left
+  const flip = n % 2 === 0; // even cards: visual on the left
   const outcomes = project.caseStudy?.outcome.slice(0, 3) ?? [];
   const linkCls =
     "inline-flex min-h-[44px] items-center gap-1 text-[14.5px] text-[var(--color-ink-muted)] transition-colors hover:text-[var(--color-ink)]";
@@ -57,7 +59,7 @@ function FeaturedCard({ project, n }: { project: Project; n: number }) {
                 </span>
               ) : (
                 <span className="inline-flex items-center rounded-full border border-[var(--color-line-strong)] px-3 py-1 text-[12.5px] text-[var(--color-ink-muted)]">
-                  In build
+                  In active development
                 </span>
               )}
               <span className="eyebrow">0{n}</span>
@@ -81,7 +83,7 @@ function FeaturedCard({ project, n }: { project: Project; n: number }) {
                     >
                       <span
                         aria-hidden
-                        className="mt-[0.6em] h-1 w-1 shrink-0 bg-[var(--color-signal)]"
+                        className="mt-[0.6em] h-1 w-1 shrink-0 bg-[var(--color-ink-subtle)]"
                       />
                       {o}
                     </li>
@@ -114,7 +116,10 @@ function FeaturedCard({ project, n }: { project: Project; n: number }) {
               />
             </Link>
             {project.slug === "kaal" && (
-              <Link href="/kaal" className={`${linkCls} relative z-20`}>
+              <Link
+                href="/kaal"
+                className="relative z-20 inline-flex min-h-[44px] items-center gap-2 rounded-full border border-[var(--color-line-strong)] px-5 text-[14px] text-[var(--color-ink)] hover:bg-white/[0.05]"
+              >
                 Try the live engine
                 <ArrowRight aria-hidden className="h-3.5 w-3.5" />
               </Link>
@@ -145,7 +150,7 @@ function FeaturedCard({ project, n }: { project: Project; n: number }) {
         </div>
 
         <div
-          className={`relative min-h-[340px] overflow-hidden border-t border-[var(--color-line)] bg-[var(--color-raised-2)] sm:min-h-[420px] lg:border-t-0 ${
+          className={`relative min-h-[440px] overflow-hidden border-t border-[var(--color-line)] bg-[var(--color-raised-2)] sm:min-h-[460px] lg:border-t-0 ${
             flip
               ? "lg:order-1 lg:border-r"
               : "lg:order-2 lg:border-l"
@@ -163,14 +168,9 @@ function FeaturedCard({ project, n }: { project: Project; n: number }) {
 }
 
 function ListedRow({ project, n }: { project: Project; n: number }) {
-  const live = project.status === "LIVE";
-  const status = live ? (
-    <span className="inline-flex items-center gap-2 text-[13px] text-[var(--color-ink-muted)]">
-      <span className="live-dot" aria-hidden />
-      Live
-    </span>
-  ) : (
-    <span className="text-[13px] text-[var(--color-ink-subtle)]">In build</span>
+  const statusText = project.status === "LIVE" ? "Live" : "In build";
+  const status = (
+    <span className="text-[13px] text-[var(--color-ink-muted)]">{statusText}</span>
   );
   const idx = (
     <span className="font-mono text-[12px] text-[var(--color-ink-subtle)]">
@@ -179,29 +179,58 @@ function ListedRow({ project, n }: { project: Project; n: number }) {
   );
   const rowCls =
     "grid items-center gap-x-6 gap-y-3 px-3 py-6 md:grid-cols-[3rem_1fr_1.4fr_auto] md:px-4 md:py-7";
+  const nameCls =
+    "text-[20px] font-medium tracking-tight text-[var(--color-ink)] sm:text-[22px]";
+  const nameLinkCls = `${nameCls} transition-transform duration-300 group-hover:translate-x-1`;
+  const summary = (
+    <span className="text-[15px] leading-[1.55] text-[var(--color-ink-muted)]">
+      {project.summary}
+    </span>
+  );
+  const arrowCls =
+    "h-4 w-4 text-[var(--color-ink-subtle)] transition-all duration-300 group-hover:text-[var(--color-ink)]";
+  const labelCls = "text-[13px] text-[var(--color-ink-muted)]";
 
-  if (project.repo) {
+  if (project.caseStudy) {
     return (
-      <a
-        href={project.repo}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={`${project.name} on GitHub (opens in a new tab)`}
+      <Link
+        href={`/work/${project.slug}`}
         className={`group ${rowCls} transition-colors hover:bg-white/[0.02]`}
       >
         {idx}
-        <span className="text-[20px] font-medium tracking-tight text-[var(--color-ink)] transition-transform duration-300 group-hover:translate-x-1 sm:text-[22px]">
-          {project.name}
-        </span>
-        <span className="text-[15px] leading-[1.55] text-[var(--color-ink-muted)]">
-          {project.summary}
-        </span>
+        <span className={nameLinkCls}>{project.name}</span>
+        {summary}
         <span className="flex items-center gap-3">
           {status}
-          <ArrowUpRight
-            aria-hidden
-            className="h-4 w-4 text-[var(--color-ink-subtle)] transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[var(--color-ink)]"
-          />
+          <span className={labelCls}>Case study →</span>
+        </span>
+      </Link>
+    );
+  }
+
+  const external = project.href ?? project.repo;
+  if (external) {
+    const label = project.href ? "Live site" : "GitHub";
+    return (
+      <a
+        href={external}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`${project.name}, ${label.toLowerCase()} (opens in a new tab)`}
+        className={`group ${rowCls} transition-colors hover:bg-white/[0.02]`}
+      >
+        {idx}
+        <span className={nameLinkCls}>{project.name}</span>
+        {summary}
+        <span className="flex items-center gap-3">
+          {status}
+          <span className={`${labelCls} inline-flex items-center gap-1`}>
+            {label}
+            <ArrowUpRight
+              aria-hidden
+              className={`${arrowCls} !h-3.5 !w-3.5 group-hover:-translate-y-0.5 group-hover:translate-x-0.5`}
+            />
+          </span>
         </span>
       </a>
     );
@@ -210,13 +239,11 @@ function ListedRow({ project, n }: { project: Project; n: number }) {
   return (
     <div className={rowCls}>
       {idx}
-      <span className="text-[20px] font-medium tracking-tight text-[var(--color-ink)] sm:text-[22px]">
-        {project.name}
+      <span className={nameCls}>{project.name}</span>
+      {summary}
+      <span className={labelCls}>
+        {project.status === "LIVE" ? "Live" : "In active development"}
       </span>
-      <span className="text-[15px] leading-[1.55] text-[var(--color-ink-muted)]">
-        {project.summary}
-      </span>
-      <span className="flex items-center gap-3">{status}</span>
     </div>
   );
 }
@@ -239,7 +266,7 @@ export default function Work() {
           }
           aside={
             <p className="max-w-xs text-[15px] leading-[1.6] text-[var(--color-ink-muted)]">
-              Two products in production, built nights and weekends. Full write-ups for each.
+              Three products, built at night. Full write-ups for each.
             </p>
           }
         />

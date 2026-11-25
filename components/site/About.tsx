@@ -13,7 +13,6 @@ export default function About() {
   const paras = profile.bio.slice(1);
   const closer = paras.length > 1 ? paras[paras.length - 1] : undefined;
   const body = closer ? paras.slice(0, -1) : paras;
-  const ribbon = profile.skills.flatMap((g) => g.items);
 
   return (
     <section
@@ -33,7 +32,7 @@ export default function About() {
         />
 
         <div className="grid gap-12 lg:grid-cols-[1.25fr_1fr] lg:gap-16">
-          <div className="space-y-6">
+          <div className="space-y-6 lg:sticky lg:top-28 lg:self-start">
             {body.map((p, i) => (
               <Reveal key={i} delay={i * 0.06}>
                 <p className="text-[17px] leading-[1.7] text-[var(--color-ink-muted)]">{p}</p>
@@ -41,7 +40,7 @@ export default function About() {
             ))}
             {closer && (
               <Reveal delay={body.length * 0.06}>
-                <p className="border-l-2 border-[var(--color-signal)] pt-1 pb-1 pl-5 text-[clamp(20px,2.4vw,26px)] leading-[1.3] font-normal tracking-[-0.03em] text-[var(--color-ink)]">
+                <p className="border-l-2 border-[var(--color-line-strong)] pt-1 pb-1 pl-5 text-[clamp(20px,2.4vw,26px)] leading-[1.3] font-normal tracking-[-0.03em] text-[var(--color-ink)]">
                   {closer}
                 </p>
               </Reveal>
@@ -114,37 +113,6 @@ export default function About() {
         </div>
       </div>
 
-      <div
-        className="group mt-20 overflow-hidden"
-        style={{
-          maskImage: "linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent)",
-          WebkitMaskImage: "linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent)",
-        }}
-      >
-        <div className="flex w-max [animation:marquee_40s_linear_infinite] group-hover:[animation-play-state:paused]">
-          {[0, 1].map((copy) => (
-            <ul
-              key={copy}
-              aria-hidden={copy === 1 ? true : undefined}
-              aria-label={copy === 0 ? "Skills" : undefined}
-              className="flex shrink-0 items-center"
-            >
-              {ribbon.map((s, i) => (
-                <li key={s} className="flex items-center">
-                  <span
-                    className={`display px-6 text-[clamp(28px,4vw,40px)] whitespace-nowrap text-[var(--color-ink-subtle)] ${
-                      i % 2 === 1 ? "serif-em" : ""
-                    }`}
-                  >
-                    {s}
-                  </span>
-                  <span aria-hidden className="h-1 w-1 rounded-full bg-[var(--color-line-strong)]" />
-                </li>
-              ))}
-            </ul>
-          ))}
-        </div>
-      </div>
     </section>
   );
 }

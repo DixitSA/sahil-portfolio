@@ -36,7 +36,7 @@ export default function KaalVisual() {
 
       <motion.div
         style={reduce ? undefined : { y, rotate }}
-        className="relative w-[220px] sm:w-[250px]"
+        className="relative w-[190px] sm:w-[250px]"
       >
         <div className="rounded-[2.6rem] border border-[var(--color-line-strong)] bg-black p-2.5">
           <div className="relative overflow-hidden rounded-[2.1rem]">
