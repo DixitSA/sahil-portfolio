@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { SITE_URL } from "@/lib/site";
 import "./globals.css";
-import { geist, instrument, jetbrains, playfair, quattrocento } from "./fonts";
+import { geist, instrument, jetbrains } from "./fonts";
 
 import MotionProvider from "@/components/MotionProvider";
 import JsonLd from "@/components/JsonLd";
@@ -45,7 +45,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geist.variable} ${instrument.variable} ${jetbrains.variable} ${playfair.variable} ${quattrocento.variable}`}
+      className={`${geist.variable} ${instrument.variable} ${jetbrains.variable}`}
     >
       <body className="grain min-h-dvh antialiased">
         <JsonLd />

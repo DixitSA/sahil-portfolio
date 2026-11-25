@@ -47,7 +47,7 @@ export default function Nav() {
       >
         <Link
           href="/"
-          className="flex items-center gap-2.5 rounded-full px-3 py-1.5 text-[14px] font-medium tracking-tight text-[var(--color-ink)]"
+          className="flex min-h-[44px] items-center gap-2.5 rounded-full px-3 py-1.5 text-[14px] font-medium tracking-tight text-[var(--color-ink)]"
         >
           <span
             aria-hidden
@@ -75,7 +75,7 @@ export default function Nav() {
           href="/Sahil_Dixit_Resume.pdf"
           target="_blank"
           rel="noopener"
-          className="group flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-4 py-1.5 text-[13.5px] font-medium text-[var(--color-canvas)] transition-transform active:scale-[0.97]"
+          className="group flex min-h-[44px] items-center gap-2 rounded-full bg-[var(--color-ink)] px-4 py-1.5 text-[13.5px] font-medium text-[var(--color-canvas)] transition-transform active:scale-[0.97]"
         >
           Résumé
           <svg

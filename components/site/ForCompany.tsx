@@ -26,9 +26,9 @@ export default function ForCompany() {
       initial={{ opacity: 0, y: -6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      className="mb-6 font-mono text-[12px] tracking-[0.08em] text-[var(--color-signal)]"
+      className="eyebrow mb-6 text-[var(--color-ink-muted)]"
     >
-      {"// Prepared for "}
+      Prepared for{" "}
       {label}
     </motion.p>
   );

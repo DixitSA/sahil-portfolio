@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <main className="mx-auto flex min-h-[80svh] w-full max-w-6xl flex-col items-center justify-center px-5 py-24 text-center sm:px-8">
+    <div className="mx-auto flex min-h-[80svh] w-full max-w-6xl flex-col items-center justify-center px-5 py-24 text-center sm:px-8">
       <p className="eyebrow mb-6 !text-[var(--color-signal)]">404</p>
       <h1 className="display max-w-[16ch] text-[clamp(44px,7vw,96px)]">
         This page doesn&apos;t <span className="serif-em">exist</span>.
@@ -16,6 +16,6 @@ export default function NotFound() {
       >
         Back to the portfolio
       </Link>
-    </main>
+    </div>
   );
 }

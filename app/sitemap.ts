@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { projects } from "@/content";
+import { caseStudyProjects } from "@/content";
 import { SITE_URL } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -15,11 +15,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority,
   }));
 
-  const projectRoutes = projects.map((p) => ({
+  const projectRoutes = caseStudyProjects.map((p) => ({
     url: `${SITE_URL}/work/${p.slug}`,
     lastModified: now,
     changeFrequency: "monthly" as const,
-    priority: p.tier === "featured" ? 0.9 : 0.6,
+    priority: p.tier === "featured" ? 0.9 : 0.7,
   }));
 
   return [...pages, ...projectRoutes];

@@ -38,6 +38,7 @@ export default function CaseStudy({ project }: { project: Project }) {
       ? featuredProjects[0]
       : featuredProjects[(idx + 1) % featuredProjects.length];
   const live = project.status === "LIVE";
+  const landscape = (project.previewSize?.w ?? 0) > (project.previewSize?.h ?? 0);
 
   return (
     <div className="pt-32 pb-24 md:pt-40">
@@ -54,7 +55,7 @@ export default function CaseStudy({ project }: { project: Project }) {
           <Reveal>
             <p className="eyebrow mb-6 flex items-center gap-3">
               {live && <span className="live-dot" aria-hidden />}
-              {live ? "Live in production" : "In build"}
+              {live ? "Live in production" : "In active development"}
             </p>
             <h1 className="display text-[clamp(56px,10vw,140px)] break-words">
               {project.name}
@@ -107,7 +108,11 @@ export default function CaseStudy({ project }: { project: Project }) {
                 width={project.previewSize?.w ?? 1280}
                 height={project.previewSize?.h ?? 800}
                 sizes="(max-width: 768px) 100vw, 960px"
-                className="mx-auto block h-auto max-h-[560px] w-auto max-w-full rounded-2xl object-contain"
+                className={
+                  landscape
+                    ? "block h-auto w-full rounded-2xl"
+                    : "mx-auto block h-auto max-h-[560px] w-auto max-w-full rounded-2xl object-contain"
+                }
               />
             </figure>
           </Reveal>

@@ -18,7 +18,7 @@ export default function JsonLd() {
         jobTitle: profile.title,
         email: `mailto:${profile.email}`,
         url: BASE,
-        sameAs: [githubUrl],
+        sameAs: [githubUrl, profile.linkedin],
         address: {
           "@type": "PostalAddress",
           addressLocality: profile.location,

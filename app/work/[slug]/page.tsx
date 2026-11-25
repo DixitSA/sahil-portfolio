@@ -1,11 +1,13 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { projects, getProject } from "@/content";
+import { caseStudyProjects, getProject } from "@/content";
 import CaseStudy from "@/components/CaseStudy";
 
-/** Prerender every project so each case study is static HTML. */
+/** Prerender every case study so each one is static HTML. Unknown slugs 404. */
+export const dynamicParams = false;
+
 export function generateStaticParams() {
-  return projects.map((p) => ({ slug: p.slug }));
+  return caseStudyProjects.map((p) => ({ slug: p.slug }));
 }
 
 /** Next 16: params is a Promise. Synchronous access was removed. */
@@ -16,7 +18,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const project = getProject(slug);
-  if (!project) return { title: "Not found" };
+  if (!project || !project.caseStudy) return { title: "Not found" };
 
   const title = project.name;
   return {
@@ -33,7 +35,7 @@ export async function generateMetadata({
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const project = getProject(slug);
-  if (!project) notFound();
+  if (!project || !project.caseStudy) notFound();
 
   return <CaseStudy project={project} />;
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { Fragment, Suspense, useRef } from "react";
+import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { roles } from "@/content";
 import HeroShader from "./HeroShader";
@@ -18,13 +19,13 @@ const HEADLINE: { w: string; em?: boolean }[] = [
   { w: "what" },
   { w: "a" },
   { w: "model" },
-  { w: "can", em: true },
+  { w: "can" },
   { w: "do", em: true },
   { w: "and" },
   { w: "what" },
-  { w: "a" },
-  { w: "bank" },
-  { w: "can", em: true },
+  { w: "an" },
+  { w: "institution" },
+  { w: "can" },
   { w: "defend.", em: true },
 ];
 
@@ -49,7 +50,7 @@ export default function Hero() {
 
       <motion.div
         style={{ y, opacity, scale }}
-        className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col justify-center px-5 pt-28 pb-14 sm:px-8 md:pt-28"
+        className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col justify-center px-5 pt-24 pb-14 sm:px-8 md:pt-28"
       >
         <Suspense fallback={null}>
           <ForCompany />
@@ -59,16 +60,16 @@ export default function Hero() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease: EASE, delay: 0.1 }}
-          className="mb-7 flex flex-wrap items-center gap-x-3 gap-y-2 text-[13px] text-[var(--color-ink-muted)] sm:text-[14px]"
+          className="mb-5 flex flex-wrap items-center gap-x-3 gap-y-2 text-[13px] text-[var(--color-ink-muted)] sm:text-[14px]"
         >
           <span className="inline-flex items-center gap-2 rounded-full border border-[var(--color-line-strong)] bg-white/[0.03] px-3 py-1 text-[var(--color-ink)]">
             <span className="live-dot" aria-hidden />
             Open to new roles
           </span>
-          <span>Strategy &amp; AI governance at Bank of America</span>
+          <span>Strategy &amp; Management Analyst, Bank of America</span>
         </motion.p>
 
-        <h1 className="display max-w-[19ch] text-[clamp(42px,6.4vw,100px)] text-[var(--color-ink)]">
+        <h1 className="display max-w-[22ch] text-[clamp(38px,5.6vw,88px)] text-[var(--color-ink)]">
           {HEADLINE.map((word, i) => (
             <Fragment key={i}>
               <span className="inline-block overflow-hidden pb-[0.08em] align-bottom">
@@ -89,12 +90,12 @@ export default function Hero() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: EASE, delay: 1.05 }}
-          className="mt-8 grid max-w-3xl gap-7 md:mt-10"
+          className="mt-6 grid max-w-3xl gap-6 md:mt-10"
         >
-          <p className="text-[17px] leading-[1.6] text-[var(--color-ink-muted)] sm:text-[19px]">
+          <p className="text-[16px] leading-[1.55] text-[var(--color-ink-muted)] sm:text-[19px]">
             I&apos;m <span className="text-[var(--color-ink)]">Sahil Dixit</span>, and I work in that
-            gap. By day I shape strategy and carry AI models through model-risk review for a bank
-            serving ~69 million clients. By night I ship production software, live on web and iOS.
+            gap. By day: fraud strategy, AI model governance and consumer strategy at a bank serving
+            69 million clients. By night: production software, live on the web and iOS.
           </p>
 
           <div className="flex flex-wrap items-center gap-3">
@@ -113,6 +114,12 @@ export default function Hero() {
             >
               Get in touch
             </a>
+            <Link
+              href="/kaal"
+              className="inline-flex min-h-[44px] items-center px-2 text-[15px] text-[var(--color-ink-muted)] transition-colors hover:text-[var(--color-ink)]"
+            >
+              Try Kaal live →
+            </Link>
           </div>
         </motion.div>
       </motion.div>
@@ -126,7 +133,7 @@ export default function Hero() {
         className="relative z-10 border-t border-[var(--color-line)]"
       >
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-8 gap-y-3 px-5 py-5 sm:px-8">
-          <span className="eyebrow">Experience</span>
+          <span className="eyebrow">Background</span>
           {roles.map((r) => (
             <span key={r.id} className="text-[14px] font-medium tracking-tight text-[var(--color-ink-muted)]">
               {r.company}

@@ -4,7 +4,7 @@ import { SITE_HOST } from "@/lib/site";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 export const alt =
-  "Sahil Dixit: Strategy and AI governance at Bank of America. Shipped Kaal and Axira.";
+  "Sahil Dixit: Strategy, fraud and AI governance at Bank of America. Shipped Vazaar and Kaal.";
 
 /** Share card. Default font only: a webfont would add a network dependency to the build. */
 export default function Image() {
@@ -55,7 +55,7 @@ export default function Image() {
             maxWidth: 1000,
           }}
         >
-          Most AI programs die between what a model can do and what a bank can defend.
+          Most AI programs die between what a model can do and what an institution can defend.
         </div>
 
         <div
@@ -69,14 +69,14 @@ export default function Image() {
         >
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ display: "flex", fontSize: 24, color: "#a6a6ab" }}>
-              Strategy &amp; AI governance · Bank of America
+              Strategy · Fraud · AI governance — Bank of America
             </div>
             <div style={{ display: "flex", fontSize: 18, color: "#7c7c83", marginTop: 8 }}>
               {SITE_HOST}
             </div>
           </div>
           <div style={{ display: "flex", fontSize: 22, color: "#7c7c83" }}>
-            Shipped: Kaal · Axira
+            Shipped: Vazaar · Kaal
           </div>
         </div>
       </div>

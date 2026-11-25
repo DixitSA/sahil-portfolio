@@ -141,6 +141,7 @@ export default function HeroShader() {
       ro.disconnect();
       io.disconnect();
       window.removeEventListener("pointermove", onMove);
+      gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
   }, []);
 

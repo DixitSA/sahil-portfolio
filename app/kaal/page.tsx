@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import KaalApp from "@/components/kaal/KaalApp";
+import { playfair, quattrocento } from "@/app/fonts";
 
 export const metadata: Metadata = {
   title: "Kaal live demo",
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <main className="mx-auto w-full max-w-3xl px-5 pt-32 pb-24 sm:px-8">
+    <div className={`${playfair.variable} ${quattrocento.variable} mx-auto w-full max-w-3xl px-5 pt-32 pb-24 sm:px-8`}>
       <Link
         href="/work/kaal"
         className="mb-8 inline-flex min-h-11 items-center text-[14px] text-[var(--color-ink-subtle)] transition-colors hover:text-[var(--color-ink)]"
@@ -31,6 +32,6 @@ export default function Page() {
       <div className="overflow-hidden rounded-3xl border border-[var(--color-line)]">
         <KaalApp />
       </div>
-    </main>
+    </div>
   );
 }
