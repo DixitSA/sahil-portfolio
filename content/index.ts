@@ -10,16 +10,18 @@ export type {
   CaseStudy,
   Project,
   Role,
+  Workstream,
   Profile,
 } from "./types";
 
 export {
   projects,
   featuredProjects,
+  caseStudyProjects,
   listedProjects,
   getProject,
 } from "./projects";
 
 export { roles, getRole } from "./experience";
 
-export { profile, githubUrl, githubHandle } from "./profile";
+export { profile, githubUrl, githubHandle, linkedinHandle } from "./profile";

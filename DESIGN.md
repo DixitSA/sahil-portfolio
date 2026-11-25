@@ -16,12 +16,12 @@ The page is an argument, top to bottom:
 |---|---------|-----|
 | — | Hero | Thesis, current employer, availability. WebGL field behind. Credential rail along the bottom edge. |
 | — | Proof | Four numbers with the sentence that makes each meaningful. Count up on entry. |
-| 01 | Work | Axira and Kaal as large cards with live visuals (agent pipeline diagram, phone mockup). Other projects as rows. |
-| 02 | Experience | Timeline with a scroll-driven rail. Figures inside bullets are set in full ink. |
-| 03 | About | Bio, "Now", education, toolkit, skills marquee. |
-| 04 | Contact | Giant copy-to-clipboard email, GitHub, résumé, footer. |
+| 01 | Work | Vazaar, Kaal and Mixxx MCP as large cards with live visuals (browser mockup, phone mockup, agent pipeline diagram). Other projects as rows; Axira's row links to its case study. |
+| 02 | Experience | Timeline with a scroll-driven rail. Bank of America is broken into its three named workstreams. Figures inside bullets are set in full ink. |
+| 03 | About | Bio (sticky on desktop), "Now", education, toolkit. |
+| 04 | Contact | Giant mailto email with a copy button, GitHub, LinkedIn, résumé, footer. |
 
-Case studies live at `/work/[slug]` (long-form, sticky section headings,
+Case studies live at `/work/[slug]` (only projects that have one; others 404) (long-form, sticky section headings,
 reading progress bar). `/kaal` hosts the live Kaal engine demo. Old OS routes
 (`/about`, `/work`, `/experience`, `/contact`, `/start`) redirect to anchors.
 
@@ -37,8 +37,9 @@ reading progress bar). `/kaal` hosts the live Kaal engine demo. Old OS routes
 | `--color-ink-subtle` | `#7c7c83` | Meta. Floor for small text |
 | `--color-signal` | `#3dff7f` | Live dots, section indices, one hover accent. Never fills, never body text |
 
-Kaal's rust (`rgba(181,86,62,…)`) appears only around Kaal's own visuals and in
-the live demo, which renders in the product's identity.
+Product accents appear only around that product's own visual: Kaal's rust
+(`rgba(181,86,62,…)`, also in the live demo) and Vazaar's orange
+(`rgba(196,94,38,…)`).
 
 ## Type
 

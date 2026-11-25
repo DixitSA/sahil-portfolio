@@ -43,6 +43,14 @@ export interface Project {
   caseStudy?: CaseStudy;
 }
 
+export interface Workstream {
+  /** Program name, e.g. "Customer Complaints AI Program". */
+  name: string;
+  /** Short discipline label, e.g. "AI model governance". */
+  focus: string;
+  bullets: string[];
+}
+
 export interface Role {
   id: string;
   company: string;
@@ -50,7 +58,10 @@ export interface Role {
   location: string;
   period: string;
   current: boolean;
+  /** Flat bullets. Empty when the role is described by workstreams instead. */
   bullets: string[];
+  /** Named programs within the role, each with its own bullets. */
+  workstreams?: Workstream[];
 }
 
 export interface Profile {
@@ -59,6 +70,7 @@ export interface Profile {
   location: string;
   email: string;
   github: string;
+  linkedin: string;
   available: boolean;
   /** Two or three sentences. Specific, no filler. */
   bio: string[];
