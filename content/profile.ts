@@ -22,15 +22,15 @@ export const profile: Profile = {
     "I am most useful where finance, regulation, and working software all have to agree with each other.",
   ],
   /**
-   * The "What I'm working on" tile.
+   * The "Now" block.
    *
-   * Named themes first, evidence second. A recruiter scanning a desktop tile
+   * Named themes first, evidence second. A recruiter scanning the page
    * is pattern-matching for a discipline, not reading prose, so each line
    * leads with the thing being practised and then earns it with something
    * specific from the resume.
    *
    * Deliberately not a second copy of `stats` or of `bio`. The numbers those
-   * four tiles own (~80% ahead of deadline, ~15 minute slide turnaround) are
+   * four stats own (~80% ahead of deadline, ~15 minute slide turnaround) are
    * left to them, and the Axira line is angled at the handoff between agents
    * rather than at the home server, which the bio already covers. One line of
    * the site should never read as a paraphrase of another.
@@ -43,21 +43,6 @@ export const profile: Profile = {
       "AI/ML model-risk governance. Carrying AI complaint-handling models through active model risk review across 3 workstreams.",
     ],
   },
-  /**
-   * Sources for the "What I'm watching" tile. Curated on purpose: a live
-   * feed of arbitrary trending video would eventually surface something you
-   * would not choose to put in front of a recruiter. Picking the channels
-   * keeps the freshness without the surprise.
-   *
-   * Verified against each feed. Note these are the AI and tech channels the
-   * author selected, not a claim about what the owner watches. Swap them.
-   */
-  watching: [
-    { channelId: "UCbfYPyITQ-7l4upoX8nvctg" }, // Two Minute Papers
-    { channelId: "UCJIfeSCssxSC_Dhc5s7woww" }, // Lex Clips
-    { channelId: "UCxIJaCMEptJjxmmQgGFsnCg" }, // YC Root Access
-    { channelId: "UCQ1VQj-37kl2yS_VUhfQHsw" }, // a16z Deep Dives
-  ],
   education: {
     school: "Virginia Commonwealth University",
     degree: "B.S. Financial Technology, Minor in Statistics",

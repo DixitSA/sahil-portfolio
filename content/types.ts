@@ -1,6 +1,6 @@
 /**
  * Content contract. Single source of truth for every surface:
- * desktop icons, Finder rows, window bodies, spotlight results, and metadata.
+ * every section of the page, the case studies, and metadata.
  * Nothing renders content that does not originate here.
  */
 
@@ -74,20 +74,6 @@ export interface Profile {
    * portfolio cannot fake.
    */
   now?: { updated: string; items: string[] };
-  /**
-   * YouTube channels the "What I'm watching" tile pulls from. Names are read
-   * from the feed itself rather than stored here, so the tile cannot
-   * mislabel a channel.
-   */
-  watching?: { channelId: string }[];
   skills: { group: string; items: string[] }[];
 }
 
-/**
- * Virtual filesystem. Drives desktop icons and the Finder window.
- * `window` nodes open an in-OS route. `file` nodes open a real URL.
- */
-export type FSNode =
-  | { kind: "folder"; name: string; route: string; children: FSNode[] }
-  | { kind: "window"; name: string; route: string }
-  | { kind: "file"; name: string; href: string; external?: boolean };

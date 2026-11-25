@@ -105,7 +105,7 @@ export default function KaalApp() {
 
   return (
     <div style={{ background: K.ground, color: K.ink, minHeight: "100%" }}>
-      <div className="mx-auto w-full max-w-xl px-8 py-10">
+      <div className="mx-auto w-full max-w-xl px-5 py-8 sm:px-8 sm:py-10">
         {/* Wordmark */}
         <p
           className="mb-10 uppercase"
@@ -115,12 +115,12 @@ export default function KaalApp() {
         </p>
 
         <Label>Your chart</Label>
-        <h1
+        <h2
           className="mt-2 mb-1"
           style={{ fontFamily: K.serif, fontSize: 40, lineHeight: 1.1, color: K.ink }}
         >
           {chart.moonSign ?? "—"} moon
-        </h1>
+        </h2>
         <p
           style={{ fontFamily: K.serif, fontStyle: "italic", fontSize: 19, color: K.muted }}
         >
@@ -148,7 +148,7 @@ export default function KaalApp() {
 
         <Label>Compute another</Label>
         <form onSubmit={compute} className="mt-3">
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <Field label="Date of birth" type="date" value={date} onChange={setDate} />
             <Field label="Time" type="time" value={time} onChange={setTime} />
           </div>
@@ -159,7 +159,7 @@ export default function KaalApp() {
           <button
             type="submit"
             disabled={busy}
-            className="mt-4 px-5 py-2"
+            className="mt-4 min-h-11 px-5 py-2"
             style={{
               fontFamily: K.sans,
               fontSize: 13,
@@ -270,7 +270,7 @@ function Field({
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full px-2 py-1.5"
+        className="w-full min-w-0 px-2 py-2"
         style={{
           fontFamily: K.sans,
           fontSize: 13,

@@ -7,6 +7,17 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.resolve(import.meta.dirname),
   },
+  // Old multi-route links now land on the matching section of the single page.
+  async redirects() {
+    return [
+      { source: "/start", destination: "/", permanent: false },
+      { source: "/about", destination: "/#about", permanent: false },
+      { source: "/work", destination: "/#work", permanent: false },
+      { source: "/experience", destination: "/#experience", permanent: false },
+      { source: "/experience/:id", destination: "/#experience", permanent: false },
+      { source: "/contact", destination: "/#contact", permanent: false },
+    ];
+  },
 };
 
 export default nextConfig;

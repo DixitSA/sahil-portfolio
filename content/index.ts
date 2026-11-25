@@ -11,7 +11,6 @@ export type {
   Project,
   Role,
   Profile,
-  FSNode,
 } from "./types";
 
 export {
@@ -24,5 +23,3 @@ export {
 export { roles, getRole } from "./experience";
 
 export { profile, githubUrl, githubHandle } from "./profile";
-
-export { desktop } from "./fs";

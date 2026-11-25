@@ -1,14 +1,25 @@
+import Hero from "@/components/site/Hero";
+import Proof from "@/components/site/Proof";
+import Work from "@/components/site/Work";
+import Experience from "@/components/site/Experience";
+import About from "@/components/site/About";
+import Contact from "@/components/site/Contact";
+
 /**
- * "/" is the bare desktop. Nothing renders on the wallpaper.
- *
- * macOS does not show a document on login, and the profile panel that used to
- * sit here was the single thing keeping this from reading as an operating
- * system. The content it carried lives on /about, which is one click away in
- * the dock, the menu bar, and the desktop icons.
- *
- * Crawlability is handled by the hidden navigation in Desktop.tsx plus
- * sitemap.ts and the JSON-LD graph, since this route now emits no prose.
+ * One page, ordered as an argument: claim (hero), evidence (numbers), proof
+ * of building (work), proof of institutional trust (experience), the person
+ * (about), the ask (contact). A recruiter who stops after the first screen
+ * still leaves with the thesis, the employer and the numbers.
  */
 export default function Page() {
-  return null;
+  return (
+    <>
+      <Hero />
+      <Proof />
+      <Work />
+      <Experience />
+      <About />
+      <Contact />
+    </>
+  );
 }

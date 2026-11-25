@@ -28,16 +28,16 @@ Voice: direct, specific, zero filler. No "passionate about" language. Reads like
 
 - **Generic SaaS cream** — Inter font, card grids, gradient CTAs, hero with emoji, testimonial rows. Indistinguishable from every Y Combinator landing page clone.
 - **Finance-bro navy & gold** — The classic Wall Street palette. Conservative, corporate, expected from someone in banking. Actively avoided.
-- **Neon-everything crypto** — Purple + cyan overload, max glow effects, Web3 maximalism. The terminal aesthetic is intentional but restrained; it is not a rave.
+- **Neon-everything crypto** — Purple + cyan overload, max glow effects, Web3 maximalism. Glow is rationed to one hero field and live-state dots; it is not a rave.
 - **Minimal-to-blank agency** — White void, single font, no content. Clever but says nothing. This site has things to say.
 
 ## Design Principles
 
-1. **The system is the brand.** The terminal/OS aesthetic is not decoration — it communicates that Sahil thinks in systems. Every design choice should reinforce this, not contradict it.
+1. **Five seconds to the thesis.** A recruiter opens a link and decides almost immediately. The first viewport must carry the thesis, the current employer and a route to the work, with no boot screen, no exploration and no instructions to read first.
 2. **Specificity over superlatives.** Numbers, project names, real outputs. "~30 model-level submissions" beats "extensive regulatory work." The design should frame specific content, not generic claims.
 3. **Earn trust before asking for contact.** Information architecture should build a case: capability then proof then invitation. Don't lead with a CTA.
-4. **Restrained use of the signature color.** Terminal-green (#00ff41) is the accent, not the canvas. Used sparingly, it signals activity and importance. Used everywhere, it becomes noise.
-5. **Desktop-first, mobile-functional.** The primary audience reviews this on a laptop. Mobile must work but is not the showcase viewport.
+4. **Restrained use of the signature color.** Signal green (#3dff7f) is the accent, not the canvas. Used sparingly, it signals activity and importance. Used everywhere, it becomes noise.
+5. **Phone is a first-class viewport.** Links get opened from LinkedIn and email on a phone as often as on a laptop. Every section is designed at 375px, not merely made to fit.
 
 ## Accessibility & Inclusion
 
