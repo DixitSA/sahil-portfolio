@@ -4,41 +4,54 @@
 
 brand
 
+## Surface mode
+
+Experience (a personal portfolio): the work leads from the first viewport; the interface recedes.
+
 ## Users
 
-**Primary:** Recruiters and hiring managers evaluating Sahil for senior individual-contributor or consulting roles in fintech, strategy, or AI-adjacent functions.
+**Primary:** Founders, heads of growth and hiring managers at startups hiring for a technical growth role: growth engineer, growth / product generalist, growth analytics, or a founding-team "find the lever and build it" seat.
 
-**Secondary:** Founders and operators looking for a collaborator who can both think strategically and ship product — someone who understands finance and can write code.
+**Secondary:** Operators and early-stage teams looking for someone who can run the analysis, design the experiment and write the code without a hand-off.
 
-Both audiences are sophisticated. They scan fast, pattern-match against dozens of portfolios, and leave within seconds if nothing hooks them. The site must earn attention in the first viewport and reward it on scroll.
+They are technical or close to it. They scan fast, judge craft instantly, and are allergic to corporate polish. A banking résumé is a neutral-to-negative signal for them unless it is translated into what it proves: comfort with messy data, experiments, and shipping something people adopt.
 
 ## Product Purpose
 
-Personal portfolio for Sahil Dixit — Strategy & Management Consultant at Bank of America by day, indie product builder by night. The site exists to communicate one thing: this person operates at an unusual intersection of institutional finance, AI compliance, and independent software development. It should make that duality feel deliberate and impressive, not scattered.
+Personal site for Sahil Dixit. It exists to get him an interview for a technical growth role at a startup, a move from strategy work at a large bank toward something more hands-on and technical.
 
-Success looks like: a recruiter bookmarks it, a founder DMs within 24 hours of visiting, or a hiring manager says "I've never seen a portfolio that looked like this."
+The argument it makes: **he finds the number that matters, runs the experiment, and ships the software himself.** Evidence, all from the résumé and his repositories:
+
+- Analytics and experiments: A/B tests of account-linking flows at Capital One with a measurable effect on retention; 10,000+ complaint logs and call records mined in SQL to find friction; fraud signal inventory (12 signals × 10 fraud types → 22 detection gaps) adopted by his team.
+- Process and AI in production: re-engineered an AI model's calibration with data and reconciliation controls, weekly session completion 45% → nearly 100%; a governed Copilot workflow that cut slide turnaround from hours to ~15 minutes, adopted teamwide and extended into a department prompt library.
+- Shipping products end to end: Vazaar (live research platform, free / paid / enterprise tiers, Stripe + Supabase), Kaal (live on web and iOS, 277 commits, Stripe checkout, went to market through a niche community rather than paid acquisition), Mixxx MCP (33-tool MCP server with a beat-timed job queue and tests), plus Axira (multi-agent outreach pipeline), VibeQueue and MANIFEST.
+
+The bank is context, not the headline. Never frame him as a banker, a compliance person or a consultant.
+
+Success looks like: a founder replies to the email the link was sent in, or a hiring manager forwards it to their head of growth.
 
 ## Brand Personality
 
-**Sharp · Technical · Ambitious**
+**Sharp · Technical · Builder**
 
-Voice: direct, specific, zero filler. No "passionate about" language. Reads like a system log written by someone who also studied Strunk & White. Confident without being loud. The aesthetic earns authority so the copy doesn't have to claim it.
+Voice: direct, specific, first person, zero filler. Numbers over adjectives. Sounds like a person who ships, not a deck. No "passionate about", no "results-driven", no "leveraging". Confident without claiming; the evidence does the claiming.
 
 ## Anti-references
 
-- **Generic SaaS cream** — Inter font, card grids, gradient CTAs, hero with emoji, testimonial rows. Indistinguishable from every Y Combinator landing page clone.
-- **Finance-bro navy & gold** — The classic Wall Street palette. Conservative, corporate, expected from someone in banking. Actively avoided.
-- **Neon-everything crypto** — Purple + cyan overload, max glow effects, Web3 maximalism. Glow is rationed to one hero field and live-state dots; it is not a rave.
-- **Minimal-to-blank agency** — White void, single font, no content. Clever but says nothing. This site has things to say.
+- **Generic SaaS / AI-template portfolio**: Inter or Geist everywhere, mono eyebrow kickers over every heading, numbered "01 / 02" section labels, italic-serif accent words in headlines, card grids, gradient CTAs, stat strips.
+- **Finance-bro navy & gold**, and anything that reads "bank".
+- **Neon-everything crypto**: purple + cyan, glow maximalism.
+- **Minimal-to-blank agency**: a white void that says nothing.
+- **Résumé-as-website**: a timeline of bullets with no artifact on screen.
 
 ## Design Principles
 
-1. **Five seconds to the thesis.** A recruiter opens a link and decides almost immediately. The first viewport must carry the thesis, the current employer and a route to the work, with no boot screen, no exploration and no instructions to read first.
-2. **Specificity over superlatives.** Numbers, project names, real outputs. "~30 model-level submissions" beats "extensive regulatory work." The design should frame specific content, not generic claims.
-3. **Earn trust before asking for contact.** Information architecture should build a case: capability then proof then invitation. Don't lead with a CTA.
-4. **Restrained use of the signature color.** Signal green (#3dff7f) is the accent, not the canvas. Used sparingly, it signals activity and importance. Used everywhere, it becomes noise.
-5. **Phone is a first-class viewport.** Links get opened from LinkedIn and email on a phone as often as on a laptop. Every section is designed at 375px, not merely made to fit.
+1. **Five seconds to the pitch.** The first viewport says who he is, what role he wants, and one hard fact, with the work one click away.
+2. **The work is the hero.** Real product UI (Vazaar, Kaal, the MCP pipeline) carries the page; decoration does not.
+3. **Specificity over superlatives.** Every claim resolves to a number, a product or a repository.
+4. **Phone is a first-class viewport.** Links are opened from email and LinkedIn on phones as often as on laptops.
+5. **Earn the ask.** Evidence first, contact last.
 
 ## Accessibility & Inclusion
 
-Best effort — reasonable contrast ratios, keyboard-navigable interactions, reduced-motion support via `@media (prefers-reduced-motion)`. No formal WCAG certification required. Custom cursor is hidden on touch/coarse-pointer devices.
+WCAG AA contrast, keyboard navigable, visible focus, 44px tap targets, reduced-motion respected, no horizontal scroll from 320px.
