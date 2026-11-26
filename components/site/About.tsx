@@ -17,7 +17,7 @@ export default function About() {
 
         <div className="mt-10 grid gap-16 lg:mt-14 lg:grid-cols-12 lg:gap-x-6">
           <div className="lg:col-span-6">
-            <p className="t-statement text-[clamp(20px,1vw+14px,28px)]! text-ink">{proof}</p>
+            <p className="t-statement text-[clamp(20px,1vw+14px,28px)]! leading-[1.32]! text-ink">{proof}</p>
             <div className="mt-8 max-w-[60ch] space-y-6">
               {rest.map((p) => (
                 <p key={p} className="text-ink-2">

@@ -7,6 +7,7 @@ import AgentPipeline from "./AgentPipeline";
 import KaalVisual from "./KaalVisual";
 import VazaarVisual from "./VazaarVisual";
 import VazaarPipeline from "./VazaarPipeline";
+import { PipelineSizeProvider } from "./Pipeline";
 import WorkStage from "./WorkStage";
 
 function Status({ project }: { project: Project }) {
@@ -94,7 +95,7 @@ function Summary({ project }: { project: Project }) {
 /** Inline (phone, tablet, reduced motion, no-JS) visual: full-bleed on a phone. */
 const BLEED = "border-x-0! rounded-none! sm:border-x! sm:rounded-[4px]!";
 function Inline({ children }: { children: React.ReactNode }) {
-  return <div className="work-inline -mx-4 mt-6 sm:mx-0">{children}</div>;
+  return <div className="work-inline -mx-4 mt-6 sm:mx-0 lg:max-w-[760px]">{children}</div>;
 }
 function Title({ project }: { project: Project }) {
   return (
@@ -162,11 +163,15 @@ export default function Work() {
   const layers = [
     <VazaarVisual key="vz" fill />,
     <div key="vp" className={center}>
-      <VazaarPipeline className="max-w-[420px]" />
+      <PipelineSizeProvider size="lg">
+        <VazaarPipeline className="max-w-[540px]" />
+      </PipelineSizeProvider>
     </div>,
     <KaalVisual key="kl" fill />,
     <div key="mx" className={center}>
-      <AgentPipeline />
+      <PipelineSizeProvider size="lg">
+        <AgentPipeline />
+      </PipelineSizeProvider>
     </div>,
   ];
 
@@ -181,8 +186,8 @@ export default function Work() {
         </p>
       </div>
 
-      <div className="wrap mt-14 lg:mt-24 lg:grid lg:grid-cols-12 lg:gap-6">
-        <div className="lg:col-span-5">
+      <div className="wrap mt-14 lg:mt-24 work-grid">
+        <div className="work-col">
           <article data-chapter={0} className="work-chapter flex flex-col justify-center py-12">
             <Title project={vazaar} />
             <Status project={vazaar} />
@@ -207,6 +212,7 @@ export default function Work() {
           <article data-chapter={2} className="work-chapter flex flex-col justify-center py-12">
             <Title project={kaal} />
             <Status project={kaal} />
+            <p className="t-result mt-4">Deterministic engine, not an LLM</p>
             <Inline>
               <KaalVisual className={BLEED} />
             </Inline>
@@ -229,7 +235,7 @@ export default function Work() {
           </article>
         </div>
 
-        <div className="lg:col-span-7">
+        <div className="work-stage-col">
           <WorkStage layers={layers} />
         </div>
       </div>

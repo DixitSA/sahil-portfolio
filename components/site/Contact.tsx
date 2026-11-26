@@ -54,10 +54,7 @@ export default function Contact() {
           </span>
         </a>
 
-        <div className="mt-8 flex flex-wrap items-center gap-3">
-          <a href={`mailto:${profile.email}`} className="btn btn-primary">
-            Email me
-          </a>
+        <div className="mt-12 flex flex-wrap items-center gap-3 lg:mt-16">
           <button type="button" onClick={copy} className="btn btn-secondary">
             {copied ? <Check size={16} aria-hidden /> : <Copy size={16} aria-hidden />}
             {copied ? "Copied" : "Copy email address"}
@@ -99,8 +96,8 @@ export default function Contact() {
         <footer className="t-meta mt-24 flex flex-wrap items-center justify-between gap-x-8 gap-y-2 border-t border-rule-field pt-6">
           <p>© {new Date().getFullYear()} Sahil Dixit</p>
           <p className="max-w-[60ch]">
-            The lines behind this page are a live loss surface; the red line is gradient descent on
-            it, computed in your browser.
+            The lines behind this page are a live loss surface; the path across it is gradient
+            descent, computed in your browser, and the red ring marks where it converged.
           </p>
           <a href="#main" className="link inline-flex min-h-[44px] items-center">
             Back to top

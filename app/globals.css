@@ -57,12 +57,12 @@ html.lenis, html.lenis body { height: auto; }
 .t-h2 { font-weight: 700; font-stretch: 106%; font-size: clamp(28px, 7.4vw, 40px); line-height: 1.05; letter-spacing: -0.02em; }
 @media (min-width: 640px) { .t-hero { font-size: clamp(48px, 8.2vw, 84px); } }
 @media (min-width: 1024px) {
-  .t-hero { font-size: clamp(64px, min(7.4vw, 12.5svh), 124px); }
+  .t-hero { font-size: clamp(56px, min(7.4vw, 11svh), 124px); }
   .t-mega { font-size: clamp(64px, 6.2vw, 104px); }
   .t-h2 { font-size: clamp(40px, 3.3vw, 52px); }
 }
 .t-h3 { font-weight: 750; font-stretch: 110%; font-size: clamp(36px, 3.4vw + 8px, 64px); line-height: 0.98; letter-spacing: -0.03em; }
-.t-ledger { font-weight: 650; font-stretch: 104%; font-size: clamp(24px, 2vw + 14px, 44px); line-height: 1.12; letter-spacing: -0.02em; }
+.t-ledger { font-weight: 650; font-stretch: 104%; font-size: clamp(24px, 2vw + 14px, 44px); line-height: 1.22; letter-spacing: -0.02em; }
 .t-statement { font-weight: 600; font-stretch: 104%; font-size: clamp(24px, 1.6vw + 14px, 40px); line-height: 1.18; letter-spacing: -0.015em; }
 .t-result { font-weight: 600; font-size: clamp(20px, 1vw + 0.8rem, 26px); line-height: 1.2; letter-spacing: -0.01em; }
 .t-hero-cs { font-weight: 800; font-stretch: 115%; font-size: clamp(44px, 13vw, 176px); line-height: 0.88; letter-spacing: -0.04em; }
@@ -77,6 +77,7 @@ html.lenis, html.lenis body { height: auto; }
 .answer--plain { font-weight: inherit; color: inherit; }
 .answer::after { content: ""; position: absolute; left: 0; right: 0; bottom: -0.18em; height: max(5px, 0.14em); border-block: max(1.5px, 0.045em) solid var(--color-mark); transform-origin: left; pointer-events: none; }
 .on-field .answer::after { border-color: var(--color-mark-on-field); }
+.t-ledger .answer::after { bottom: -0.1em; height: max(5px, 0.11em); }
 .answer[data-land]::after { transition: transform 700ms var(--ease-enter) 80ms; }
 
 /* Thesis: lights up word by word (dimmed only once armed by JS, and never under reduced motion) */
@@ -171,7 +172,13 @@ html.js .t-thesis[data-armed] .tw:not([data-on]) { color: var(--color-ink-3); }
   html.js .work-sticky { display: block; }
   html.js .work-inline { display: none; }
   html.js .work-chapter { min-height: 82svh; }
+  html.js .work-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; }
+  html.js .work-col { grid-column: span 5; }
+  html.js .work-stage-col { grid-column: span 7; }
 }
+
+/* Motion switch off: still the stage wipes and the thesis word-light too */
+html[data-motion="off"] :is(.ws-layer, .ws-print, .t-thesis .tw) { transition: none !important; }
 
 /* View transitions (next.config experimental.viewTransition) */
 ::view-transition-old(root) { animation: 180ms var(--ease-ui) both vt-out; }
@@ -187,6 +194,7 @@ html.js .t-thesis[data-armed] .tw:not([data-on]) { color: var(--color-ink-3); }
   .work-sticky { display: none !important; }
   .work-inline { display: block !important; }
   .work-chapter { min-height: 0 !important; }
+  .work-grid { display: block !important; }
   .ws-print { transform: none; }
 }
 }

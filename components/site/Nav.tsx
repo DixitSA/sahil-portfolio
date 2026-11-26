@@ -58,6 +58,12 @@ export default function Nav() {
         </ul>
 
         <div className="flex items-center gap-3 sm:gap-5">
+          <Link
+            href="/#work"
+            className="flex min-h-[44px] items-center text-[15px] font-medium text-ink-2 transition-colors hover:text-ink md:hidden"
+          >
+            Work
+          </Link>
           <button
             type="button"
             role="switch"

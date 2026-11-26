@@ -33,10 +33,10 @@ export default function Hero() {
           ))}
         </h1>
 
-        <DescentPath className="my-3 h-[104px] lg:absolute lg:right-12 lg:top-[12%] lg:my-0 lg:h-[40%] lg:w-[24%] xl:right-16" />
+        <DescentPath className="my-3 h-[104px] lg:absolute lg:right-12 lg:top-[12%] lg:my-0 lg:h-[30%] lg:w-[24%] xl:right-16" />
 
         <p
-          className="t-meta enter-fade mb-4 text-center lg:absolute lg:top-[50%] lg:right-12 lg:mb-0 lg:max-w-[24%] lg:text-right xl:right-16"
+          className="t-meta enter-fade mb-4 text-center lg:absolute lg:top-[44%] lg:right-12 lg:mb-0 lg:max-w-[300px] lg:text-right text-balance xl:right-16"
           style={{ animationDelay: "900ms" }}
         >
           <span className="hint-fine">Move to disturb the surface. Click to start a new descent.</span>
@@ -44,17 +44,17 @@ export default function Hero() {
         </p>
 
         <BrowserFrame
-          src="/previews/vazaar.jpg"
+          src="/previews/vazaar-catalog.jpg"
           w={1920}
-          h={1080}
-          alt="Vazaar landing page: The underwriting AI market, in one place."
-          url="vazaar-site.vercel.app"
+          h={1200}
+          alt="Vazaar catalog: 174 underwriting solutions with search, workflow and type filters."
+          url="vazaar-site.vercel.app/catalog"
           sizes="(min-width:1024px) 52vw, 100vw"
           eager
-          className="enter-print w-full lg:absolute lg:bottom-[-56px] lg:right-12 lg:w-[min(52%,calc((100svh_-_400px)*1.6))] xl:right-16"
+          className="enter-print order-last mt-8 w-full lg:absolute lg:bottom-[-56px] lg:right-12 lg:order-none lg:mt-0 lg:w-[min(52%,calc(100%_-_696px),calc((100svh_-_400px)*1.44))] xl:right-16 xl:w-[min(52%,calc(100%_-_728px),calc((100svh_-_400px)*1.44))]"
         />
 
-        <div className="mt-6 lg:mt-auto lg:max-w-[560px]">
+        <div className="mt-6 lg:mt-auto lg:max-w-[560px] lg:pt-10">
           <p className="t-lead enter-fade max-w-[46ch] text-ink-2" style={{ animationDelay: "480ms" }}>
             I&rsquo;m Sahil Dixit. I put AI models to work and build the checks that make them hold up. At Bank of
             America, a governed Copilot workflow cut slide turnaround from hours to{" "}

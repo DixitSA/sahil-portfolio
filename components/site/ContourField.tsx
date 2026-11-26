@@ -40,27 +40,35 @@ export default function ContourField({ tone, className = "" }: { tone: keyof typ
     host.classList.add("cf-armed");
 
     // WebGL is optional: without it the path still runs on the plain ground.
-    const gl = canvas.getContext("webgl", { antialias: false, alpha: true, premultipliedAlpha: true, powerPreference: "low-power" });
-    let ok = false;
+    // The contact-band field (intro "view") defers context creation until it first intersects.
+    let gl: WebGLRenderingContext | null = null;
+    let ok = false, glTried = false;
     const U: Record<string, WebGLUniformLocation | null> = {};
-    if (gl && gl.getExtension("OES_standard_derivatives")) {
-      const sh = (t: number, s: string) => { const o = gl.createShader(t)!; gl.shaderSource(o, s); gl.compileShader(o); return o; };
-      const pr = gl.createProgram()!;
-      gl.attachShader(pr, sh(gl.VERTEX_SHADER, VERT)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, FRAG)); gl.linkProgram(pr);
-      if (gl.getProgramParameter(pr, gl.LINK_STATUS)) {
-        ok = true; gl.useProgram(pr);
-        gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-        const loc = gl.getAttribLocation(pr, "p"); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-        for (const n of ["r", "O", "U", "b", "col", "al", "nz", "w[0]", "w[1]", "w[2]", "w[3]", "w[4]", "w[5]"]) U[n] = gl.getUniformLocation(pr, n);
-        const tc = TONES[tone];
-        gl.uniform3f(U.col, tc.col[0], tc.col[1], tc.col[2]); gl.uniform2f(U.al, tc.al[0], tc.al[1]);
+    const initGL = () => {
+      if (glTried) return;
+      glTried = true;
+      gl = canvas.getContext("webgl", { antialias: false, alpha: true, premultipliedAlpha: true, powerPreference: "low-power" });
+      if (gl && gl.getExtension("OES_standard_derivatives")) {
+        const sh = (t: number, s: string) => { const o = gl!.createShader(t)!; gl!.shaderSource(o, s); gl!.compileShader(o); return o; };
+        const pr = gl.createProgram()!;
+        gl.attachShader(pr, sh(gl.VERTEX_SHADER, VERT)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, FRAG)); gl.linkProgram(pr);
+        if (gl.getProgramParameter(pr, gl.LINK_STATUS)) {
+          ok = true; gl.useProgram(pr);
+          gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+          gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+          const loc = gl.getAttribLocation(pr, "p"); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+          for (const n of ["r", "O", "U", "b", "col", "al", "nz", "w[0]", "w[1]", "w[2]", "w[3]", "w[4]", "w[5]"]) U[n] = gl.getUniformLocation(pr, n);
+          const tc = TONES[tone];
+          gl.uniform3f(U.col, tc.col[0], tc.col[1], tc.col[2]); gl.uniform2f(U.al, tc.al[0], tc.al[1]);
+        }
       }
-    }
+    };
+    const deferred = host.dataset.cfIntro === "view";
+    if (!deferred) initGL();
 
     const geo = { ox: 0, oy: 0, u: 1 };
     const scale = Math.min(devicePixelRatio, 2) * 0.75;
-    let t = 0, last = performance.now(), driftUntil = 0, live = false, dirty = true, visible = true;
+    let t = 0, last = performance.now(), driftUntil = 0, live = false, dirty = true, visible = !deferred;
     let start: Pt = START;
     let nz = still() ? 0 : 1, nzStart = 0, nzMs = 1400;
     const bump = { x: 9, y: 9, tx: 9, ty: 9, a: 0, ta: 0 };
@@ -93,11 +101,12 @@ export default function ContourField({ tone, className = "" }: { tone: keyof typ
       ring?.setAttribute("cx", String(e[0])); ring?.setAttribute("cy", String(e[1]));
     };
     const render = () => {
-      if (!ok || !gl) return;
-      wellsAt(t).forEach((w, i) => gl.uniform4f(U[`w[${i}]`], ...w));
-      gl.uniform4f(U.b, ...(hill() ?? [9, 9, 0, 0.12]));
-      gl.uniform1f(U.nz, nz);
-      gl.drawArrays(gl.TRIANGLES, 0, 3);
+      const g = gl;
+      if (!ok || !g) return;
+      wellsAt(t).forEach((w, i) => g.uniform4f(U[`w[${i}]`], ...w));
+      g.uniform4f(U.b, ...(hill() ?? [9, 9, 0, 0.12]));
+      g.uniform1f(U.nz, nz);
+      g.drawArrays(g.TRIANGLES, 0, 3);
       canvas.style.opacity = "1";
     };
     const play = (ms: number) => {
@@ -128,8 +137,7 @@ export default function ContourField({ tone, className = "" }: { tone: keyof typ
     const onClick = (e: MouseEvent) => {
       if ((e.target as Element).closest("a,button,input,label,select,textarea") || getSelection()?.toString()) return;
       const [x, y] = toField(e);
-      if (x < -1.1 || x > 0.9 || y < -0.9 || y > 0.7) return;
-      start = [x, y];
+      start = [Math.max(-1.1, Math.min(0.9, x)), Math.max(-0.9, Math.min(0.7, y))];
       if (still()) { setPath(solve()); return; }
       play(900);
     };
@@ -137,8 +145,13 @@ export default function ContourField({ tone, className = "" }: { tone: keyof typ
     host.addEventListener("click", onClick);
 
     let raf = 0;
+    // declared before the observer so its callback can restart the loop
     const io = new IntersectionObserver(([en]) => {
       visible = en.isIntersecting;
+      if (visible) {
+        if (!glTried) { initGL(); measure(); if (still()) settle(); }
+        if (!raf) { last = performance.now(); raf = requestAnimationFrame(frame); }
+      }
       if (visible && host.dataset.cfIntro === "view" && !still() && !host.hasAttribute("data-landed") && en.intersectionRatio >= 0.35 && !host.classList.contains("cf-drawing")) {
         timers.push(window.setTimeout(() => play(1400), 150));
       }
@@ -158,9 +171,10 @@ export default function ContourField({ tone, className = "" }: { tone: keyof typ
     else if (host.dataset.cfIntro !== "view") timers.push(window.setTimeout(() => play(1400), 700));
 
     const frame = (now: number) => {
+      if (!visible) { raf = 0; return; } // paused off-screen; the IO callback restarts it
       raf = requestAnimationFrame(frame);
       const dt = Math.min(0.05, (now - last) / 1000); last = now;
-      if (!visible || document.hidden || still()) return;
+      if (document.hidden || still()) return;
       if (nzStart && nz > 0) { const x = Math.min(1, (now - nzStart) / nzMs); nz = (1 - x) ** 3; dirty = true; }
       if (live && now < driftUntil) { t += dt; dirty = true; }
       const k = 0.08;
@@ -174,7 +188,7 @@ export default function ContourField({ tone, className = "" }: { tone: keyof typ
       render();
       if (live) setPath(solve());
     };
-    raf = requestAnimationFrame(frame);
+    if (visible) raf = requestAnimationFrame(frame);
 
     return () => {
       cancelAnimationFrame(raf); timers.forEach(clearTimeout); ro.disconnect(); io.disconnect();

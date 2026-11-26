@@ -24,8 +24,8 @@ export const projects: Project[] = [
       "I built the whole funnel: a free searchable catalog, a $49-a-month introductory tier with email-code accounts and Stripe checkout, an enterprise request form, and its own analytics endpoint.",
     href: "https://vazaar-site.vercel.app",
     // Repository is private, so no source link is shown.
-    preview: "/previews/vazaar.jpg",
-    previewSize: { w: 1920, h: 1080 },
+    preview: "/previews/vazaar-product.jpg",
+    previewSize: { w: 1920, h: 1200 },
     caseStudy: {
       problem:
         "Insurers buying underwriting software (submission intake, triage, document extraction, decision support) face a crowded market where every vendor page says roughly the same thing. A research product only helps if a buyer can tell which claims rest on evidence and which rest on marketing. AI makes the research faster, and it also makes it easy to publish confident claims that nobody checked.",

@@ -3,7 +3,6 @@ import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 import { hubot, mona, jetbrains } from "./fonts";
 
-import MotionProvider from "@/components/MotionProvider";
 import JsonLd from "@/components/JsonLd";
 import SmoothScroll from "@/components/site/SmoothScroll";
 import Nav from "@/components/site/Nav";
@@ -61,11 +60,9 @@ export default function RootLayout({
         <a href="#main" className="skip-to-content">
           Skip to content
         </a>
-        <MotionProvider>
-          <SmoothScroll />
-          <Nav />
-          <main id="main">{children}</main>
-        </MotionProvider>
+        <SmoothScroll />
+        <Nav />
+        <main id="main">{children}</main>
       </body>
     </html>
   );
