@@ -1,11 +1,12 @@
-import { Fragment, Suspense } from "react";
+import { Suspense } from "react";
 import { ArrowDown } from "lucide-react";
 import { profile } from "@/content";
-import HeroShader from "./HeroShader";
+import ContourField from "./ContourField";
+import DescentPath from "./DescentPath";
 import ForCompany from "./ForCompany";
-import { BrowserFrame, PhoneFrame } from "./Frames";
+import { BrowserFrame } from "./Frames";
 
-const HEADLINE = "Startup growth, from the SQL query to the shipped app.".split(" ");
+const LINES = ["Put AI to work.", "Check its work.", "Ship what passes."];
 
 const CONTEXT =
   "Now: Strategy & Management Analyst at Bank of America, Charlotte. Before: Capital One, Alliant Insurance Services.";
@@ -13,35 +14,57 @@ const CONTEXT =
 export default function Hero() {
   return (
     <section
+      data-cf-host
+      data-cf-intro="load"
       aria-label="Introduction"
-      className="min-h-[100svh] pt-[88px] pb-6 lg:pt-[120px] lg:pb-14"
+      className="cf-host relative overflow-hidden"
     >
-      <div className="wrap lg:grid lg:grid-cols-12 lg:gap-6">
-        <div className="flex flex-col lg:col-span-6">
-          <Suspense fallback={null}>
-            <ForCompany />
-          </Suspense>
+      <ContourField tone="paper" className="cf-mask-hero" />
+      <div className="wrap relative z-10 flex min-h-[100svh] flex-col pt-[88px] pb-6 lg:pt-[112px] lg:pb-12">
+        <Suspense fallback={null}>
+          <ForCompany />
+        </Suspense>
 
-          <h1 className="t-display">
-            {HEADLINE.map((word, i) => (
-              <Fragment key={i}>
-                {i > 0 && " "}
-                <span className="mask">
-                  <span className="enter-word" style={{ "--i": i } as React.CSSProperties}>
-                    {word}
-                  </span>
-                </span>
-              </Fragment>
-            ))}
-          </h1>
+        <h1 className="t-hero">
+          {LINES.map((line, i) => (
+            <span key={line} className="hl">
+              <span style={{ "--i": i } as React.CSSProperties}>{line}</span>
+            </span>
+          ))}
+        </h1>
 
-          <p className="t-lead enter-fade mt-6 max-w-[44ch] text-ink-2" style={{ animationDelay: "380ms" }}>
-            I&rsquo;m Sahil Dixit. I find the number that matters, test it, and write the code myself.
-            Kaal is live on web and iOS after <span className="answer answer--draw">277 commits</span>.
-            Next: a technical growth role at a startup.
+        <DescentPath className="my-3 h-[104px] lg:absolute lg:right-12 lg:top-[12%] lg:my-0 lg:h-[40%] lg:w-[24%] xl:right-16" />
+
+        <p
+          className="t-meta enter-fade mb-4 text-center lg:absolute lg:top-[50%] lg:right-12 lg:mb-0 lg:max-w-[24%] lg:text-right xl:right-16"
+          style={{ animationDelay: "900ms" }}
+        >
+          <span className="hint-fine">Move to disturb the surface. Click to start a new descent.</span>
+          <span className="hint-touch">Tap to start a new descent.</span>
+        </p>
+
+        <BrowserFrame
+          src="/previews/vazaar.jpg"
+          w={1920}
+          h={1080}
+          alt="Vazaar landing page: The underwriting AI market, in one place."
+          url="vazaar-site.vercel.app"
+          sizes="(min-width:1024px) 52vw, 100vw"
+          eager
+          className="enter-print w-full lg:absolute lg:bottom-[-56px] lg:right-12 lg:w-[min(52%,calc((100svh_-_400px)*1.6))] xl:right-16"
+        />
+
+        <div className="mt-6 lg:mt-auto lg:max-w-[560px]">
+          <p className="t-lead enter-fade max-w-[46ch] text-ink-2" style={{ animationDelay: "480ms" }}>
+            I&rsquo;m Sahil Dixit. I put AI models to work and build the checks that make them hold up. At Bank of
+            America, a governed Copilot workflow cut slide turnaround from hours to{" "}
+            <span className="answer" data-land>
+              about 15 minutes
+            </span>
+            . Next: an AI strategy role at a startup.
           </p>
 
-          <div className="enter-fade mt-8 flex gap-3" style={{ animationDelay: "440ms" }}>
+          <div className="enter-fade mt-8 flex gap-3" style={{ animationDelay: "560ms" }}>
             <a href="#work" className="btn btn-primary flex-1 sm:flex-none">
               See the work
               <ArrowDown aria-hidden className="nudge h-4 w-4" />
@@ -51,31 +74,9 @@ export default function Hero() {
             </a>
           </div>
 
-          <p className="t-meta mt-auto hidden max-w-[52ch] pt-8 lg:block">{CONTEXT}</p>
-        </div>
-
-        <div className="mt-8 lg:col-span-6 lg:mt-0">
-          <div className="stage enter-stage h-[260px] sm:h-[380px] lg:h-[clamp(520px,calc(100svh_-_176px),720px)]">
-            <HeroShader />
-            <BrowserFrame
-              src="/previews/vazaar.jpg"
-              w={1920}
-              h={1080}
-              alt="Vazaar landing page: The underwriting AI market, in one place."
-              url="vazaar-site.vercel.app"
-              sizes="(min-width: 1024px) 40vw, 80vw"
-              eager
-              className="absolute left-[4%] top-[8%] w-[80%] lg:left-[5%] lg:top-[9%] lg:w-[70%]"
-            />
-            <PhoneFrame
-              src="/previews/kaal-dashboard.png"
-              alt="Kaal on iPhone, showing the current phase, today's guidance and a Wait decision for career."
-              sizes="(min-width: 1024px) 20vw, 42vw"
-              eager
-              className="absolute right-[5%] top-[12%] w-[42%] lg:right-[6%] lg:w-[32%]"
-            />
-          </div>
-          <p className="t-meta mt-5 lg:hidden">{CONTEXT}</p>
+          <p className="t-meta enter-fade mt-6 max-w-[52ch]" style={{ animationDelay: "640ms" }}>
+            {CONTEXT}
+          </p>
         </div>
       </div>
     </section>

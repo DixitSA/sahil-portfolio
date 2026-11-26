@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { ArrowUpRight, ArrowRight, ArrowLeft } from "lucide-react";
-import type { ReactNode } from "react";
+import { ViewTransition, type ReactNode } from "react";
 import type { Project } from "@/content/types";
 import { featuredProjects } from "@/content";
 import ReadingProgress from "@/components/site/ReadingProgress";
 import { BrowserFrame, PhoneFrame } from "@/components/site/Frames";
+import AgentPipeline from "@/components/site/AgentPipeline";
+import VazaarPipeline from "@/components/site/VazaarPipeline";
 
 /** Splits on backticks; odd segments render as inline code. */
 function withCode(text: string): ReactNode[] {
@@ -19,6 +21,19 @@ function withCode(text: string): ReactNode[] {
     ) : (
       <span key={i}>{seg}</span>
     ),
+  );
+}
+
+/** Wraps the project's result figure in a strong; falls back to plain text. */
+function withAnswer(summary: string, answer?: string): ReactNode {
+  const i = answer ? summary.indexOf(answer) : -1;
+  if (!answer || i === -1) return summary;
+  return (
+    <>
+      {summary.slice(0, i)}
+      <strong className="font-semibold text-ink">{answer}</strong>
+      {summary.slice(i + answer.length)}
+    </>
   );
 }
 
@@ -59,8 +74,12 @@ export default function CaseStudy({ project }: { project: Project }) {
         </Link>
 
         <header>
-          <h1 className="t-hero-cs break-words">{project.name}</h1>
-          <p className="t-lead mt-6 max-w-[40ch] text-ink">{project.summary}</p>
+          <ViewTransition name={`title-${project.slug}`} share="title-morph">
+            <h1 className="t-hero-cs break-words">{project.name}</h1>
+          </ViewTransition>
+          <p className="t-lead mt-6 max-w-[40ch] text-ink">
+            {withAnswer(project.summary, project.answer)}
+          </p>
           {project.angle && <p className="mt-3 max-w-[60ch] text-ink-2">{project.angle}</p>}
           <p className="t-meta mt-6 flex flex-wrap items-center gap-x-2 gap-y-1">
             <span
@@ -104,9 +123,17 @@ export default function CaseStudy({ project }: { project: Project }) {
           </ul>
         </header>
 
+        {!project.preview && project.slug === "mixxx-mcp" && (
+          <div className="stage mt-16 p-6 md:p-12">
+            <div className="mx-auto max-w-[420px]">
+              <AgentPipeline />
+            </div>
+          </div>
+        )}
+
         {project.preview &&
           (isKaal ? (
-            <div className="stage mt-14 h-[clamp(300px,42vw,620px)]">
+            <div className="stage mt-16 h-[clamp(300px,42vw,620px)]">
               <BrowserFrame
                 src="/previews/kaal-landing.png"
                 w={1600}
@@ -124,7 +151,7 @@ export default function CaseStudy({ project }: { project: Project }) {
               />
             </div>
           ) : (
-            <div className="stage mt-14 p-6 md:p-12">
+            <div className="stage mt-16 p-6 md:p-12">
               {landscape ? (
                 <BrowserFrame
                   src={project.preview}
@@ -133,6 +160,7 @@ export default function CaseStudy({ project }: { project: Project }) {
                   alt={`${project.name} interface`}
                   url={hostOf(project.href)}
                   sizes="(max-width: 768px) 100vw, 960px"
+                  eager={project.slug === "vazaar"}
                   className="mx-auto max-w-5xl"
                 />
               ) : (
@@ -160,12 +188,17 @@ export default function CaseStudy({ project }: { project: Project }) {
                   className="grid gap-8 border-t border-rule py-12 md:grid-cols-[minmax(0,1fr)_minmax(0,1.7fr)] md:gap-16 md:py-16"
                 >
                   <h2 className="t-result self-start md:sticky md:top-24">{s.heading}</h2>
-                  <div className="max-w-[68ch] space-y-5">
+                  <div className="max-w-[60ch] space-y-5">
                     {s.body.map((para, j) => (
                       <p key={j} className="text-ink-2">
                         {withCode(para)}
                       </p>
                     ))}
+                    {project.slug === "vazaar" && s.heading.startsWith("AI drafts.") && (
+                      <div className="mt-8 max-w-[420px]">
+                        <VazaarPipeline />
+                      </div>
+                    )}
                   </div>
                 </section>
               ))}
@@ -175,7 +208,7 @@ export default function CaseStudy({ project }: { project: Project }) {
               <h2 className="t-h2">Results</h2>
               <ul className="mt-8 border-t border-rule">
                 {cs.outcome.map((line, i) => (
-                  <li key={i} className="max-w-[68ch] border-b border-rule py-5 text-ink">
+                  <li key={i} className="max-w-[60ch] border-b border-rule py-5 text-ink">
                     {withCode(line)}
                   </li>
                 ))}
@@ -190,12 +223,16 @@ export default function CaseStudy({ project }: { project: Project }) {
           {next && next.slug !== project.slug && (
             <Link
               href={`/work/${next.slug}`}
-              className="block min-h-11 border-t border-rule pt-10"
+              className="group block min-h-11 border-t border-rule pt-10"
             >
               <span className="t-meta block">Next case study</span>
               <span className="mt-3 flex items-end justify-between gap-6">
-                <span className="t-h2 break-words">{next.name}</span>
-                <ArrowRight aria-hidden className="nudge mb-1 h-8 w-8 shrink-0 text-ink" />
+                <ViewTransition name={`title-${next.slug}`} share="title-morph">
+                  <span className="t-mega break-words underline decoration-transparent decoration-2 [text-underline-offset:.12em] group-hover:decoration-ink">
+                    {next.name}
+                  </span>
+                </ViewTransition>
+                <ArrowRight aria-hidden className="nudge mb-2 h-8 w-8 shrink-0 text-ink" />
               </span>
             </Link>
           )}

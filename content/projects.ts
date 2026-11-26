@@ -15,7 +15,10 @@ export const projects: Project[] = [
     tier: "featured",
     status: "LIVE",
     summary:
-      "Research platform for commercial P&C underwriting software. A catalog of 170+ solutions, with source-linked evidence checks behind every claim.",
+      "Research platform for commercial P&C underwriting software: a catalog of 170+ solutions, researched with AI and checked before anything is published.",
+    answer: "170+ solutions",
+    aiNote:
+      "Research drafting runs offline. A separate, lower-cost model reviews each draft as an independent judge, with at most two revision rounds, and a deterministic publication gate checks the recorded judgment before anything ships. The live product makes no runtime model calls.",
     tags: ["TypeScript", "Astro", "Supabase", "Stripe"],
     angle:
       "I built the whole funnel: a free searchable catalog, a $49-a-month introductory tier with email-code accounts and Stripe checkout, an enterprise request form, and its own analytics endpoint.",
@@ -70,7 +73,7 @@ export const projects: Project[] = [
     tier: "listed",
     status: "LIVE",
     summary:
-      "Multi-agent outreach automation. Three specialized LLM agents in one pipeline, running on ~$0 of infrastructure.",
+      "Multi-agent outreach automation: three LLM agents for research, drafting and follow-up, and nothing sends until a person approves it.",
     tags: ["Python", "LLM agent orchestration", "Self-hosted Linux"],
     // Added back at the owner's request. Flagged twice and worth repeating:
     // this URL currently resolves to a Next.js/Prisma operations dashboard for
@@ -126,6 +129,7 @@ export const projects: Project[] = [
     status: "LIVE",
     summary:
       "Vedic astrology decision app shipped to production web and iOS. Deterministic chart computation, 277 commits.",
+    answer: "277 commits",
     tags: ["Next.js", "TypeScript", "Python", "Capacitor"],
     angle:
       "It ships with magic-link sign-in and Stripe checkout, and went to market through a niche community instead of paid acquisition.",
@@ -192,6 +196,7 @@ export const projects: Project[] = [
     status: "BUILD",
     summary:
       "An MCP server exposing 33 tools that let an LLM agent run multi-step DJ work in Mixxx: beat-timed transitions, mashup matching and set planning, with job queuing and automated tests.",
+    answer: "33 tools",
     tags: ["Python", "Model Context Protocol", "MIDI", "Audio analysis"],
     angle:
       "Agent tooling with guardrails: narrow tools, a job queue that lands on the beat, and an evaluator that checks a transition before anyone trusts it.",

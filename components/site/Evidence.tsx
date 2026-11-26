@@ -15,36 +15,50 @@ function Result({ result, answer }: { result: string; answer: string }) {
   );
 }
 
+function Rows({ group }: { group: "ai" | "analysis" }) {
+  return (
+    <ol className="mt-10">
+      {profile.evidence
+        .filter((e) => e.group === group)
+        .map((e) => (
+          <li
+            key={e.result}
+            className="ledger-row grid gap-3 border-t border-rule-field py-8 lg:grid-cols-12 lg:gap-6 lg:py-12"
+          >
+            <p className="t-ledger lg:col-span-6">
+              <Result result={e.result} answer={e.answer} />
+            </p>
+            <p className="max-w-[44ch] text-on-field-2 lg:col-span-4 lg:col-start-7">{e.method}</p>
+            <p className="t-meta lg:col-span-2 lg:text-right">{e.where}</p>
+          </li>
+        ))}
+    </ol>
+  );
+}
+
 export default function Evidence() {
   const { education } = profile;
 
   return (
-    <section id="evidence" aria-labelledby="evidence-title" className="on-field py-[88px] lg:py-32">
+    <section id="evidence" aria-labelledby="evidence-title" className="on-field py-[88px] lg:py-36">
       <div className="wrap">
-        <h2 id="evidence-title" className="t-h2 max-w-[22ch]">
-          Experiments and analysis at work
+        <h2 id="evidence-title" className="t-h2 max-w-[18ch]">
+          Applied AI at work
         </h2>
-        <p className="t-lead mt-4 max-w-[60ch]">
-          Before the products, the same loop inside large companies: find the friction in the data,
-          test a change, get it adopted.
+        <p className="t-lead mt-5 max-w-[56ch] text-on-field-2">
+          At Bank of America: putting AI into daily work, then the calibration, review and reporting
+          that make it hold up.
         </p>
 
-        <ol className="mt-12">
-          {profile.evidence.map((e) => (
-            <li
-              key={e.result}
-              className="grid gap-2 border-t border-rule-field py-7 lg:grid-cols-12 lg:gap-6"
-            >
-              <p className="t-result lg:col-span-5">
-                <Result result={e.result} answer={e.answer} />
-              </p>
-              <p className="max-w-[68ch] lg:col-span-5 lg:col-start-6">{e.method}</p>
-              <p className="t-meta lg:col-span-2 lg:text-right">{e.where}</p>
-            </li>
-          ))}
-        </ol>
+        <Rows group="ai" />
 
-        <h3 className="t-result mt-16">Roles</h3>
+        <h3 className="t-result mt-20">Analysis and experiments</h3>
+        <p className="mt-2 max-w-[56ch] text-on-field-2">
+          Where the habit started: find the friction in the data, test a change, get it adopted.
+        </p>
+        <Rows group="analysis" />
+
+        <h3 className="t-result mt-20">Roles</h3>
         <ul className="mt-6">
           {roles.map((r) => (
             <li

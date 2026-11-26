@@ -6,7 +6,7 @@ function splitTheme(item: string): [string, string] {
 }
 
 export default function About() {
-  const [first, ...rest] = profile.bio;
+  const [, proof, ...rest] = profile.bio;
 
   return (
     <section id="about" aria-labelledby="about-title" className="py-[88px] lg:py-32">
@@ -15,17 +15,19 @@ export default function About() {
           How I work
         </h2>
 
-        <div className="mt-8 grid gap-16 lg:mt-12 lg:grid-cols-12 lg:gap-x-6">
-          <div className="max-w-[64ch] space-y-5 lg:col-span-7">
-            <p className="text-ink">{first}</p>
-            {rest.map((p) => (
-              <p key={p} className="text-ink-2">
-                {p}
-              </p>
-            ))}
+        <div className="mt-10 grid gap-16 lg:mt-14 lg:grid-cols-12 lg:gap-x-6">
+          <div className="lg:col-span-6">
+            <p className="t-statement text-[clamp(20px,1vw+14px,28px)]! text-ink">{proof}</p>
+            <div className="mt-8 max-w-[60ch] space-y-6">
+              {rest.map((p) => (
+                <p key={p} className="text-ink-2">
+                  {p}
+                </p>
+              ))}
+            </div>
           </div>
 
-          <div className="lg:col-span-4 lg:col-start-9">
+          <div className="lg:col-span-5 lg:col-start-8">
             {profile.now && (
               <>
                 <h3 className="t-result">Now</h3>

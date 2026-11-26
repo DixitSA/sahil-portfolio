@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.resolve(import.meta.dirname),
   },
+  experimental: { viewTransition: true },
   // Old multi-route links now land on the matching section of the single page.
   async redirects() {
     return [

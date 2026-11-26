@@ -30,6 +30,7 @@ export interface Evidence {
   answer: string;
   method: string;
   where: string;
+  group: "ai" | "analysis";
 }
 
 export interface Project {
@@ -39,6 +40,10 @@ export interface Project {
   status: ProjectStatus;
   /** One line, used in list rows and spotlight. */
   summary: string;
+  /** Verbatim substring of `summary`: the result figure. */
+  answer?: string;
+  /** The AI-pipeline note (Vazaar chapter 2). */
+  aiNote?: string;
   tags: string[];
   /** Live product URL, if shipped. */
   href?: string;

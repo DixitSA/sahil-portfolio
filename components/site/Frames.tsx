@@ -44,7 +44,7 @@ interface PhoneFrameProps {
 /** Phone bezel around a portrait screenshot. */
 export function PhoneFrame({ src, alt, sizes, eager, className = "" }: PhoneFrameProps) {
   return (
-    <div className={`relative rounded-[28px] bg-ink p-[7px] frame-shadow ${className}`}>
+    <div className={`rounded-[28px] bg-ink p-[7px] frame-shadow ${className}`}>
       <div className="relative aspect-[9/19.5] overflow-hidden rounded-[22px] bg-sheet">
         <Image
           src={src}
@@ -54,11 +54,11 @@ export function PhoneFrame({ src, alt, sizes, eager, className = "" }: PhoneFram
           className="object-cover object-top"
           {...(eager ? { loading: "eager" as const, fetchPriority: "high" as const } : {})}
         />
+        <span
+          aria-hidden
+          className="absolute left-1/2 top-1 h-[16px] w-[56px] max-w-[40%] -translate-x-1/2 rounded-full bg-ink"
+        />
       </div>
-      <span
-        aria-hidden
-        className="absolute left-1/2 top-2 h-[16px] w-[56px] max-w-[40%] -translate-x-1/2 rounded-full bg-ink"
-      />
     </div>
   );
 }

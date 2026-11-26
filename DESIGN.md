@@ -1,36 +1,41 @@
-# Design: The computation pad
+# Design: The red pen
 
 ## World
-The page is an engineer's computation pad: pale green paper, a faint grid, graphite lettering, and one convention: **the answer gets a red-pencil double underline**. That mark is the thesis: he finds the number that matters, works it out in the open, and underlines it. The one live effect is a loss surface drawn as contour lines on the pad's grid, behind real product UI. Real screens (Vazaar's browser window, Kaal on web and iPhone, the MCP pipeline) sit on the pad like taped-in printouts. A deep pad-green field runs edge to edge twice, for the evidence ledger and the close; only one is on screen at a time. Type is GitHub's own family: Hubot Sans display, Mona Sans text, set wide and bold like drafting lettering. The ground is light because the scene is daylight, often a phone opened from an email.
+A clean off-white sheet, near-black ink and one reviewer's red pen. The thesis is checking the model's work: put AI to work, check its work, ship what passes. The hero is a loss surface drawn as contour lines. It starts noisy; a graphite path runs real momentum gradient descent on it (the same function in GLSL and TypeScript) and the noise calibrates out as it converges. Only when it lands does red appear: a ring at the minimum and a double underline under the result. Colour otherwise comes from product UI. No grid, no gradients, no glow.
 
-Rejected: black canvas, neon green, grain and glow, Geist, italic serif accents, mono uppercase kickers, numbered labels, pill chips, stat strips, nested cards, floating chips, reveal-on-scroll, any framing as a banker.
+Rejected: uppercase tracked labels, 01/02 indices, marquees, collapsing menu pills, grids, neon, navy or gold, reveal-on-scroll, any framing as a banker.
 
 ## Color (light only)
 | Token | Hex | Use |
 |---|---|---|
-| paper | `#E7EDE1` | page ground |
-| sheet | `#F4F7F0` | stage and frame grounds |
-| ink | `#18201A` | headings, primary text, primary button |
-| ink-2 | `#3B4A3E` | body |
-| ink-3 | `#56655A` | meta (14px minimum) |
-| ink-hover | `#2A352C` | primary button hover |
-| rule / rule-strong | `rgba(24,32,26,.16/.32)` | hairlines / stage borders |
-| grid | `rgba(30,74,52,.10)` | 24px grid inside `.stage` only |
-| field | `#1E4A34` | the two full-bleed bands |
-| on-field / on-field-2 | `#EEF3EA` / `#B8CCBB` | text on field |
-| rule-field | `rgba(238,243,234,.22)` | hairlines on field |
-| mark / mark-on-field | `#B23A0B` / `#F59A6B` | answer underline, focus ring, selection, caret |
+| paper | `#F4F3EF` | ground |
+| sheet | `#FBFAF8` | stages and frames |
+| ink | `#161513` | headings, primary button |
+| ink-2 | `#3D3B37` | body |
+| ink-3 | `#605D57` | meta (14px minimum) |
+| ink-hover | `#2B2A27` | primary hover |
+| rule / rule-strong | `rgba(22,21,19,.12 / .26)` | hairlines, stage borders |
+| field / on-field | `#161513` / `#F4F3EF` | the two inverse bands |
+| on-field-2 | `#ABA79F` | secondary on field |
+| rule-field | `rgba(244,243,239,.16)` | hairlines on field |
+| mark / mark-on-field | `#B8360F` / `#FF7A4D` | passed review only |
 
-The mark never fills an area and is never body text.
+The mark appears only where something passed review: converged ring, hero underline, Evidence underlines, email underline, pipeline gate marker, focus, selection. Never an area over 12px square, never body text. The descent path and dots are ink.
 
 ## Type
-Hubot Sans (display, wdth 106%), Mona Sans (text), JetBrains Mono (code, URLs, tags only). Classes: `.t-display`, `.t-h2`, `.t-h3`, `.t-result`, `.t-hero-cs`, `.t-lead`, `.t-meta`, `.t-mono`. Body 16px phone, 17px desktop, line-height 1.65, max 68ch. Nothing below 14px except the aria-hidden 13px browser-bar URL.
-
-## Space and shape
-- `.wrap`: max 1440px, gutters 16/32/48/64. 12 columns, 24px gap from lg.
-- Sections: 128px vertical from lg, 88px on a phone. More space above a heading than below.
-- Radii: 4px frames, stages and inputs; 6px buttons; 28/22px phone bezel and screen. No pills.
-- Borders: 1px rule; browser frames 1px ink; stages 1px rule-strong. Shadow on frames only.
+Hubot Sans display, Mona Sans text, JetBrains Mono for code only.
+- `.t-hero`: 750, 112% width, lh .94, three explicit lines, up to 124px.
+- `.t-mega`: Work and Contact h2. `.t-h3`: project names. `.t-ledger`: evidence results. `.t-statement`: the About pull line. `.t-hero-cs`: case-study h1. `.t-thesis`: the word-highlight sentence.
+- `.t-h2`, `.t-result`, `.t-lead`, `.t-meta`, `.t-mono` as in globals.css. Body copy max 60ch. Nothing under 14px except the aria-hidden browser-bar URL.
 
 ## Motion
-Easing `--ease-ui` and `--ease-enter`. Hover 150ms in, 120ms out; press 90ms. The hero load is pure CSS and visible without JS: words rise from masks, lead and buttons fade up, the stage settles, then the double underline draws under "277 commits". The contour shader is the one effect: it pauses offscreen, renders one frame under reduced motion, and falls back to the grid. The AgentPipeline packet loops only in view. Nothing else animates: no section reveals, parallax, counters or timelines. Reduced motion skips every entrance.
+- Easing: `--ease-enter` for arrivals, `--ease-ui` for hover, `cubic-bezier(.3,0,.2,1)` for the path. Hover 150ms in, 120ms out; press 90ms.
+- Hero timeline: lines rise at 120/210/300ms; the path draws 700 to 2100ms while noise decays to zero; the ring and underline land at 2100ms; the surface drifts until about 7s, then rests. Nothing moves on its own for more than 5s.
+- Interaction: a fine pointer raises a hill under the cursor and the path re-solves each frame; a click or tap starts a new descent from that point (not on links, buttons or selections).
+- Motion switch: `html[data-motion="off"|"on"]`, set before paint from localStorage or `prefers-reduced-motion`. Off renders one settled frame, no drift, no hill; clicks re-solve instantly. It affects only the two fields.
+- Scroll moments: the thesis lights word by word; the Work stage is pinned with four chapters wiping up. Nothing else moves on scroll. Both follow OS reduced motion.
+- View Transitions: root fades up, titles morph, the nav holds still. Off under reduced motion.
+- Fallbacks: no WebGL keeps the ground and SVG path; no JS shows the drawn path and underlines; `html.cf-safe` un-hides after 4s.
+
+## Space and shape
+`.wrap`: max 1440px, gutters 16/32/48/64. Radius 4px on stages and frames, 6px on buttons; the one pill is the Motion switch. Stages are plain sheets with a hairline border.

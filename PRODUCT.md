@@ -10,31 +10,36 @@ Experience (a personal portfolio): the work leads from the first viewport; the i
 
 ## Users
 
-**Primary:** Founders, heads of growth and hiring managers at startups hiring for a technical growth role: growth engineer, growth / product generalist, growth analytics, or a founding-team "find the lever and build it" seat.
+**Primary:** Founders, CEOs and heads of product or operations at startups hiring for AI strategy or applied-AI roles: an AI strategy lead, an applied-AI generalist, AI operations and enablement, or a founding "make AI actually work here" seat.
 
-**Secondary:** Operators and early-stage teams looking for someone who can run the analysis, design the experiment and write the code without a hand-off.
+**Secondary:** Teams that need someone who can pick where AI pays off, build it, and put the evaluation and governance around it without a hand-off.
 
-They are technical or close to it. They scan fast, judge craft instantly, and are allergic to corporate polish. A banking résumé is a neutral-to-negative signal for them unless it is translated into what it proves: comfort with messy data, experiments, and shipping something people adopt.
+They are technical or close to it, scan fast, and distrust AI hype; a banking résumé is neutral unless it is translated into what it proves: AI shipped under real controls.
 
 ## Product Purpose
 
-Personal site for Sahil Dixit. It exists to get him an interview for a technical growth role at a startup, a move from strategy work at a large bank toward something more hands-on and technical.
+Get him an interview for an AI strategy role at a startup. The argument: he gets real work out of AI models and builds the controls that make it hold up — calibration, evaluation, review gates and governance — inside a large company and in products he ships.
 
-The argument it makes: **he finds the number that matters, runs the experiment, and ships the software himself.** Evidence, all from the résumé and his repositories:
+Evidence (verbatim from `content/*.ts`):
 
-- Analytics and experiments: A/B tests of account-linking flows at Capital One with a measurable effect on retention; 10,000+ complaint logs and call records mined in SQL to find friction; fraud signal inventory (12 signals × 10 fraud types → 22 detection gaps) adopted by his team.
-- Process and AI in production: re-engineered an AI model's calibration with data and reconciliation controls, weekly session completion 45% → nearly 100%; a governed Copilot workflow that cut slide turnaround from hours to ~15 minutes, adopted teamwide and extended into a department prompt library.
-- Shipping products end to end: Vazaar (live research platform, free / paid / enterprise tiers, Stripe + Supabase), Kaal (live on web and iOS, 277 commits, Stripe checkout, went to market through a niche community rather than paid acquisition), Mixxx MCP (33-tool MCP server with a beat-timed job queue and tests), plus Axira (multi-agent outreach pipeline), VibeQueue and MANIFEST.
+- Slide turnaround from hours to about 15 minutes, through a governed Copilot workflow the whole team adopted.
+- Weekly completion from 45% to nearly 100%, by re-engineering the accuracy calibration for an AI call-summarization model.
+- 30 model submissions and 8 regulatory responses, 80% ahead of deadline, in AI model risk review at Bank of America.
+- Vazaar: AI drafts the research, a separate lower-cost model judges each draft, and a deterministic gate decides what ships; the live product makes no runtime model calls.
+- Mixxx MCP: 33 narrow tools that let an LLM agent run multi-step work, with a beat-timed job queue and an evaluator.
+- Axira: three LLM agents for research, drafting and follow-up, and nothing sends until a person approves it.
+
+Supporting evidence: A/B tests of account-linking flows at Capital One with a measurable effect on retention; 10,000+ complaint logs mined in SQL; a fraud signal inventory (22 detection gaps). Lead product: Vazaar. Kaal (live on web and iOS, 277 commits) is second.
 
 The bank is context, not the headline. Never frame him as a banker, a compliance person or a consultant.
 
-Success looks like: a founder replies to the email the link was sent in, or a hiring manager forwards it to their head of growth.
+Success looks like: a founder replies to the email the link was sent in, or a hiring manager forwards it to the person who owns AI at their company.
 
 ## Brand Personality
 
-**Sharp · Technical · Builder**
+**Rigorous · Technical · Builder.**
 
-Voice: direct, specific, first person, zero filler. Numbers over adjectives. Sounds like a person who ships, not a deck. No "passionate about", no "results-driven", no "leveraging". Confident without claiming; the evidence does the claiming.
+Voice: direct, specific, first person, zero filler. Numbers over adjectives. Sounds like a person who ships, not a deck. No "passionate about", no "results-driven", no "leveraging". Confident without claiming; the evidence does the claiming. No AI hype words ("revolutionize", "unlock", "supercharge"); every AI claim names the model's job and the check around it.
 
 ## Anti-references
 

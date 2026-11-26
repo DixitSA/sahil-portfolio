@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, Check, Copy } from "lucide-react";
 import { githubUrl, profile } from "@/content";
+import ContourField from "./ContourField";
+import DescentPath from "./DescentPath";
 
 export default function Contact() {
   const [copied, setCopied] = useState(false);
@@ -30,20 +32,26 @@ export default function Contact() {
     <section
       id="contact"
       aria-labelledby="contact-title"
-      className="on-field pt-[88px] pb-10 lg:pt-32"
+      data-cf-host
+      data-cf-intro="view"
+      className="on-field cf-host relative overflow-hidden pt-[88px] pb-10 lg:pt-36"
     >
-      <div className="wrap">
-        <h2 id="contact-title" className="t-h2 max-w-[24ch]">
-          Open to technical growth roles at startups
+      <ContourField tone="field" className="cf-mask-close" />
+      <div className="wrap relative z-10">
+        <h2 id="contact-title" className="t-mega max-w-[12ch]">
+          Open to AI strategy roles at startups
         </h2>
         <p className="t-lead mt-4">Based in Charlotte, NC. Email reaches me fastest.</p>
 
+        <DescentPath className="mt-6 h-[120px] lg:absolute lg:top-0 lg:right-12 lg:mt-0 lg:h-[46%] lg:w-[28%] xl:right-16" />
+
         <a
           href={`mailto:${profile.email}`}
-          className="mt-10 inline-block max-w-full font-display text-[clamp(24px,6.6vw,64px)] leading-[1.1] font-bold tracking-[-0.02em] break-all text-on-field decoration-mark-on-field decoration-2 underline-offset-8 hover:underline sm:break-normal"
-          style={{ fontStretch: "100%" }}
+          className="mt-8 inline-block max-w-full font-display text-[clamp(24px,6.4vw,96px)] leading-[1.1] font-bold tracking-[-0.02em] text-on-field [font-stretch:100%] hover:text-white lg:mt-14"
         >
-          {profile.email}
+          <span className="answer answer--plain" data-land>
+            {profile.email}
+          </span>
         </a>
 
         <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -90,6 +98,10 @@ export default function Contact() {
 
         <footer className="t-meta mt-24 flex flex-wrap items-center justify-between gap-x-8 gap-y-2 border-t border-rule-field pt-6">
           <p>© {new Date().getFullYear()} Sahil Dixit</p>
+          <p className="max-w-[60ch]">
+            The lines behind this page are a live loss surface; the red line is gradient descent on
+            it, computed in your browser.
+          </p>
           <a href="#main" className="link inline-flex min-h-[44px] items-center">
             Back to top
           </a>
