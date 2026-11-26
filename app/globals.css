@@ -1,168 +1,111 @@
 @import "tailwindcss";
 
-/* ═══════════════════════════════════════════════════════════════════
-   Tokens. Source of truth is DESIGN.md.
-
-   One dark canvas, one ink ladder, one signal color. The signal is for
-   live state and the single most important mark in a section, never
-   for decoration. Display type is Geist set tight; one italic serif
-   (Instrument Serif) carries emphasis inside headlines.
-   ═══════════════════════════════════════════════════════════════════ */
 @theme {
-  --color-canvas: #08080a;
-  --color-raised: #0f0f12;
-  --color-raised-2: #16161a;
-  --color-line: rgba(255, 255, 255, 0.08);
-  --color-line-strong: rgba(255, 255, 255, 0.14);
-
-  --color-ink: #f2f2f0;          /* 18:1  headlines */
-  --color-ink-muted: #a6a6ab;    /*  8:1  body */
-  --color-ink-subtle: #7c7c83;   /* 4.6:1 meta */
-
-  --color-signal: #3dff7f;       /* live state, key marks */
-  --color-signal-dim: rgba(61, 255, 127, 0.16);
-
-  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-instrument), ui-serif, Georgia, serif;
+  --color-paper: #e7ede1;
+  --color-sheet: #f4f7f0;
+  --color-ink: #18201a;
+  --color-ink-2: #3b4a3e;
+  --color-ink-3: #56655a;
+  --color-ink-hover: #2a352c;
+  --color-rule: rgba(24, 32, 26, 0.16);
+  --color-rule-strong: rgba(24, 32, 26, 0.32);
+  --color-grid: rgba(30, 74, 52, 0.1);
+  --color-field: #1e4a34;
+  --color-on-field: #eef3ea;
+  --color-on-field-2: #b8ccbb;
+  --color-rule-field: rgba(238, 243, 234, 0.22);
+  --color-mark: #b23a0b;
+  --color-mark-on-field: #f59a6b;
+  --font-display: var(--font-hubot), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-mona), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, monospace;
-
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-ui: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-enter: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-:root {
-  color-scheme: dark;
-}
+:root { color-scheme: light; }
+html { background: var(--color-paper); color: var(--color-ink); -webkit-text-size-adjust: 100%; scroll-padding-top: 64px; scrollbar-color: var(--color-ink-3) var(--color-paper); }
+body { background: var(--color-paper); color: var(--color-ink-2); font-family: var(--font-sans); font-size: 16px; line-height: 1.65; overflow-x: clip; caret-color: var(--color-mark); }
+@media (min-width: 640px) { body { font-size: 17px; } }
+p, li { text-wrap: pretty; }
+::selection { background: var(--color-mark); color: var(--color-sheet); }
+:focus-visible { outline: 2px solid var(--color-mark); outline-offset: 2px; border-radius: 4px; }
+.on-field :focus-visible { outline-color: var(--color-mark-on-field); }
 
-html {
-  background: var(--color-canvas);
-  color: var(--color-ink);
-  -webkit-text-size-adjust: 100%;
-}
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
 
-body {
-  background: var(--color-canvas);
-  color: var(--color-ink);
-  font-family: var(--font-sans);
-  font-feature-settings: "ss01", "cv11";
-  text-rendering: optimizeLegibility;
-  overflow-x: clip;
-}
+.skip-to-content { position: absolute; left: 16px; top: -60px; z-index: 100; padding: 10px 14px; border-radius: 6px; background: var(--color-ink); color: var(--color-paper); font-size: 15px; }
+.skip-to-content:focus { top: 16px; }
 
-::selection {
-  background: var(--color-signal);
-  color: #08080a;
-}
+/* Layout */
+.wrap { margin-inline: auto; width: 100%; max-width: 1440px; padding-inline: 16px; }
+@media (min-width: 640px) { .wrap { padding-inline: 32px; } }
+@media (min-width: 1024px) { .wrap { padding-inline: 48px; } }
+@media (min-width: 1280px) { .wrap { padding-inline: 64px; } }
+.on-field { background: var(--color-field); color: var(--color-on-field-2); }
 
-/* Lenis owns scrolling when it is active. */
-html.lenis,
-html.lenis body {
-  height: auto;
+/* Type */
+.t-display, .t-h2, .t-h3, .t-result, .t-hero-cs { font-family: var(--font-display); color: var(--color-ink); text-wrap: balance; }
+.on-field :is(.t-display, .t-h2, .t-h3, .t-result) { color: var(--color-on-field); }
+.t-display { font-weight: 700; font-stretch: 106%; font-size: clamp(32px, 9.6vw, 46px); line-height: 1.02; letter-spacing: -0.022em; }
+.t-h2 { font-weight: 700; font-stretch: 106%; font-size: clamp(28px, 7.4vw, 40px); line-height: 1.05; letter-spacing: -0.02em; }
+@media (min-width: 1024px) {
+  .t-display { font-size: clamp(52px, 5vw, 80px); }
+  .t-h2 { font-size: clamp(40px, 3.3vw, 52px); }
 }
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
+.t-h3 { font-weight: 700; font-stretch: 106%; font-size: clamp(30px, 2.4vw + 0.6rem, 44px); line-height: 1.05; letter-spacing: -0.02em; }
+.t-result { font-weight: 600; font-size: clamp(20px, 1vw + 0.8rem, 26px); line-height: 1.2; letter-spacing: -0.01em; }
+.t-hero-cs { font-weight: 700; font-stretch: 110%; font-size: clamp(48px, 9vw, 96px); line-height: 0.98; letter-spacing: -0.03em; }
+.t-lead { font-size: clamp(17px, 0.4vw + 15.5px, 20px); line-height: 1.5; }
+.t-meta { font-size: 15px; line-height: 1.45; color: var(--color-ink-3); }
+.on-field .t-meta { color: var(--color-on-field-2); }
+.t-mono { font-family: var(--font-mono); font-size: 14px; font-variant-numeric: tabular-nums; }
 
-:focus-visible {
-  outline: 2px solid var(--color-signal);
-  outline-offset: 3px;
-  border-radius: 4px;
-}
+/* The answer: red-pencil double underline */
+.answer { position: relative; white-space: nowrap; color: var(--color-ink); font-weight: 600; }
+.on-field .answer { color: var(--color-on-field); }
+.answer::after { content: ""; position: absolute; left: 0; right: 0; bottom: -0.2em; height: 5px; border-block: 1.5px solid var(--color-mark); transform-origin: left; pointer-events: none; }
+.on-field .answer::after { border-color: var(--color-mark-on-field); }
+.answer--draw::after { animation: draw 600ms var(--ease-enter) 900ms both; }
+@keyframes draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
-.skip-to-content {
-  position: absolute;
-  left: 16px;
-  top: -60px;
-  z-index: 100;
-  padding: 10px 14px;
-  border-radius: 8px;
-  background: var(--color-ink);
-  color: var(--color-canvas);
-  font-size: 14px;
-  transition: top 0.2s;
+/* Buttons and links */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 22px; border-radius: 6px; font-weight: 600; font-size: 16px; transition: transform 150ms var(--ease-ui), background-color 150ms var(--ease-ui); }
+.btn-primary { background: var(--color-ink); color: var(--color-paper); }
+.btn-secondary { border: 1.5px solid var(--color-ink); color: var(--color-ink); }
+.on-field .btn-primary { background: var(--color-on-field); color: var(--color-field); }
+.on-field .btn-secondary { border-color: var(--color-on-field); color: var(--color-on-field); }
+.btn-sm { min-height: 44px; padding: 0 16px; font-size: 15px; }
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover { transform: translateY(-1px); }
+  .btn-primary:hover { background: var(--color-ink-hover); }
+  .btn-secondary:hover { background: rgba(24, 32, 26, 0.06); }
+  .on-field .btn-primary:hover { background: #ffffff; }
+  .on-field .btn-secondary:hover { background: rgba(238, 243, 234, 0.1); }
 }
-.skip-to-content:focus {
-  top: 16px;
-}
+.btn:active { transform: translateY(0.5px) scale(0.985); transition-duration: 90ms; }
+.link { color: var(--color-ink); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 5px; text-decoration-color: var(--color-rule-strong); transition: text-decoration-color 150ms var(--ease-ui); }
+.link:hover { text-decoration-color: currentColor; }
+.on-field .link { color: var(--color-on-field); text-decoration-color: var(--color-rule-field); }
+.on-field .link:hover { text-decoration-color: currentColor; }
+.nudge { transition: transform 150ms var(--ease-ui); }
+:is(a, button):hover .nudge { transform: translateX(3px); }
 
-/* ── Type primitives ─────────────────────────────────────────────── */
-.eyebrow {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--color-ink-subtle);
-}
+/* Stage: the pad's grid */
+.stage { position: relative; overflow: hidden; border: 1px solid var(--color-rule-strong); border-radius: 4px; background-color: var(--color-sheet); background-image: linear-gradient(var(--color-grid) 1px, transparent 1px), linear-gradient(90deg, var(--color-grid) 1px, transparent 1px); background-size: 24px 24px; background-position: -1px -1px; }
+.frame-shadow { box-shadow: 0 18px 40px -18px rgba(24, 32, 26, 0.35); }
 
-.display {
-  font-family: var(--font-sans);
-  font-weight: 500;
-  letter-spacing: -0.045em;
-  line-height: 0.98;
-}
-
-.serif-em {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 400;
-  letter-spacing: -0.02em;
-}
-
-/* Film grain over the whole page. Breaks up banding in the gradients and
-   gives the black some material. Static, so it costs nothing per frame. */
-.grain::after {
-  content: "";
-  position: fixed;
-  inset: -50%;
-  pointer-events: none;
-  z-index: 60;
-  opacity: 0.05;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-}
-
-/* Live dot. */
-@keyframes pulse-ring {
-  0% {
-    transform: scale(1);
-    opacity: 0.7;
-  }
-  100% {
-    transform: scale(2.6);
-    opacity: 0;
-  }
-}
-.live-dot {
-  position: relative;
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  border-radius: 9999px;
-  background: var(--color-signal);
-}
-.live-dot::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: var(--color-signal);
-  animation: pulse-ring 1.8s var(--ease-out-expo) infinite;
-}
-
-/* Marquee for the stack ribbon. */
-@keyframes marquee {
-  to {
-    transform: translateX(-50%);
-  }
-}
+/* Hero entrance (CSS only, visible without JS) */
+.mask { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 0.08em; margin-bottom: -0.08em; }
+.enter-word { display: inline-block; animation: rise 700ms var(--ease-enter) both; animation-delay: calc(80ms + var(--i, 0) * 35ms); }
+.enter-fade { animation: fade-up 520ms var(--ease-enter) both; }
+.enter-stage { animation: settle 900ms var(--ease-enter) both; }
+@keyframes rise { from { transform: translateY(105%); } to { transform: translateY(0); } }
+@keyframes fade-up { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes settle { from { transform: scale(0.98); } to { transform: none; } }
 
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-  }
+  *, *::before, *::after { animation: none !important; transition-duration: 0.001ms !important; }
 }

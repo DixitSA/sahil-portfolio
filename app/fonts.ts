@@ -6,28 +6,22 @@ import localFont from "next/font/local";
  * a third-party origin.
  */
 
-export const geist = localFont({
-  src: "../node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2",
-  weight: "100 900",
-  variable: "--font-geist",
+export const hubot = localFont({
+  src: "../node_modules/@fontsource-variable/hubot-sans/files/hubot-sans-latin-standard-normal.woff2",
+  weight: "200 900",
+  style: "normal",
+  variable: "--font-hubot",
   display: "swap",
+  declarations: [{ prop: "font-stretch", value: "75% 125%" }],
 });
 
-export const instrument = localFont({
-  src: [
-    {
-      path: "../node_modules/@fontsource/instrument-serif/files/instrument-serif-latin-400-italic.woff2",
-      style: "italic",
-      weight: "400",
-    },
-    {
-      path: "../node_modules/@fontsource/instrument-serif/files/instrument-serif-latin-400-normal.woff2",
-      style: "normal",
-      weight: "400",
-    },
-  ],
-  variable: "--font-instrument",
+export const mona = localFont({
+  src: "../node_modules/@fontsource-variable/mona-sans/files/mona-sans-latin-standard-normal.woff2",
+  weight: "200 900",
+  style: "normal",
+  variable: "--font-mona",
   display: "swap",
+  declarations: [{ prop: "font-stretch", value: "75% 125%" }],
 });
 
 export const jetbrains = localFont({

@@ -1,8 +1,4 @@
 import { profile } from "@/content";
-import Reveal, { SectionHead } from "./Reveal";
-
-const cardCls =
-  "rounded-2xl border border-[var(--color-line)] bg-[var(--color-raised)] p-6 sm:p-7";
 
 function splitTheme(item: string): [string, string] {
   const i = item.indexOf(". ");
@@ -10,109 +6,56 @@ function splitTheme(item: string): [string, string] {
 }
 
 export default function About() {
-  const paras = profile.bio.slice(1);
-  const closer = paras.length > 1 ? paras[paras.length - 1] : undefined;
-  const body = closer ? paras.slice(0, -1) : paras;
+  const [first, ...rest] = profile.bio;
 
   return (
-    <section
-      id="about"
-      aria-labelledby="about-title"
-      className="border-t border-[var(--color-line)] py-24 md:py-36"
-    >
-      <div className="mx-auto max-w-6xl px-5 sm:px-8">
-        <SectionHead
-          index="03"
-          eyebrow="About"
-          title={
-            <span id="about-title">
-              Where finance, regulation and code have to <span className="serif-em">agree</span>
-            </span>
-          }
-        />
+    <section id="about" aria-labelledby="about-title" className="py-[88px] lg:py-32">
+      <div className="wrap">
+        <h2 id="about-title" className="t-h2">
+          How I work
+        </h2>
 
-        <div className="grid gap-12 lg:grid-cols-[1.25fr_1fr] lg:gap-16">
-          <div className="space-y-6 lg:sticky lg:top-28 lg:self-start">
-            {body.map((p, i) => (
-              <Reveal key={i} delay={i * 0.06}>
-                <p className="text-[17px] leading-[1.7] text-[var(--color-ink-muted)]">{p}</p>
-              </Reveal>
+        <div className="mt-8 grid gap-16 lg:mt-12 lg:grid-cols-12 lg:gap-x-6">
+          <div className="max-w-[64ch] space-y-5 lg:col-span-7">
+            <p className="text-ink">{first}</p>
+            {rest.map((p) => (
+              <p key={p} className="text-ink-2">
+                {p}
+              </p>
             ))}
-            {closer && (
-              <Reveal delay={body.length * 0.06}>
-                <p className="border-l-2 border-[var(--color-line-strong)] pt-1 pb-1 pl-5 text-[clamp(20px,2.4vw,26px)] leading-[1.3] font-normal tracking-[-0.03em] text-[var(--color-ink)]">
-                  {closer}
-                </p>
-              </Reveal>
-            )}
           </div>
 
-          <div className="space-y-5">
+          <div className="lg:col-span-4 lg:col-start-9">
             {profile.now && (
-              <Reveal>
-                <div className={cardCls}>
-                  <div className="mb-5 flex items-center justify-between gap-3">
-                    <p className="eyebrow flex items-center gap-2.5">
-                      <span className="live-dot" aria-hidden />
-                      Now
-                    </p>
-                    <p className="font-mono text-[11px] text-[var(--color-ink-subtle)]">
-                      Updated {profile.now.updated}
-                    </p>
-                  </div>
-                  <ul className="space-y-4">
-                    {profile.now.items.map((item) => {
-                      const [theme, rest] = splitTheme(item);
-                      return (
-                        <li key={item} className="text-[14.5px] leading-relaxed text-[var(--color-ink-muted)]">
-                          {theme && <span className="font-medium text-[var(--color-ink)]">{theme} </span>}
-                          {rest}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
-              </Reveal>
+              <>
+                <h3 className="t-result">Now</h3>
+                <p className="t-meta mt-1">Updated {profile.now.updated}</p>
+                <ul className="mt-5 space-y-4">
+                  {profile.now.items.map((item) => {
+                    const [theme, body] = splitTheme(item);
+                    return (
+                      <li key={item} className="text-ink-2">
+                        {theme && <span className="font-semibold text-ink">{theme} </span>}
+                        {body}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </>
             )}
 
-            <Reveal delay={0.08}>
-              <div className={cardCls}>
-                <p className="eyebrow mb-4">Education</p>
-                <p className="text-[17px] text-[var(--color-ink)]">{profile.education.school}</p>
-                <p className="mt-1 text-[14.5px] text-[var(--color-ink-muted)]">{profile.education.degree}</p>
-                <p className="mt-1 text-[14.5px] text-[var(--color-ink-muted)]">{profile.education.detail}</p>
-                <p className="mt-3 font-mono text-[12px] text-[var(--color-ink-subtle)]">
-                  Graduated {profile.education.graduated}
-                </p>
-              </div>
-            </Reveal>
-
-            <Reveal delay={0.16}>
-              <div className={cardCls}>
-                <p className="eyebrow mb-5">Toolkit</p>
-                <div className="space-y-5">
-                  {profile.skills.map((g) => (
-                    <div key={g.group}>
-                      <p className="eyebrow mb-2.5">{g.group}</p>
-                      <ul className="flex flex-wrap gap-2">
-                        {g.items.map((s) => (
-                          <li
-                            key={s}
-                            className="rounded-full border border-[var(--color-line)] px-3 py-1.5 text-[13px] text-[var(--color-ink-muted)]"
-                          >
-                            {s}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
+            <h3 className="t-result mt-12">Tools</h3>
+            <dl>
+              {profile.skills.map((g) => (
+                <div key={g.group}>
+                  <dt className="mt-5 text-[15px] font-semibold text-ink">{g.group}</dt>
+                  <dd className="text-ink-2">{g.items.join(", ")}</dd>
                 </div>
-              </div>
-            </Reveal>
+              ))}
+            </dl>
           </div>
         </div>
       </div>
-
     </section>
   );
 }

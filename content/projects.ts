@@ -17,6 +17,8 @@ export const projects: Project[] = [
     summary:
       "Research platform for commercial P&C underwriting software. A catalog of 170+ solutions, with source-linked evidence checks behind every claim.",
     tags: ["TypeScript", "Astro", "Supabase", "Stripe"],
+    angle:
+      "I built the whole funnel: a free searchable catalog, a $49-a-month introductory tier with email-code accounts and Stripe checkout, an enterprise request form, and its own analytics endpoint.",
     href: "https://vazaar-site.vercel.app",
     // Repository is private, so no source link is shown.
     preview: "/previews/vazaar.jpg",
@@ -125,6 +127,8 @@ export const projects: Project[] = [
     summary:
       "Vedic astrology decision app shipped to production web and iOS. Deterministic chart computation, 277 commits.",
     tags: ["Next.js", "TypeScript", "Python", "Capacitor"],
+    angle:
+      "It ships with magic-link sign-in and Stripe checkout, and went to market through a niche community instead of paid acquisition.",
     href: "https://getkaal.com",
     repo: "https://github.com/DixitSA/kaal",
     preview: "/previews/kaal-dashboard.png",
@@ -189,6 +193,8 @@ export const projects: Project[] = [
     summary:
       "An MCP server exposing 33 tools that let an LLM agent run multi-step DJ work in Mixxx: beat-timed transitions, mashup matching and set planning, with job queuing and automated tests.",
     tags: ["Python", "Model Context Protocol", "MIDI", "Audio analysis"],
+    angle:
+      "Agent tooling with guardrails: narrow tools, a job queue that lands on the beat, and an evaluator that checks a transition before anyone trusts it.",
     // Repository is private, so no source link is shown.
     caseStudy: {
       problem:

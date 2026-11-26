@@ -23,6 +23,15 @@ export interface CaseStudy {
   outcome: string[];
 }
 
+export interface Evidence {
+  /** Short result line. Must contain `answer` verbatim. */
+  result: string;
+  /** Substring of `result` that gets the double underline. */
+  answer: string;
+  method: string;
+  where: string;
+}
+
 export interface Project {
   slug: string;
   name: string;
@@ -39,6 +48,8 @@ export interface Project {
   preview?: string;
   /** Intrinsic pixel size of `preview`. Required to avoid layout shift. */
   previewSize?: { w: number; h: number };
+  /** Why a growth team would care. One sentence. */
+  angle?: string;
   /** Present only when tier === "featured". */
   caseStudy?: CaseStudy;
 }
@@ -80,7 +91,7 @@ export interface Profile {
     detail: string;
     graduated: string;
   };
-  stats: { label: string; value: string; sub: string }[];
+  evidence: Evidence[];
   /**
    * "What I'm working on" tile. Freshness is the one thing a static
    * portfolio cannot fake.

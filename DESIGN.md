@@ -1,76 +1,36 @@
-# Design system
+# Design: The computation pad
 
-Single-page editorial portfolio. One dark canvas, one ink ladder, one rationed
-signal color, one italic serif for emphasis. Motion is choreography, not
-decoration: it reveals the argument in the order the page makes it.
+## World
+The page is an engineer's computation pad: pale green paper, a faint grid, graphite lettering, and one convention: **the answer gets a red-pencil double underline**. That mark is the thesis: he finds the number that matters, works it out in the open, and underlines it. The one live effect is a loss surface drawn as contour lines on the pad's grid, behind real product UI. Real screens (Vazaar's browser window, Kaal on web and iPhone, the MCP pipeline) sit on the pad like taped-in printouts. A deep pad-green field runs edge to edge twice, for the evidence ledger and the close; only one is on screen at a time. Type is GitHub's own family: Hubot Sans display, Mona Sans text, set wide and bold like drafting lettering. The ground is light because the scene is daylight, often a phone opened from an email.
 
-The previous macOS-desktop design (windows, dock, menu bar) was retired in
-favour of a page that answers "who is this and why should I care" in the
-first viewport, on a laptop or a phone.
+Rejected: black canvas, neon green, grain and glow, Geist, italic serif accents, mono uppercase kickers, numbered labels, pill chips, stat strips, nested cards, floating chips, reveal-on-scroll, any framing as a banker.
 
-## Page order
-
-The page is an argument, top to bottom:
-
-| # | Section | Job |
-|---|---------|-----|
-| — | Hero | Thesis, current employer, availability. WebGL field behind. Credential rail along the bottom edge. |
-| — | Proof | Four numbers with the sentence that makes each meaningful. Count up on entry. |
-| 01 | Work | Vazaar, Kaal and Mixxx MCP as large cards with live visuals (browser mockup, phone mockup, agent pipeline diagram). Other projects as rows; Axira's row links to its case study. |
-| 02 | Experience | Timeline with a scroll-driven rail. Bank of America is broken into its three named workstreams. Figures inside bullets are set in full ink. |
-| 03 | About | Bio (sticky on desktop), "Now", education, toolkit. |
-| 04 | Contact | Giant mailto email with a copy button, GitHub, LinkedIn, résumé, footer. |
-
-Case studies live at `/work/[slug]` (only projects that have one; others 404) (long-form, sticky section headings,
-reading progress bar). `/kaal` hosts the live Kaal engine demo. Old OS routes
-(`/about`, `/work`, `/experience`, `/contact`, `/start`) redirect to anchors.
-
-## Tokens (`app/globals.css`)
-
-| Token | Value | Use |
+## Color (light only)
+| Token | Hex | Use |
 |---|---|---|
-| `--color-canvas` | `#08080a` | Page ground |
-| `--color-raised` / `-2` | `#0f0f12` / `#16161a` | Cards, visual panels |
-| `--color-line` / `-strong` | white 8% / 14% | Hairlines, borders |
-| `--color-ink` | `#f2f2f0` | Headlines, key figures |
-| `--color-ink-muted` | `#a6a6ab` | Body |
-| `--color-ink-subtle` | `#7c7c83` | Meta. Floor for small text |
-| `--color-signal` | `#3dff7f` | Live dots, section indices, one hover accent. Never fills, never body text |
+| paper | `#E7EDE1` | page ground |
+| sheet | `#F4F7F0` | stage and frame grounds |
+| ink | `#18201A` | headings, primary text, primary button |
+| ink-2 | `#3B4A3E` | body |
+| ink-3 | `#56655A` | meta (14px minimum) |
+| ink-hover | `#2A352C` | primary button hover |
+| rule / rule-strong | `rgba(24,32,26,.16/.32)` | hairlines / stage borders |
+| grid | `rgba(30,74,52,.10)` | 24px grid inside `.stage` only |
+| field | `#1E4A34` | the two full-bleed bands |
+| on-field / on-field-2 | `#EEF3EA` / `#B8CCBB` | text on field |
+| rule-field | `rgba(238,243,234,.22)` | hairlines on field |
+| mark / mark-on-field | `#B23A0B` / `#F59A6B` | answer underline, focus ring, selection, caret |
 
-Product accents appear only around that product's own visual: Kaal's rust
-(`rgba(181,86,62,…)`, also in the live demo) and Vazaar's orange
-(`rgba(196,94,38,…)`).
+The mark never fills an area and is never body text.
 
 ## Type
+Hubot Sans (display, wdth 106%), Mona Sans (text), JetBrains Mono (code, URLs, tags only). Classes: `.t-display`, `.t-h2`, `.t-h3`, `.t-result`, `.t-hero-cs`, `.t-lead`, `.t-meta`, `.t-mono`. Body 16px phone, 17px desktop, line-height 1.65, max 68ch. Nothing below 14px except the aria-hidden 13px browser-bar URL.
 
-- **Geist** (sans, variable): everything. Display set at weight 500, tracking −0.045em, line-height ~0.98 (`.display`).
-- **Instrument Serif italic** (`.serif-em`): one or two emphasised words per headline, at most. This is the signature move; overusing it kills it.
-- **JetBrains Mono** (`.eyebrow`): 11px uppercase labels, indices, code.
-
-All fonts are self-hosted from `@fontsource` packages via `next/font/local`
-(`app/fonts.ts`). No request to Google at build or run time.
-
-## Shape
-
-Cards `rounded-2xl`/`rounded-3xl`, pills `rounded-full`, hairline borders, no
-heavy shadows. Max content width `max-w-6xl`, gutters `px-5 sm:px-8`, section
-rhythm `py-24 md:py-36`.
+## Space and shape
+- `.wrap`: max 1440px, gutters 16/32/48/64. 12 columns, 24px gap from lg.
+- Sections: 128px vertical from lg, 88px on a phone. More space above a heading than below.
+- Radii: 4px frames, stages and inputs; 6px buttons; 28/22px phone bezel and screen. No pills.
+- Borders: 1px rule; browser frames 1px ink; stages 1px rule-strong. Shadow on frames only.
 
 ## Motion
-
-- Easing `cubic-bezier(0.16, 1, 0.3, 1)` everywhere; entrances 0.8–1.1s, stagger 0.045–0.1s.
-- Scroll: Lenis on fine pointers only (touch keeps native momentum). Scroll-linked effects via Motion `useScroll`.
-- Hero: word-by-word masked reveal; content drifts and fades as it scrolls away.
-- WebGL hero field (`HeroShader.tsx`): rendered at half resolution, paused off-screen and in hidden tabs, single static frame under reduced motion, CSS gradient fallback without WebGL.
-- `MotionConfig reducedMotion="user"` globally; CSS animations neutralised under `prefers-reduced-motion`.
-
-## Mobile
-
-Designed at 375px, not shrunk to it. No horizontal scroll from 320px, tap
-targets ≥44px, nothing hover-only, scroll-pinned layouts collapse to stacks
-below `md`.
-
-## Sharing
-
-- `/?for=Stripe` shows "Prepared for the Stripe team" above the headline. `/?for=Jane at Ramp` shows "Prepared for Jane at Ramp". Sanitised and length-capped.
-- `app/opengraph-image.tsx` is the link-preview card. It is the first thing a recruiter sees in LinkedIn, email or Slack, so it carries the thesis, not just a name.
+Easing `--ease-ui` and `--ease-enter`. Hover 150ms in, 120ms out; press 90ms. The hero load is pure CSS and visible without JS: words rise from masks, lead and buttons fade up, the stage settles, then the double underline draws under "277 commits". The contour shader is the one effect: it pauses offscreen, renders one frame under reduced motion, and falls back to the grid. The AgentPipeline packet loops only in view. Nothing else animates: no section reveals, parallax, counters or timelines. Reduced motion skips every entrance.

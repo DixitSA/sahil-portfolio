@@ -17,28 +17,15 @@ export const profile: Profile = {
    * resume, so the two never contradict each other.
    */
   bio: [
-    "Most AI programs die in the gap between what a model can do and what an institution can defend. I work in that gap.",
-    "At Bank of America I work across three programs that all come down to trust in a system: mapping how fraud moves between products, carrying an AI call-summarization model through model risk review, and shaping the three-year strategic plan for a consumer bank of 69 million clients. The hard part is rarely the model. It is getting the people who own the math and the people who own the liability to describe the same system the same way, fast enough to matter.",
-    "I build at night because I do not think you can govern systems you have never shipped. Vazaar is a research platform for underwriting software where AI drafts but a deterministic gate decides what gets published. Kaal is a decision engine live on web and iOS that is deliberately deterministic rather than generative, because a product people return to cannot contradict itself. And I build agent tooling, like a 33-tool MCP server that lets a model run multi-step work under explicit guardrails.",
-    "I am most useful where finance, regulation, and working software all have to agree with each other.",
+    "I work from the data out: find where a flow loses people, design a test that can show it, then build the change.",
+    "My day job is strategy, fraud analytics and AI model work at Bank of America. My own time goes into products I run myself: Vazaar, a research platform with free and paid tiers, and Kaal, an app live on web and iOS. Building them is how I learned the parts of growth a slide deck never touches: pricing tiers, Stripe checkout, sign-in flows, and launching to a community instead of buying ads.",
+    "I want both halves in one job: a technical growth role at a startup, where the person who finds the number also ships the fix.",
   ],
-  /**
-   * The "Now" block.
-   *
-   * Named themes first, evidence second. A recruiter scanning the page
-   * is pattern-matching for a discipline, not reading prose, so each line
-   * leads with the thing being practised and then earns it with something
-   * specific from the resume.
-   *
-   * Deliberately not a second copy of `stats` or of `bio`. The numbers the
-   * four stats own are left to them. One line of the site should never read
-   * as a paraphrase of another.
-   */
   now: {
     updated: "November 2026",
     items: [
-      "Fraud detection strategy. Mapping how fraud moves between products across 9 product groups, and taking 2 schemes into proof-of-concept signal testing.",
-      "AI model governance. Calibration and reconciliation controls for an AI call-summarization model in active model risk review.",
+      "Fraud signal testing. Taking 2 of 6 profiled fraud schemes into proof-of-concept signal testing at Bank of America.",
+      "AI model evaluation. Calibration and reconciliation controls for an AI call-summarization model, and the business logic behind its daily Tableau performance report.",
       "Agent tooling. MCP servers that let an LLM agent run multi-step work with job queuing, evaluation and automated tests.",
     ],
   },
@@ -48,49 +35,43 @@ export const profile: Profile = {
     detail: "GPA 3.7. Dean's List every semester.",
     graduated: "May 2025",
   },
-  stats: [
+  evidence: [
     {
-      label: "CONSUMER BANK SCALE",
-      value: "69M",
-      sub: "clients in the consumer bank whose three-year strategic plan I helped prioritize",
+      result: "A/B tests with a measurable effect on retention",
+      answer: "measurable effect",
+      method: "Ran the tests on account-linking flows with the Retail Bank Fraud team, comparing specific linking policies.",
+      where: "Capital One, 2024",
     },
     {
-      label: "AI MODEL CALIBRATION",
-      value: "~100%",
-      sub: "weekly session completion, up from 45%, after re-engineering an AI model's calibration process",
+      result: "10,000+ complaint logs and call records mined in SQL",
+      answer: "10,000+",
+      method: "Pinpointed the friction in external account linking, working in SQL and Excel.",
+      where: "Capital One, 2024",
     },
     {
-      label: "MODEL RISK DELIVERY",
-      value: "80%",
-      sub: "of 30 model submissions and 8 regulatory responses delivered ahead of deadline",
+      result: "Weekly completion from 45% to nearly 100%",
+      answer: "nearly 100%",
+      method: "Re-engineered the accuracy calibration process for an AI call-summarization model, adding data and reconciliation controls.",
+      where: "Bank of America",
     },
     {
-      label: "FRAUD COVERAGE",
-      value: "22",
-      sub: "detection gaps surfaced by linking 12 shared signals to 10 fraud types",
+      result: "Slide turnaround from hours to about 15 minutes",
+      answer: "about 15 minutes",
+      method: "Designed a governed Copilot workflow. The whole team adopted it, and it grew into a department prompt library.",
+      where: "Bank of America",
+    },
+    {
+      result: "22 detection gaps found across 12 signals and 10 fraud types",
+      answer: "22 detection gaps",
+      method: "Built a fraud signal inventory from expert interviews across 9 product groups. The team adopted it to widen fraud visibility.",
+      where: "Bank of America",
     },
   ],
   skills: [
-    {
-      group: "STRATEGY & RISK",
-      items: [
-        "Strategic planning",
-        "Fraud analytics",
-        "AI model governance",
-        "A/B testing",
-        "Financial modeling",
-      ],
-    },
-    {
-      group: "ANALYTICS",
-      items: ["SQL", "Python", "Advanced Excel", "Tableau", "Power BI", "R", "SAS"],
-    },
-    {
-      group: "AI & DEVELOPMENT",
-      items: ["Microsoft Copilot", "Prompt engineering", "LLM workflows", "MCP", "TypeScript", "Git"],
-    },
+    { group: "Analysis", items: ["SQL", "Python", "R", "SAS", "Advanced Excel", "Tableau", "Power BI"] },
+    { group: "Experiments and strategy", items: ["A/B testing", "Fraud analytics", "Financial modeling", "Strategic planning"] },
+    { group: "Building", items: ["TypeScript", "Next.js", "Astro", "Supabase", "Stripe", "Capacitor", "Git", "MCP", "LLM workflows", "Microsoft Copilot"] },
   ],
-
 };
 
 /**

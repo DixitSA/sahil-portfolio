@@ -15,6 +15,10 @@ const NODES = [
 const HOPS = NODES.length - 1;
 const HOP = 900; // ms per connector
 
+const SHEET = "rgba(244,247,240,1)";
+const PULSE = "rgba(178,58,11,0.08)";
+
+/** The MCP pipeline, one packet walking the stages. Runs only while in view. */
 export default function AgentPipeline() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { margin: "-10% 0px" });
@@ -33,7 +37,7 @@ export default function AgentPipeline() {
   }, [animated]);
 
   return (
-    <div ref={ref} className="relative flex min-h-[inherit] items-center justify-center p-6 sm:p-10">
+    <div ref={ref} className="stage flex items-center justify-center p-6 sm:p-10">
       <div className="flex w-full max-w-sm flex-col items-stretch">
         <ol className="flex flex-col items-stretch" aria-label="Mixxx MCP pipeline stages">
           {NODES.map((node, i) => {
@@ -41,53 +45,26 @@ export default function AgentPipeline() {
             return (
               <li key={node.name} className="flex flex-col items-stretch">
                 <motion.div
-                  animate={
-                    pulse
-                      ? {
-                          boxShadow: [
-                            "0 0 0 0 rgba(61,255,127,0)",
-                            "0 0 28px 2px rgba(61,255,127,0.35)",
-                            "0 0 18px 0 rgba(61,255,127,0.14)",
-                          ],
-                        }
-                      : {
-                          boxShadow: node.gate
-                            ? "0 0 18px 0 rgba(61,255,127,0.14)"
-                            : "0 0 0 0 rgba(0,0,0,0)",
-                        }
-                  }
-                  transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                  className={`flex items-center justify-between gap-4 rounded-xl border bg-[var(--color-canvas)]/80 px-4 py-2.5 ${
-                    node.gate
-                      ? "border-[var(--color-signal)]/60"
-                      : "border-[var(--color-line-strong)]"
+                  animate={{ backgroundColor: pulse ? [SHEET, PULSE, SHEET] : SHEET }}
+                  transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                  className={`flex items-start gap-3 rounded-[4px] border px-4 py-3 ${
+                    node.gate ? "border-mark" : "border-rule-strong"
                   }`}
                 >
-                  <div className="min-w-0">
-                    <p className="mb-1 font-mono text-[10.5px] uppercase tracking-[0.2em] text-[var(--color-ink-subtle)]">
-                      Stage 0{i + 1}
-                      {node.gate && <span className="text-[var(--color-signal)]"> · gate</span>}
-                    </p>
-                    <p className="text-[15px] font-medium text-[var(--color-ink)]">{node.name}</p>
-                    <p className="text-[12px] leading-[1.4] text-[var(--color-ink-subtle)]">
-                      {node.sub}
-                    </p>
+                  <span className="t-mono w-6 shrink-0 pt-0.5 text-ink-3">{i + 1}</span>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[16px] font-semibold leading-snug text-ink">{node.name}</p>
+                    <p className="t-meta">{node.sub}</p>
                   </div>
-                  {node.gate && (
-                    <ShieldCheck
-                      aria-hidden
-                      className="h-5 w-5 shrink-0 text-[var(--color-signal)]"
-                    />
-                  )}
+                  {node.gate && <ShieldCheck aria-hidden className="mt-0.5 h-5 w-5 shrink-0 text-mark" />}
                 </motion.div>
 
                 {i < NODES.length - 1 && (
-                  <div aria-hidden className="relative mx-auto h-[14px] w-px bg-[var(--color-line-strong)]">
+                  <div aria-hidden className="relative mx-auto h-[14px] w-px bg-rule-strong">
                     {animated && (
                       <motion.span
                         key={`${tick}-${i}`}
-                        className="absolute left-1/2 top-0 h-[7px] w-[7px] -translate-x-1/2 rounded-full bg-[var(--color-signal)]"
-                        style={{ boxShadow: "0 0 10px 2px rgba(61,255,127,0.6)" }}
+                        className="absolute left-1/2 top-0 h-[7px] w-[7px] -translate-x-1/2 bg-mark"
                         initial={{ y: -3, opacity: step === i ? 1 : 0 }}
                         animate={step === i ? { y: 10, opacity: 1 } : { opacity: 0 }}
                         transition={{ duration: HOP / 1000, ease: "linear" }}
@@ -100,9 +77,7 @@ export default function AgentPipeline() {
           })}
         </ol>
 
-        <p className="mx-auto mt-5 rounded-full border border-[var(--color-line-strong)] bg-[var(--color-canvas)]/80 px-3.5 py-1.5 text-center font-mono text-[11px] text-[var(--color-ink-subtle)]">
-          Guardrail: never touch an audible deck unless asked
-        </p>
+        <p className="t-meta mt-5 text-center">Guardrail: never touch an audible deck unless asked.</p>
       </div>
     </div>
   );

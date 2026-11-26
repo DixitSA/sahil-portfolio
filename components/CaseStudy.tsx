@@ -1,11 +1,10 @@
-import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, ArrowRight, Check } from "lucide-react";
+import { ArrowUpRight, ArrowRight, ArrowLeft } from "lucide-react";
 import type { ReactNode } from "react";
 import type { Project } from "@/content/types";
 import { featuredProjects } from "@/content";
-import Reveal from "@/components/site/Reveal";
 import ReadingProgress from "@/components/site/ReadingProgress";
+import { BrowserFrame, PhoneFrame } from "@/components/site/Frames";
 
 /** Splits on backticks; odd segments render as inline code. */
 function withCode(text: string): ReactNode[] {
@@ -13,7 +12,7 @@ function withCode(text: string): ReactNode[] {
     i % 2 === 1 ? (
       <code
         key={i}
-        className="rounded-md border border-[var(--color-line)] bg-[var(--color-raised)] px-1.5 py-0.5 font-mono text-[0.88em] text-[var(--color-ink)]"
+        className="t-mono rounded-[4px] border border-rule bg-sheet px-1.5 py-0.5 text-[0.9em] text-ink"
       >
         {seg}
       </code>
@@ -23,8 +22,14 @@ function withCode(text: string): ReactNode[] {
   );
 }
 
-const pill =
-  "inline-flex min-h-11 items-center gap-1.5 rounded-full border border-[var(--color-line-strong)] px-4 text-[14px] text-[var(--color-ink)] transition-colors hover:bg-[var(--color-raised)]";
+function hostOf(href?: string) {
+  if (!href) return "";
+  try {
+    return new URL(href).host;
+  } catch {
+    return "";
+  }
+}
 
 /**
  * Server component. Long-form case study: readable with scripting disabled
@@ -38,172 +43,163 @@ export default function CaseStudy({ project }: { project: Project }) {
       ? featuredProjects[0]
       : featuredProjects[(idx + 1) % featuredProjects.length];
   const live = project.status === "LIVE";
-  const landscape = (project.previewSize?.w ?? 0) > (project.previewSize?.h ?? 0);
+  const pw = project.previewSize?.w ?? 1280;
+  const ph = project.previewSize?.h ?? 800;
+  const landscape = pw > ph;
+  const isKaal = project.slug === "kaal";
+  const secondary = "btn btn-secondary";
 
   return (
-    <div className="pt-32 pb-24 md:pt-40">
+    <div className="pt-[120px] pb-24">
       <ReadingProgress />
-      <article className="mx-auto w-full max-w-6xl px-5 sm:px-8">
-        <Link
-          href="/#work"
-          className="mb-10 inline-flex min-h-11 items-center text-[14px] text-[var(--color-ink-subtle)] transition-colors hover:text-[var(--color-ink)]"
-        >
-          ← All work
+      <article className="wrap">
+        <Link href="/#work" className="link mb-10 inline-flex min-h-11 items-center gap-2">
+          <ArrowLeft size={16} aria-hidden />
+          All projects
         </Link>
 
         <header>
-          <Reveal>
-            <p className="eyebrow mb-6 flex items-center gap-3">
-              {live && <span className="live-dot" aria-hidden />}
-              {live ? "Live in production" : "In active development"}
-            </p>
-            <h1 className="display text-[clamp(56px,10vw,140px)] break-words">
-              {project.name}
-            </h1>
-            <p className="mt-8 max-w-3xl text-[20px] leading-snug text-[var(--color-ink-muted)] md:text-[24px]">
-              {project.summary}
-            </p>
-          </Reveal>
-
-          <Reveal delay={0.1} className="mt-10 flex flex-col gap-6">
-            <ul className="flex flex-wrap gap-2">
-              {project.tags.map((tag) => (
-                <li
-                  key={tag}
-                  className="rounded-full border border-[var(--color-line-strong)] px-3 py-1 font-mono text-[11.5px] text-[var(--color-ink-muted)]"
-                >
-                  {tag}
-                </li>
-              ))}
-            </ul>
-            <div className="flex flex-wrap gap-3">
-              {project.slug === "kaal" && (
-                <Link href="/kaal" className={pill}>
-                  Try the live engine
-                  <ArrowRight size={15} aria-hidden />
+          <h1 className="t-hero-cs break-words">{project.name}</h1>
+          <p className="t-lead mt-6 max-w-[40ch] text-ink">{project.summary}</p>
+          {project.angle && <p className="mt-3 max-w-[60ch] text-ink-2">{project.angle}</p>}
+          <p className="t-meta mt-6 flex flex-wrap items-center gap-x-2 gap-y-1">
+            <span
+              aria-hidden
+              className={`h-2 w-2 ${live ? "bg-field" : "border border-ink-3"}`}
+            />
+            <span>{live ? "Live" : "In build"}</span>
+            <span aria-hidden>·</span>
+            {project.tags.map((tag, i) => (
+              <span key={tag} className="t-mono">
+                {tag}
+                {i < project.tags.length - 1 ? "," : ""}
+              </span>
+            ))}
+          </p>
+          <ul className="mt-8 flex flex-wrap gap-3">
+            {project.href && (
+              <li>
+                <a href={project.href} target="_blank" rel="noopener noreferrer" className={secondary}>
+                  Visit the live site
+                  <ArrowUpRight size={16} aria-hidden />
+                </a>
+              </li>
+            )}
+            {project.repo && (
+              <li>
+                <a href={project.repo} target="_blank" rel="noopener noreferrer" className={secondary}>
+                  View the source
+                  <ArrowUpRight size={16} aria-hidden />
+                </a>
+              </li>
+            )}
+            {isKaal && (
+              <li>
+                <Link href="/kaal" className={secondary}>
+                  Run the live engine
+                  <ArrowRight size={16} aria-hidden className="nudge" />
                 </Link>
-              )}
-              {project.href && (
-                <a href={project.href} target="_blank" rel="noopener noreferrer" className={pill}>
-                  Live site
-                  <ArrowUpRight size={15} aria-hidden />
-                </a>
-              )}
-              {project.repo && (
-                <a href={project.repo} target="_blank" rel="noopener noreferrer" className={pill}>
-                  GitHub
-                  <ArrowUpRight size={15} aria-hidden />
-                </a>
-              )}
-            </div>
-          </Reveal>
+              </li>
+            )}
+          </ul>
         </header>
 
-        {project.preview && (
-          <Reveal className="mt-14 md:mt-20">
-            <figure className="rounded-3xl border border-[var(--color-line)] bg-[var(--color-raised)] p-3 sm:p-6">
-              <Image
-                src={project.preview}
-                alt={`${project.name} interface`}
-                width={project.previewSize?.w ?? 1280}
-                height={project.previewSize?.h ?? 800}
-                sizes="(max-width: 768px) 100vw, 960px"
-                className={
-                  landscape
-                    ? "block h-auto w-full rounded-2xl"
-                    : "mx-auto block h-auto max-h-[560px] w-auto max-w-full rounded-2xl object-contain"
-                }
+        {project.preview &&
+          (isKaal ? (
+            <div className="stage mt-14 h-[clamp(300px,42vw,620px)]">
+              <BrowserFrame
+                src="/previews/kaal-landing.png"
+                w={1600}
+                h={1280}
+                alt="Kaal on the web: the birth-details form under &quot;Know what's happening. Know what to do.&quot;"
+                url="getkaal.com"
+                sizes="(max-width: 1024px) 58vw, 780px"
+                className="absolute top-[8%] left-[5%] w-[58%]"
               />
-            </figure>
-          </Reveal>
-        )}
+              <PhoneFrame
+                src={project.preview}
+                alt="Kaal interface"
+                sizes="(max-width: 640px) 36vw, 22vw"
+                className="absolute top-[10%] right-8 w-[36%] sm:w-[22%]"
+              />
+            </div>
+          ) : (
+            <div className="stage mt-14 p-6 md:p-12">
+              {landscape ? (
+                <BrowserFrame
+                  src={project.preview}
+                  w={pw}
+                  h={ph}
+                  alt={`${project.name} interface`}
+                  url={hostOf(project.href)}
+                  sizes="(max-width: 768px) 100vw, 960px"
+                  className="mx-auto max-w-5xl"
+                />
+              ) : (
+                <PhoneFrame
+                  src={project.preview}
+                  alt={`${project.name} interface`}
+                  sizes="260px"
+                  className="mx-auto w-[250px] max-w-full"
+                />
+              )}
+            </div>
+          ))}
 
         {cs ? (
           <>
-            <Reveal className="my-16 md:my-24">
-              <p className="eyebrow mb-6">The problem</p>
-              <p className="max-w-4xl text-[22px] leading-snug text-[var(--color-ink)] md:text-[28px]">
-                {withCode(cs.problem)}
-              </p>
-            </Reveal>
+            <div className="my-16 md:my-24">
+              <h2 className="t-h2">The problem</h2>
+              <p className="t-lead mt-6 max-w-[60ch] text-ink">{withCode(cs.problem)}</p>
+            </div>
 
             <div>
-              {cs.sections.map((s, i) => (
+              {cs.sections.map((s) => (
                 <section
                   key={s.heading}
-                  className="grid gap-8 border-t border-[var(--color-line)] py-12 md:grid-cols-[minmax(0,1fr)_minmax(0,1.7fr)] md:gap-16 md:py-16"
+                  className="grid gap-8 border-t border-rule py-12 md:grid-cols-[minmax(0,1fr)_minmax(0,1.7fr)] md:gap-16 md:py-16"
                 >
-                  <div className="self-start md:sticky md:top-28">
-                    <p className="mb-3 font-mono text-[12px] text-[var(--color-signal)]">
-                      {String(i + 1).padStart(2, "0")}
-                    </p>
-                    <h2 className="display text-[24px] md:text-[30px]">{s.heading}</h2>
-                  </div>
-                  <Reveal className="space-y-5">
+                  <h2 className="t-result self-start md:sticky md:top-24">{s.heading}</h2>
+                  <div className="max-w-[68ch] space-y-5">
                     {s.body.map((para, j) => (
-                      <p
-                        key={j}
-                        className="text-[17px] leading-[1.75] text-[var(--color-ink-muted)]"
-                      >
+                      <p key={j} className="text-ink-2">
                         {withCode(para)}
                       </p>
                     ))}
-                  </Reveal>
+                  </div>
                 </section>
               ))}
             </div>
 
-            <section className="border-t border-[var(--color-line)] pt-12 md:pt-16">
-              <p className="eyebrow mb-8">Outcome</p>
-              <ul className="grid gap-4 sm:grid-cols-2">
+            <section className="pt-12 md:pt-16">
+              <h2 className="t-h2">Results</h2>
+              <ul className="mt-8 border-t border-rule">
                 {cs.outcome.map((line, i) => (
-                  <li
-                    key={i}
-                    className="flex gap-3 rounded-2xl border border-[var(--color-line)] bg-[var(--color-raised)] p-6"
-                  >
-                    <Check
-                      size={16}
-                      aria-hidden
-                      className="mt-1 shrink-0 text-[var(--color-signal)]"
-                    />
-                    <p className="text-[15.5px] leading-relaxed text-[var(--color-ink)]">
-                      {withCode(line)}
-                    </p>
+                  <li key={i} className="max-w-[68ch] border-b border-rule py-5 text-ink">
+                    {withCode(line)}
                   </li>
                 ))}
               </ul>
             </section>
           </>
         ) : (
-          project.repo && (
-            <p className="mt-14 text-[17px] text-[var(--color-ink-muted)]">
-              Source and details are on GitHub.
-            </p>
-          )
+          project.repo && <p className="mt-14 text-ink-2">Source and details are on GitHub.</p>
         )}
 
-        <nav aria-label="Next project" className="mt-24 md:mt-32">
+        <nav aria-label="Next case study" className="mt-24 md:mt-32">
           {next && next.slug !== project.slug && (
             <Link
               href={`/work/${next.slug}`}
-              className="group block rounded-3xl border border-[var(--color-line)] p-8 transition-colors hover:bg-[var(--color-raised)] md:p-12"
+              className="block min-h-11 border-t border-rule pt-10"
             >
-              <p className="eyebrow mb-6">Next project</p>
-              <div className="flex items-end justify-between gap-6">
-                <span className="display text-[clamp(40px,7vw,96px)] break-words">
-                  {next.name}
-                </span>
-                <ArrowRight
-                  aria-hidden
-                  className="mb-2 h-8 w-8 shrink-0 text-[var(--color-ink-muted)] transition-transform duration-500 group-hover:translate-x-1.5 group-hover:text-[var(--color-ink)] md:h-12 md:w-12"
-                />
-              </div>
+              <span className="t-meta block">Next case study</span>
+              <span className="mt-3 flex items-end justify-between gap-6">
+                <span className="t-h2 break-words">{next.name}</span>
+                <ArrowRight aria-hidden className="nudge mb-1 h-8 w-8 shrink-0 text-ink" />
+              </span>
             </Link>
           )}
-          <Link
-            href="/"
-            className="mt-6 inline-flex min-h-11 items-center text-[14px] text-[var(--color-ink-subtle)] transition-colors hover:text-[var(--color-ink)]"
-          >
+          <Link href="/" className="link mt-8 inline-flex min-h-11 items-center">
             Back to home
           </Link>
         </nav>

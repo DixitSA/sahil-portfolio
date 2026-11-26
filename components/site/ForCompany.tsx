@@ -1,7 +1,6 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { motion } from "framer-motion";
 
 /**
  * Personalised greeting for a link sent to a specific team.
@@ -22,14 +21,9 @@ export default function ForCompany() {
   const label = personal ? name : `the ${name} team`;
 
   return (
-    <motion.p
-      initial={{ opacity: 0, y: -6 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      className="eyebrow mb-6 text-[var(--color-ink-muted)]"
-    >
-      Prepared for{" "}
-      {label}
-    </motion.p>
+    <p className="t-meta mb-5 flex items-center gap-2 text-ink-2">
+      <span aria-hidden className="h-2 w-2 bg-mark" />
+      Prepared for {label}
+    </p>
   );
 }

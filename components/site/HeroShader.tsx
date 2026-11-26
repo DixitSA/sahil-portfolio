@@ -3,57 +3,32 @@
 import { useEffect, useRef } from "react";
 
 /**
- * A slow, dark field of light behind the hero. Raw WebGL, one full-screen
- * triangle and one fragment shader, so it costs a few KB instead of a 3D
- * library. Pauses when scrolled out of view or the tab is hidden, drops to a
- * single static frame for reduced motion, and leaves the CSS gradient
- * underneath visible if WebGL is unavailable.
+ * A loss surface drawn as contour lines on the pad's grid. Raw WebGL, one
+ * full-screen triangle and one fragment shader. Pauses when scrolled out of
+ * view or the tab is hidden, renders one static frame for reduced motion, and
+ * leaves the stage's CSS grid visible if WebGL is unavailable.
  */
 
 const VERT = `attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}`;
 
-const FRAG = `
+const FRAG = `#extension GL_OES_standard_derivatives : enable
 precision highp float;
-uniform vec2 r;
-uniform float t;
-uniform vec2 m;
-
+uniform vec2 r;uniform float t;uniform vec2 m;
 float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
-float n(vec2 p){
-  vec2 i=floor(p),f=fract(p);
-  vec2 u=f*f*(3.-2.*f);
-  return mix(mix(h(i),h(i+vec2(1,0)),u.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),u.x),u.y);
-}
-float fbm(vec2 p){
-  float v=0.,a=.5;
-  mat2 R=mat2(.8,.6,-.6,.8);
-  for(int i=0;i<5;i++){v+=a*n(p);p=R*p*2.02;a*=.5;}
-  return v;
-}
+float n(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f);return mix(mix(h(i),h(i+vec2(1,0)),u.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),u.x),u.y);}
+float fbm(vec2 p){float v=0.,a=.5;mat2 R=mat2(.8,.6,-.6,.8);for(int i=0;i<4;i++){v+=a*n(p);p=R*p*2.02;a*=.5;}return v;}
 void main(){
-  vec2 uv=gl_FragCoord.xy/r;
   vec2 p=(gl_FragCoord.xy-.5*r)/r.y;
-  float T=t*.045;
-  vec2 q=vec2(fbm(p*1.6+T),fbm(p*1.6-T+3.1));
-  vec2 w=vec2(fbm(p*2.2+q*1.8+vec2(1.7,9.2)+T*1.3),fbm(p*2.2+q*1.8+vec2(8.3,2.8)-T));
-  float f=fbm(p*1.4+w*1.6);
-
-  // Cursor lends a faint lift to the field near it.
-  float d=length(p-m);
-  f+=.18*exp(-d*d*3.);
-
-  vec3 base=vec3(.031,.031,.039);
-  vec3 deep=vec3(.05,.09,.08);
-  vec3 sig=vec3(.24,1.,.5);
-  vec3 col=mix(base,deep,smoothstep(.25,.85,f));
-  col+=sig*pow(smoothstep(.55,1.05,f),3.)*.22;
-  col+=vec3(.9,.92,1.)*pow(smoothstep(.7,1.1,w.x*f),4.)*.06;
-
-  // Fade into the canvas at the bottom so the hero hands off seamlessly.
-  col=mix(vec3(.031,.031,.039),col,smoothstep(0.,.55,uv.y));
-  // Vignette.
-  col*=1.-.35*pow(length(uv-.5)*1.25,2.);
-  gl_FragColor=vec4(col,1.);
+  float T=t*.02;
+  vec2 q=vec2(fbm(p*1.1+T),fbm(p*1.1-T+3.1));
+  float f=fbm(p*.9+q*.9);
+  float d=length(p-m); f+=.16*exp(-d*d*7.);
+  float c=f*20.;
+  float g=abs(fract(c-.5)-.5); float w=fwidth(c);
+  float line=1.-smoothstep(.5*w,1.5*w,g);
+  float major=step(mod(floor(c+.5),5.),.5);
+  float a=line*mix(.18,.45,major);
+  gl_FragColor=vec4(vec3(.118,.29,.204)*a,a);
 }`;
 
 export default function HeroShader() {
@@ -62,8 +37,10 @@ export default function HeroShader() {
   useEffect(() => {
     const canvas = ref.current;
     if (!canvas) return;
-    const gl = canvas.getContext("webgl", { antialias: false, alpha: false, powerPreference: "low-power" });
+    const gl = canvas.getContext("webgl", { antialias: false, alpha: true, premultipliedAlpha: true, powerPreference: "low-power" });
     if (!gl) return;
+
+    if (!gl.getExtension("OES_standard_derivatives")) return;
 
     const compile = (type: number, src: string) => {
       const s = gl.createShader(type)!;
@@ -91,7 +68,7 @@ export default function HeroShader() {
 
     // The field is soft by design, so rendering below device resolution is
     // invisible and roughly quarters the fragment cost.
-    const scale = Math.min(window.devicePixelRatio, 2) * 0.5;
+    const scale = Math.min(window.devicePixelRatio, 2) * 0.75;
     const resize = () => {
       const { clientWidth: w, clientHeight: h } = canvas;
       canvas.width = Math.max(1, Math.floor(w * scale));
@@ -109,7 +86,8 @@ export default function HeroShader() {
       mouse.tx = (e.clientX - rect.left - rect.width / 2) / rect.height;
       mouse.ty = -(e.clientY - rect.top - rect.height / 2) / rect.height;
     };
-    window.addEventListener("pointermove", onMove, { passive: true });
+    const stage = canvas.parentElement ?? canvas;
+    stage.addEventListener("pointermove", onMove, { passive: true });
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let visible = true;
@@ -126,21 +104,22 @@ export default function HeroShader() {
       gl.uniform1f(uT, (now - start) / 1000);
       gl.uniform2f(uM, mouse.x, mouse.y);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
+      canvas.style.opacity = "1";
     };
     if (reduce) {
       gl.uniform1f(uT, 20);
       gl.uniform2f(uM, mouse.x, mouse.y);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
+      canvas.style.opacity = "1";
     } else {
       raf = requestAnimationFrame(frame);
     }
-    canvas.style.opacity = "1";
 
     return () => {
       cancelAnimationFrame(raf);
       ro.disconnect();
       io.disconnect();
-      window.removeEventListener("pointermove", onMove);
+      stage.removeEventListener("pointermove", onMove);
       gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
   }, []);
@@ -149,7 +128,7 @@ export default function HeroShader() {
     <canvas
       ref={ref}
       aria-hidden
-      className="absolute inset-0 h-full w-full opacity-0 transition-opacity duration-[1600ms]"
+      className="absolute inset-0 h-full w-full opacity-0 transition-opacity duration-[1200ms]"
     />
   );
 }

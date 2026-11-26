@@ -9,6 +9,7 @@ export type {
   CaseStudySection,
   CaseStudy,
   Project,
+  Evidence,
   Role,
   Workstream,
   Profile,
