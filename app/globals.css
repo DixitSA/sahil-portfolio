@@ -1,367 +1,200 @@
 @import "tailwindcss";
 
-/* ═══════════════════════════════════════════════════════════════════
-   Tokens. Source of truth is DESIGN.md. Do not add a color here that
-   is not in that file, and do not hardcode a hex in a component.
-   ═══════════════════════════════════════════════════════════════════ */
 @theme {
-  /* ── Signal ────────────────────────────────────────────────────── */
-  --color-primary: #00ff41;          /* terminal green. LIVE STATE ONLY */
-  --color-on-primary: #0a0a0a;
-  --color-primary-dim: rgba(0, 255, 65, 0.55);
-  --color-primary-ghost: rgba(0, 255, 65, 0.1);
-  --color-label: #f0b429;            /* terminal amber. LABELS ONLY */
-  --color-label-dim: rgba(240, 180, 41, 0.55);
-
-  /* ── Surfaces ──────────────────────────────────────────────────── */
-  --color-canvas: #0a0a0a;
-  --color-surface-1: #0d0d0d;
-  --color-surface-2: #111111;
-  --color-surface-3: #161616;
-  --color-hairline: #1e1e1e;
-  --color-hairline-strong: #2a2a2a;
-
-  /* ── Ink ladder. Ratios verified against #0a0a0a ───────────────── */
-  --color-ink: #e8e8e8;              /* 16.2:1  headlines */
-  --color-ink-muted: #9a9a9a;        /*  7.0:1  body copy */
-  --color-ink-subtle: #8a8a8a;       /*  5.7:1  meta, dates */
-  --color-ink-faint: #6a6a6a;        /*  3.7:1  indices. LARGE ONLY */
-  --color-ornament: #2a2a2a;         /*  non-text */
-
-  /* ── OS chrome ─────────────────────────────────────────────────── */
-  --color-desktop: #0b0a14;
-  --color-chrome-menubar: rgba(14, 14, 14, 0.72);
-  --color-chrome-window: rgba(17, 17, 17, 0.88);
-  --color-chrome-titlebar: #161616;
-  --color-chrome-titlebar-inactive: #101010;
-  --color-chrome-dock: rgba(20, 20, 20, 0.6);
-  --color-chrome-border: #2a2a2a;
-  --color-chrome-border-focused: #3a3a3a;
-  --color-selection: rgba(0, 255, 65, 0.14);
-  --color-selection-border: rgba(0, 255, 65, 0.45);
-
-  /* Traffic lights. Licensed quotation, focused window only. */
-  --color-tl-close: #ff5f57;
-  --color-tl-minimize: #febc2e;
-  --color-tl-zoom: #28c840;
-  --color-tl-inactive: #3a3a3a;
-
-  /* ── Type ──────────────────────────────────────────────────────── */
-  --font-display: var(--font-jetbrains), ui-monospace, SFMono-Regular, monospace;
+  --color-paper: #f4f3ef;
+  --color-sheet: #fbfaf8;
+  --color-ink: #161513;
+  --color-ink-2: #3d3b37;
+  --color-ink-3: #605d57;
+  --color-ink-hover: #2b2a27;
+  --color-rule: rgba(22, 21, 19, 0.12);
+  --color-rule-strong: rgba(22, 21, 19, 0.26);
+  --color-field: #161513;
+  --color-on-field: #f4f3ef;
+  --color-on-field-2: #aba79f;
+  --color-rule-field: rgba(244, 243, 239, 0.16);
+  --color-mark: #b8360f;
+  --color-mark-on-field: #ff7a4d;
+  --font-display: var(--font-hubot), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-mona), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, monospace;
-  --font-body: var(--font-geist), system-ui, sans-serif;
-
-  /* ── Radii. Content caps at 4px. Chrome is the exception. ──────── */
-  --radius-none: 0px;
-  --radius-xs: 2px;
-  --radius-sm: 4px;
-  --radius-window: 10px;
-  --radius-dock: 16px;
-
-  /* ── OS metrics ────────────────────────────────────────────────── */
-  --spacing-menubar-height: 28px;
-  --spacing-titlebar-height: 32px;
-  --spacing-dock-height: 64px;
-  --spacing-dock-icon: 48px;
-  --spacing-dock-icon-max: 72px;
-  --spacing-desktop-icon: 72px;
-  --spacing-section: 128px;
-
-  /* ── Motion ────────────────────────────────────────────────────── */
-  --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --ease-ui: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-enter: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* ── Wallpaper ───────────────────────────────────────────────────
-   A flat fill does not read as a desktop. macOS leans on a single
-   vivid gradient, so this is a dark-mode take on that: layered radial
-   pools over a deep base, no image asset and no network request.
-   ──────────────────────────────────────────────────────────────── */
-:root {
-  --wallpaper:
-    radial-gradient(1100px 780px at 16% 10%, #1e2f6b 0%, transparent 62%),
-    radial-gradient(980px 860px at 84% 20%, #5b2a72 0%, transparent 60%),
-    radial-gradient(1300px 900px at 62% 96%, #86304f 0%, transparent 60%),
-    radial-gradient(700px 600px at 96% 78%, #1d4f6b 0%, transparent 62%),
-    linear-gradient(160deg, #0b1024 0%, #130b20 46%, #1a0f1d 100%);
+@layer base {
+:root { color-scheme: light; }
+html { background: var(--color-paper); color: var(--color-ink); -webkit-text-size-adjust: 100%; scroll-padding-top: 64px; scrollbar-color: var(--color-ink-3) var(--color-paper); }
+body { background: var(--color-paper); color: var(--color-ink-2); font-family: var(--font-sans); font-size: 16px; line-height: 1.65; overflow-x: clip; caret-color: var(--color-mark); }
+@media (min-width: 640px) { body { font-size: 17px; } }
+p, li { text-wrap: pretty; }
+::selection { background: var(--color-mark); color: var(--color-paper); }
+:focus-visible { outline: 2px solid var(--color-mark); outline-offset: 2px; border-radius: 4px; }
+.on-field :focus-visible { outline-color: var(--color-mark-on-field); }
+.on-field ::selection { background: var(--color-mark-on-field); color: var(--color-field); }
 
-  /* Chrome elevation. Floating windows and the dock need a real shadow to
-     read as floating; content inside them still uses hairlines only. */
-  --shadow-window:
-    0 22px 70px rgba(0, 0, 0, 0.62),
-    0 6px 18px rgba(0, 0, 0, 0.45);
-  --shadow-dock: 0 12px 40px rgba(0, 0, 0, 0.5);
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
 
-  /* Window body. Opaque on purpose.
-     Vibrancy belongs on chrome, not on content: in macOS the title bar and
-     sidebar are translucent while the content area is solid. Letting the
-     wallpaper through here stacked two translucent layers and washed the
-     case-study text out. Slightly lifted off the canvas so a window still
-     reads as a surface. ink-muted holds 6.6:1 on this, ink holds 15.1:1. */
-  --color-window-body: #131317;
-
-  /* Content grouping inside a window. macOS groups settings and list rows
-     into inset rounded boxes; sharp-cornered blocks read as foreign inside
-     Mac chrome. Scoped to window content, not to the site's own surfaces. */
-  --radius-group: 8px;
-  /* macOS link blue, matched to the dock tiles. Distinct from the terminal
-     green, which stays reserved for live state. */
-  --link-accent: #6cb0ff;
-  --color-group: rgba(255, 255, 255, 0.035);
-  --color-group-border: rgba(255, 255, 255, 0.08);
-  --color-row-divider: rgba(255, 255, 255, 0.06);
-
-  /* Desktop icon tints. */
-  --icon-folder: #63b3f5;
-  --icon-file: #d7dae0;
-  --icon-app: #8fb8ff;
-  --icon-guide: #b79cff;
-
-  /* Attention halo behind the guide icon. Violet, after the tile it sits
-     under, but lifted most of the way to white: the wallpaper presets are
-     themselves purple in places, and a saturated violet glow on a violet
-     ground is invisible exactly where it most needs to be seen. The outer
-     stop carries the same hue at zero alpha, because `transparent` fades
-     through black and leaves a grey ring. */
-  --glow-guide: rgba(226, 214, 255, 0.72);
-  --glow-guide-mid: rgba(183, 156, 255, 0.34);
-  --glow-guide-out: rgba(183, 156, 255, 0);
+.skip-to-content { position: absolute; left: 16px; top: -60px; z-index: 100; padding: 10px 14px; border-radius: 6px; background: var(--color-ink); color: var(--color-paper); font-size: 15px; }
+.skip-to-content:focus { top: 16px; }
 }
 
-/* ── z-index scale. Kept out of @theme so it stays readable. ─────── */
-:root {
-  --z-desktop: 0;
-  --z-desktop-icon: 10;
-  --z-window-base: 100;
-  --z-window-ceiling: 899;
-  --z-dock: 900;
-  --z-menubar: 1000;
-  --z-menu-dropdown: 1010;
-  --z-spotlight: 1100;
-  --z-boot: 9000;
-  --z-grain: 9999;
+@layer components {
+/* Layout. In @layer components so Tailwind utilities (e.g. lg:absolute) override these, as Tailwind v4 intends. */
+.wrap { margin-inline: auto; width: 100%; max-width: 1440px; padding-inline: 16px; }
+@media (min-width: 640px) { .wrap { padding-inline: 32px; } }
+@media (min-width: 1024px) { .wrap { padding-inline: 48px; } }
+@media (min-width: 1280px) { .wrap { padding-inline: 64px; } }
+.on-field { background: var(--color-field); color: var(--color-on-field-2); }
+
+/* Type */
+:is(.t-hero, .t-mega, .t-h2, .t-h3, .t-result, .t-ledger, .t-statement, .t-hero-cs) { font-family: var(--font-display); color: var(--color-ink); text-wrap: balance; }
+.on-field :is(.t-hero, .t-mega, .t-h2, .t-h3, .t-result, .t-ledger, .t-statement) { color: var(--color-on-field); }
+.t-hero { font-weight: 750; font-stretch: 112%; font-size: clamp(28px, 9.2vw, 48px); line-height: 0.94; letter-spacing: -0.035em; }
+.t-mega { font-weight: 750; font-stretch: 112%; font-size: clamp(40px, 10.4vw, 56px); line-height: 0.95; letter-spacing: -0.03em; }
+.t-h2 { font-weight: 700; font-stretch: 106%; font-size: clamp(28px, 7.4vw, 40px); line-height: 1.05; letter-spacing: -0.02em; }
+@media (min-width: 640px) { .t-hero { font-size: clamp(48px, 8.2vw, 84px); } }
+@media (min-width: 1024px) {
+  .t-hero { font-size: clamp(56px, min(7.4vw, 11svh), 124px); }
+  .t-mega { font-size: clamp(64px, 6.2vw, 104px); }
+  .t-h2 { font-size: clamp(40px, 3.3vw, 52px); }
+}
+.t-h3 { font-weight: 750; font-stretch: 110%; font-size: clamp(36px, 3.4vw + 8px, 64px); line-height: 0.98; letter-spacing: -0.03em; }
+.t-ledger { font-weight: 650; font-stretch: 104%; font-size: clamp(24px, 2vw + 14px, 44px); line-height: 1.22; letter-spacing: -0.02em; }
+.t-statement { font-weight: 600; font-stretch: 104%; font-size: clamp(24px, 1.6vw + 14px, 40px); line-height: 1.18; letter-spacing: -0.015em; }
+.t-result { font-weight: 600; font-size: clamp(20px, 1vw + 0.8rem, 26px); line-height: 1.2; letter-spacing: -0.01em; }
+.t-hero-cs { font-weight: 800; font-stretch: 115%; font-size: clamp(44px, 13vw, 176px); line-height: 0.88; letter-spacing: -0.04em; }
+.t-lead { font-size: clamp(17px, 0.4vw + 15.5px, 20px); line-height: 1.5; }
+.t-meta { font-size: 15px; line-height: 1.45; color: var(--color-ink-3); }
+.on-field .t-meta { color: var(--color-on-field-2); }
+.t-mono { font-family: var(--font-mono); font-size: 14px; font-variant-numeric: tabular-nums; }
+
+/* The answer: the reviewer's red double underline */
+.answer { position: relative; white-space: nowrap; color: var(--color-ink); font-weight: 600; }
+.on-field .answer { color: var(--color-on-field); }
+.answer--plain { font-weight: inherit; color: inherit; }
+.answer::after { content: ""; position: absolute; left: 0; right: 0; bottom: -0.18em; height: max(5px, 0.14em); border-block: max(1.5px, 0.045em) solid var(--color-mark); transform-origin: left; pointer-events: none; }
+.on-field .answer::after { border-color: var(--color-mark-on-field); }
+.t-ledger .answer::after { bottom: -0.1em; height: max(5px, 0.11em); }
+.answer[data-land]::after { transition: transform 700ms var(--ease-enter) 80ms; }
+
+/* Thesis: lights up word by word (dimmed only once armed by JS, and never under reduced motion) */
+.t-thesis { font-family: var(--font-display); font-weight: 650; font-stretch: 106%; font-size: clamp(30px, 7.6vw, 40px); line-height: 1.08; letter-spacing: -0.025em; color: var(--color-ink); text-wrap: pretty; }
+@media (min-width: 1024px) { .t-thesis { font-size: clamp(48px, 4.4vw, 76px); } }
+.t-thesis .tw { transition: color 200ms var(--ease-ui); }
+html.js .t-thesis[data-armed] .tw:not([data-on]) { color: var(--color-ink-3); }
+
+/* Motion switch (nav) */
+.switch-track { position: relative; width: 32px; height: 18px; border: 1.5px solid var(--color-ink); border-radius: 9px; transition: background-color 180ms var(--ease-ui); }
+.switch-track::after { content: ""; position: absolute; top: 1.5px; left: 1.5px; width: 12px; height: 12px; border-radius: 6px; background: var(--color-ink-3); transition: transform 180ms var(--ease-ui), background-color 180ms var(--ease-ui); }
+[aria-checked="true"] .switch-track { background: var(--color-ink); }
+[aria-checked="true"] .switch-track::after { transform: translateX(14px); background: var(--color-paper); }
+.hint-touch { display: none; }
+@media (pointer: coarse) { .hint-fine { display: none; } .hint-touch { display: inline; } }
+
+/* Buttons and links */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 22px; border-radius: 6px; font-weight: 600; font-size: 16px; white-space: nowrap; transition: transform 150ms var(--ease-ui), background-color 150ms var(--ease-ui); }
+.btn-primary { background: var(--color-ink); color: var(--color-paper); }
+.btn-secondary { border: 1.5px solid var(--color-ink); color: var(--color-ink); }
+.on-field .btn-primary { background: var(--color-on-field); color: var(--color-field); }
+.on-field .btn-secondary { border-color: var(--color-on-field); color: var(--color-on-field); }
+.btn-sm { min-height: 44px; padding: 0 16px; font-size: 15px; }
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover { transform: translateY(-1px); }
+  .btn-primary:hover { background: var(--color-ink-hover); }
+  .btn-secondary:hover { background: rgba(22, 21, 19, 0.06); }
+  .on-field .btn-primary:hover { background: #ffffff; }
+  .on-field .btn-secondary:hover { background: rgba(244, 243, 239, 0.1); }
+}
+.btn:active { transform: translateY(0.5px) scale(0.985); transition-duration: 90ms; }
+.link { color: var(--color-ink); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 5px; text-decoration-color: var(--color-rule-strong); transition: text-decoration-color 150ms var(--ease-ui); }
+.link:hover { text-decoration-color: currentColor; }
+.on-field .link { color: var(--color-on-field); text-decoration-color: var(--color-rule-field); }
+.on-field .link:hover { text-decoration-color: currentColor; }
+.nudge { transition: transform 150ms var(--ease-ui); }
+:is(a, button):hover .nudge { transform: translateX(3px); }
+
+/* Stages and frames: a plain sheet, no grid */
+.stage { position: relative; overflow: hidden; border: 1px solid var(--color-rule); border-radius: 4px; background: var(--color-sheet); }
+.frame-shadow { box-shadow: 0 24px 48px -24px rgba(22, 21, 19, 0.35); }
+
+/* Hero entrance (CSS only; visible without JS) */
+.hl { display: block; overflow: hidden; padding-bottom: 0.08em; margin-bottom: -0.08em; }
+.hl > span { display: inline-block; animation: rise 900ms var(--ease-enter) both; animation-delay: calc(120ms + var(--i, 0) * 90ms); }
+.enter-fade { animation: fade-up 520ms var(--ease-enter) both; }
+.enter-print { animation: print-in 1000ms var(--ease-enter) 200ms both; }
+@keyframes rise { from { transform: translateY(105%); } to { transform: none; } }
+@keyframes fade-up { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes print-in { from { transform: translateY(40px); } to { transform: none; } }
+
+/* Contour field and descent */
+.cf-canvas { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 1200ms var(--ease-ui); pointer-events: none; }
+.cf-mask-hero { mask-image: linear-gradient(180deg, rgba(0,0,0,.12) 0 18%, #000 26% 48%, rgba(0,0,0,.25) 60%); }
+@media (min-width: 1024px) { .cf-mask-hero { mask-image: linear-gradient(90deg, rgba(0,0,0,.2) 0 35%, #000 62%); } }
+.cf-mask-close { mask-image: linear-gradient(180deg, rgba(0,0,0,.35), #000 45%); }
+.cf-slot { position: relative; container-type: size; pointer-events: none; }
+.cf-path { position: absolute; --u: min(calc(100cqh / var(--bh)), calc(100cqw / var(--bw))); left: calc(50% - var(--bcx) * var(--u)); top: calc(50% - var(--bcy) * var(--u)); width: calc(2 * var(--u)); height: calc(2 * var(--u)); overflow: visible; }
+.cf-path path { fill: none; stroke: var(--color-ink); stroke-width: 1.6; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round; }
+.cf-path [data-dot] { fill: var(--color-ink); }
+.cf-path [data-ring] { fill: none; stroke: var(--color-mark); stroke-width: 1.6; vector-effect: non-scaling-stroke; transform-box: fill-box; transform-origin: center; transition: transform 420ms var(--ease-enter), opacity 200ms linear; }
+.on-field .cf-path path { stroke: var(--color-on-field); }
+.on-field .cf-path [data-ring] { stroke: var(--color-mark-on-field); }
+.on-field .cf-path [data-dot] { fill: var(--color-on-field); }
+.cf-live .cf-path path { stroke-dasharray: none; }
+@media (prefers-reduced-motion: no-preference) {
+  html.js [data-cf-host]:not(.cf-drawing):not(.cf-live) .cf-path path { stroke-dasharray: 1; stroke-dashoffset: 1; }
+  html.js [data-cf-host].cf-drawing:not(.cf-live) .cf-path path { stroke-dasharray: 1; stroke-dashoffset: 0; transition: stroke-dashoffset var(--cf-draw, 1400ms) cubic-bezier(0.3, 0, 0.2, 1); }
+  html.js [data-cf-host]:not(.cf-drawing):not(.cf-live) .cf-path [data-dot] { opacity: 0; }
+  html.js [data-cf-host] .cf-path [data-dot] { transition: opacity 160ms linear; }
+  html.js [data-cf-host]:not(.cf-ring-on) .cf-path [data-ring] { opacity: 0; transform: scale(0.4); }
+  html.js [data-cf-host]:not([data-landed]) .answer[data-land]::after { transform: scaleX(0); }
+  /* safety: JS ran but the field never mounted */
+  html.cf-safe [data-cf-host]:not(.cf-armed) .cf-path path { stroke-dasharray: none; }
+  html.cf-safe [data-cf-host]:not(.cf-armed) .cf-path :is([data-dot], [data-ring]) { opacity: 1; transform: none; }
+  html.cf-safe [data-cf-host]:not(.cf-armed) .answer[data-land]::after { transform: none; }
+}
+@media (hover: hover) and (pointer: fine) {
+  .cf-host { cursor: crosshair; }
+  .cf-host :is(h1, h2, p, span) { cursor: auto; }
+  .cf-host :is(a, button) { cursor: pointer; }
 }
 
-html {
-  scroll-behavior: smooth;
+/* Work: pinned stage */
+.ws-layer { position: absolute; inset: 0; background: var(--color-sheet); clip-path: inset(100% 0 0 0); transition: clip-path 800ms var(--ease-enter); }
+.ws-layer[data-state="on"] { clip-path: inset(0); z-index: 2; }
+.ws-layer[data-state="past"] { clip-path: inset(0); z-index: 1; }
+.ws-print { position: absolute; inset: 0; transform: translateY(32px); transition: transform 900ms var(--ease-enter); }
+.ws-layer[data-state="on"] .ws-print { transform: none; }
+.work-sticky { display: none; }
+@media (min-width: 1024px) and (min-height: 680px) {
+  html.js .work-sticky { display: block; }
+  html.js .work-inline { display: none; }
+  html.js .work-chapter { min-height: 82svh; }
+  html.js .work-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; }
+  html.js .work-col { grid-column: span 5; }
+  html.js .work-stage-col { grid-column: span 7; }
 }
 
-body {
-  background-color: var(--color-canvas);
-  background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 24px 24px;
-  color: var(--color-ink-muted);
-  font-family: var(--font-body);
-  /* Native system cursor. On a Mac this IS the macOS pointer, and every
-     visitor gets the arrow, I-beam, hand and resize shapes their own OS
-     draws. A hand-drawn replacement can only be a worse copy of it. */
-  cursor: default;
-}
+/* Motion switch off: still the stage wipes and the thesis word-light too */
+html[data-motion="off"] :is(.ws-layer, .ws-print, .t-thesis .tw) { transition: none !important; }
 
-/* Standard pointer semantics, so the cursor means what it does on a desktop. */
-a,
-button,
-[role="button"],
-[role="menuitem"],
-[role="menuitemradio"] {
-  cursor: pointer;
-}
-
-p, h1, h2, h3, li, article, figcaption {
-  cursor: text;
-}
-
-/* ── Custom scrollbar ────────────────────────────────────────────── */
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: var(--color-surface-2); }
-::-webkit-scrollbar-thumb { background: var(--color-hairline-strong); }
-::-webkit-scrollbar-thumb:hover { background: var(--color-ink-faint); }
-* { scrollbar-width: thin; scrollbar-color: var(--color-hairline-strong) var(--color-surface-2); }
-
-/* ── Skip to content ─────────────────────────────────────────────── */
-.skip-to-content {
-  position: absolute;
-  left: -9999px;
-  z-index: var(--z-grain);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.1em;
-  color: var(--color-primary);
-  background: var(--color-canvas);
-  border: 1px solid var(--color-primary);
-  padding: 6px 16px;
-}
-.skip-to-content:focus {
-  position: fixed;
-  top: 0;
-  left: 0;
-}
-
-/* ── Focus visible ───────────────────────────────────────────────── */
-:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-}
-
-/* ── Grain texture overlay ───────────────────────────────────────── */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23grain)' opacity='0.04'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: var(--z-grain);
-  opacity: 1;
-}
-
-/* ── Marquee ─────────────────────────────────────────────────────── */
-@keyframes marquee {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-@keyframes marquee-rev {
-  0%   { transform: translateX(-50%); }
-  100% { transform: translateX(0); }
-}
-.marquee-track         { animation: marquee     40s linear infinite; }
-.marquee-track-reverse { animation: marquee-rev 40s linear infinite; }
-
-/* ── Screensaver ink drift ───────────────────────────────────────── */
-@keyframes ink-drift {
-  0%   { transform: translate3d(0, 0, 0) rotate(0deg); }
-  100% { transform: translate3d(var(--drift, -60px), var(--drift, -60px)) rotate(8deg); }
-}
-.screensaver-mark {
-  animation-name: ink-drift;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-  will-change: transform;
-}
-
-/* ── Lock screen dismissal ──────────────────────────────────────────
-   The unmount is driven by a timeout, not by this animation finishing, so
-   a fade that never runs cannot strand the lock screen over the site.
-   ──────────────────────────────────────────────────────────────────── */
-@keyframes lock-leave {
-  to { opacity: 0; transform: scale(1.04); }
-}
-.lock-leave {
-  animation: lock-leave 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
-  pointer-events: none;
-}
-@media (prefers-reduced-motion: reduce) {
-  .lock-leave { animation: none; opacity: 0; }
-}
-
-/* ── iOS view transitions ────────────────────────────────────────────
-   CSS, not JS. A JS-driven transition that stalls can leave the incoming
-   view unmounted, which blanks the screen on navigation. A keyframe
-   always resolves, and animation-fill-mode both means the resting state
-   is correct even if the animation never runs at all.
-   ──────────────────────────────────────────────────────────────────── */
-@keyframes ios-push {
-  from { opacity: 0; transform: translate3d(18px, 0, 0); }
-  to   { opacity: 1; transform: translate3d(0, 0, 0); }
-}
-@keyframes ios-home {
-  from { opacity: 0; transform: scale(0.975); }
-  to   { opacity: 1; transform: scale(1); }
-}
-.ios-push { animation: ios-push 240ms cubic-bezier(0.22, 1, 0.36, 1) both; }
-.ios-home { animation: ios-home 220ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+/* View transitions (next.config experimental.viewTransition) */
+::view-transition-old(root) { animation: 180ms var(--ease-ui) both vt-out; }
+::view-transition-new(root) { animation: 420ms var(--ease-enter) 60ms both vt-in; }
+::view-transition-group(.title-morph) { animation-duration: 520ms; animation-timing-function: var(--ease-enter); }
+::view-transition-group(site-nav), ::view-transition-old(site-nav), ::view-transition-new(site-nav) { animation: none; }
+@keyframes vt-out { to { opacity: 0; transform: translateY(-8px); } }
+@keyframes vt-in { from { opacity: 0; transform: translateY(16px); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .ios-push, .ios-home { animation: none; }
+  *, *::before, *::after { animation: none !important; transition-duration: 0.001ms !important; }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+  .work-sticky { display: none !important; }
+  .work-inline { display: block !important; }
+  .work-chapter { min-height: 0 !important; }
+  .work-grid { display: block !important; }
+  .ws-print { transform: none; }
 }
-
-/* ── Dock launch bounce ──────────────────────────────────────────── */
-@keyframes dock-bounce {
-  0%   { transform: translateY(0); }
-  30%  { transform: translateY(-16px); }
-  55%  { transform: translateY(0); }
-  72%  { transform: translateY(-7px); }
-  88%  { transform: translateY(0); }
-  100% { transform: translateY(0); }
 }
-.dock-bounce {
-  animation: dock-bounce 0.62s ease-out 1;
-}
-
-/* ── Attention: the guide icon and its callout ─────────────────
-   Apple's way of saying "this one" is a soft halo and a popover that grows
-   out of the thing it is pointing at. Neither carries a badge, a colour that
-   already means something, or a number.
-
-   The halo breathes three times and then rests at the low end of its own
-   cycle, which `both` leaves painted. An indicator that pulses forever stops
-   reading as guidance and starts reading as a rave, and this one has to sit
-   on a desktop someone is trying to use.
-
-   Under reduced motion the global rule below collapses both animations to
-   their fill state, which is why every resting value lives in a keyframe
-   rather than in JS: the glow and the popover still arrive, they simply
-   arrive already there.
-   ──────────────────────────────────────────────────────────── */
-@keyframes icon-breathe {
-  0%, 100% { opacity: 0.24; transform: scale(0.94); }
-  50%      { opacity: 0.72; transform: scale(1.07); }
-}
-.icon-attention {
-  position: absolute;
-  inset: -7px;
-  border-radius: 16px;
-  background: radial-gradient(
-    circle at 50% 46%,
-    var(--glow-guide) 0%,
-    var(--glow-guide-mid) 42%,
-    var(--glow-guide-out) 72%
-  );
-  animation: icon-breathe 2.6s var(--ease-standard) 3 both;
-  pointer-events: none;
-}
-
-/* The popover grows from its tail, so it reads as coming out of the icon it
-   points at rather than as a panel that faded in over the wallpaper. */
-@keyframes callout-in {
-  0%   { opacity: 0; transform: translateY(-50%) scale(0.84); }
-  62%  { opacity: 1; transform: translateY(-50%) scale(1.025); }
-  100% { opacity: 1; transform: translateY(-50%) scale(1); }
-}
-@keyframes callout-out {
-  to { opacity: 0; transform: translateY(-50%) scale(0.96); }
-}
-.callout-in {
-  transform-origin: right center;
-  animation: callout-in 340ms var(--ease-standard) both;
-}
-.callout-out {
-  transform-origin: right center;
-  animation: callout-out 200ms var(--ease-exit) both;
-  pointer-events: none;
-}
-
-/* ── Live status pulse ───────────────────────────────────────────── */
-@keyframes status-pulse {
-  0%, 100% { opacity: 1; }
-  50%      { opacity: 0.4; }
-}
-
-/* ── Reduced motion ──────────────────────────────────────────────── */
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  .marquee-track,
-  .marquee-track-reverse {
-    animation: none;
-  }
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-/* ── Clip-reveal helper ──────────────────────────────────────────── */
-.clip-line { overflow: hidden; }

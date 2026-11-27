@@ -9,20 +9,20 @@ export type {
   CaseStudySection,
   CaseStudy,
   Project,
+  Evidence,
   Role,
+  Workstream,
   Profile,
-  FSNode,
 } from "./types";
 
 export {
   projects,
   featuredProjects,
+  caseStudyProjects,
   listedProjects,
   getProject,
 } from "./projects";
 
 export { roles, getRole } from "./experience";
 
-export { profile, githubUrl, githubHandle } from "./profile";
-
-export { desktop } from "./fs";
+export { profile, githubUrl, githubHandle, linkedinHandle } from "./profile";

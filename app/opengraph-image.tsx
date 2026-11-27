@@ -3,75 +3,78 @@ import { SITE_HOST } from "@/lib/site";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = "Sahil Dixit — Strategist. Builder.";
+export const alt = "Sahil Dixit: put AI to work, check its work, ship what passes.";
 
-/**
- * Share card. Rendered at build time, so it replaces the /og.png that was
- * referenced in metadata but never existed.
- *
- * Deliberately font-agnostic: loading a webfont here would add a network
- * dependency to the build for very little gain at this size.
- */
+/** Share card. Default font only: a webfont would add a network dependency to the build. */
 export default function Image() {
   return new ImageResponse(
     (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          background: "#0a0a0a",
-          padding: 72,
-        }}
-      >
-        {/* Menu-bar quotation */}
+      <div style={{ width: "100%", height: "100%", display: "flex", background: "#F4F3EF" }}>
         <div
           style={{
             display: "flex",
-            alignItems: "center",
+            flexDirection: "column",
             justifyContent: "space-between",
-            fontSize: 22,
-            color: "#8a8a8a",
-            letterSpacing: 2,
+            width: 840,
+            height: "100%",
+            padding: 72,
           }}
         >
-          <span>SAHIL_DIXIT.exe</span>
-          <span style={{ color: "#00ff41" }}>● AVAILABLE FOR WORK</span>
-        </div>
-
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <span style={{ fontSize: 26, color: "#f0b429", letterSpacing: 6, marginBottom: 20 }}>
-            {"// STRATEGY · AI GOVERNANCE · PRODUCT"}
-</span>
-          <span
+          <div style={{ display: "flex", fontSize: 28, fontWeight: 600, color: "#161513" }}>
+            Sahil Dixit
+          </div>
+          <div
             style={{
-              fontSize: 104,
-              color: "#e8e8e8",
-              lineHeight: 1,
-              letterSpacing: -3,
+              display: "flex",
+              flexDirection: "column",
+              fontSize: 60,
+              fontWeight: 750,
+              color: "#161513",
+              letterSpacing: -2,
+              lineHeight: 1.0,
+              maxWidth: 680,
             }}
           >
-            SAHIL DIXIT
-          </span>
-          <span style={{ fontSize: 30, color: "#9a9a9a", marginTop: 24, maxWidth: 900 }}>
-            Strategy &amp; Management Consultant at Bank of America. AI compliance by day,
-            shipped products by night.
-          </span>
+            {["Put AI to work.", "Check its work.", "Ship what passes."].map((l) => (
+              <div key={l} style={{ display: "flex" }}>
+                {l}
+              </div>
+            ))}
+          </div>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <div style={{ display: "flex", fontSize: 26, color: "#3D3B37" }}>
+              <div style={{ display: "flex" }}>Slide turnaround from hours to&nbsp;</div>
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <div style={{ display: "flex" }}>about 15 minutes</div>
+                <div style={{ display: "flex", height: 2, background: "#B8360F", marginTop: 2 }} />
+                <div style={{ display: "flex", height: 2, background: "#B8360F", marginTop: 4 }} />
+              </div>
+            </div>
+            <div style={{ display: "flex", fontSize: 20, color: "#605D57", marginTop: 20 }}>
+              {SITE_HOST}
+            </div>
+          </div>
         </div>
-
         <div
           style={{
             display: "flex",
-            borderTop: "1px solid #1e1e1e",
-            paddingTop: 24,
-            fontSize: 22,
-            color: "#6a6a6a",
-            letterSpacing: 2,
+            flexDirection: "column",
+            justifyContent: "center",
+            gap: 20,
+            width: 360,
+            height: "100%",
+            padding: 40,
+            background: "#161513",
           }}
         >
-          {SITE_HOST}
+          {["Vazaar", "Kaal", "Mixxx MCP"].map((n) => (
+            <div key={n} style={{ display: "flex", fontSize: 34, fontWeight: 700, color: "#F4F3EF" }}>
+              {n}
+            </div>
+          ))}
+          <div style={{ display: "flex", fontSize: 20, color: "#ABA79F", marginTop: 16 }}>
+            Open to AI strategy roles
+          </div>
         </div>
       </div>
     ),

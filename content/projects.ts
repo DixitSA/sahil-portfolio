@@ -1,17 +1,79 @@
 import type { Project } from "./types";
 
 /**
- * Two featured projects carry full case studies. The remaining three are
- * plaintext rows: no case study, no screenshot.
+ * Featured projects get a large card and a case study. Listed projects are
+ * rows; a listed project may still carry a case study (Axira), in which case
+ * its row links to it.
+ *
+ * Featured set matches the 2026 resume: Vazaar and the MCP server, plus Kaal,
+ * which has a live engine demo on this site.
  */
 export const projects: Project[] = [
   {
-    slug: "axira",
-    name: "Axira",
+    slug: "vazaar",
+    name: "Vazaar",
     tier: "featured",
     status: "LIVE",
     summary:
-      "Multi-agent outreach automation. Three specialized LLM agents in one pipeline, running on ~$0 of infrastructure.",
+      "Research platform for commercial P&C underwriting software: a catalog of 170+ solutions, researched with AI and checked before anything is published.",
+    answer: "170+ solutions",
+    aiNote:
+      "Research drafting runs offline. A separate, lower-cost model reviews each draft as an independent judge, with at most two revision rounds, and a deterministic publication gate checks the recorded judgment before anything ships. The live product makes no runtime model calls.",
+    tags: ["TypeScript", "Astro", "Supabase", "Stripe"],
+    angle:
+      "I built the whole funnel: a free searchable catalog, a $49-a-month introductory tier with email-code accounts and Stripe checkout, an enterprise request form, and its own analytics endpoint.",
+    href: "https://vazaar-site.vercel.app",
+    // Repository is private, so no source link is shown.
+    preview: "/previews/vazaar-product.jpg",
+    previewSize: { w: 1920, h: 1200 },
+    caseStudy: {
+      problem:
+        "Insurers buying underwriting software (submission intake, triage, document extraction, decision support) face a crowded market where every vendor page says roughly the same thing. A research product only helps if a buyer can tell which claims rest on evidence and which rest on marketing. AI makes the research faster, and it also makes it easy to publish confident claims that nobody checked.",
+      sections: [
+        {
+          heading: "Evidence and capability are scored separately",
+          body: [
+            "Each product carries separate capability, evidence and readiness scores, and there is deliberately no overall rating or buyer-fit ranking.",
+            "Collapsing them into one number would hide the thing a buyer most needs to know: whether a strong capability score is backed by independent sources or only by the vendor's own description.",
+          ],
+        },
+        {
+          heading: "AI drafts. A deterministic gate publishes.",
+          body: [
+            "Research drafting is AI-assisted and runs offline. A separate, lower-cost model reviews each draft as an independent judge, with at most two revision rounds, and a deterministic publication gate checks the recorded judgment before anything ships.",
+            "Agent approval is explicitly not treated as independent verification of a vendor's claims, and the shipped product makes no runtime model calls. It runs without an AI API key.",
+          ],
+        },
+        {
+          heading: "Static where possible, private where it pays",
+          body: [
+            "The public catalog is a static Astro site with Pagefind search, built from data in Git. Five serverless endpoints handle assessment intake, analytics, the paid tier, Stripe webhooks and launch notifications.",
+            "Paid research (reports, scores, source lists) is served by an entitlement-checked API inside product pages and never shipped in static HTML or search data, so it cannot be scraped from the free site.",
+          ],
+        },
+        {
+          heading: "A three-tier business model",
+          body: [
+            "Free: a searchable catalog with product overviews and vendor links. Intelligence: $49 a month introductory access to reports and scores, with email-code accounts, Supabase entitlements and Stripe checkout. Enterprise: a manual assessment request.",
+            "Contracts are typed with Zod, and scoring lives in a pure, deterministic rules package that can be tested in isolation.",
+          ],
+        },
+      ],
+      outcome: [
+        "Free research catalog live in production.",
+        "Research corpus of 174 underwriting solutions across 153 companies, each with source-linked evidence states.",
+        "Paid tier built end to end: accounts, entitlements, Stripe checkout and signed webhooks. Paid checkout opens after launch checks.",
+        "No runtime model dependency. The shipped product runs without an AI API key.",
+      ],
+    },
+  },
+  {
+    slug: "axira",
+    name: "Axira",
+    tier: "listed",
+    status: "LIVE",
+    summary:
+      "Multi-agent outreach automation: three LLM agents for research, drafting and follow-up, and nothing sends until a person approves it.",
     tags: ["Python", "LLM agent orchestration", "Self-hosted Linux"],
     // Added back at the owner's request. Flagged twice and worth repeating:
     // this URL currently resolves to a Next.js/Prisma operations dashboard for
@@ -67,7 +129,10 @@ export const projects: Project[] = [
     status: "LIVE",
     summary:
       "Vedic astrology decision app shipped to production web and iOS. Deterministic chart computation, 277 commits.",
+    answer: "277 commits",
     tags: ["Next.js", "TypeScript", "Python", "Capacitor"],
+    angle:
+      "It ships with magic-link sign-in and Stripe checkout, and went to market through a niche community instead of paid acquisition.",
     href: "https://getkaal.com",
     repo: "https://github.com/DixitSA/kaal",
     preview: "/previews/kaal-dashboard.png",
@@ -125,6 +190,58 @@ export const projects: Project[] = [
     },
   },
   {
+    slug: "mixxx-mcp",
+    name: "Mixxx MCP",
+    tier: "featured",
+    status: "BUILD",
+    summary:
+      "An MCP server exposing 33 tools that let an LLM agent run multi-step DJ work in Mixxx: beat-timed transitions, mashup matching and set planning, with job queuing and automated tests.",
+    answer: "33 tools",
+    tags: ["Python", "Model Context Protocol", "MIDI", "Audio analysis"],
+    angle:
+      "Agent tooling with guardrails: narrow tools, a job queue that lands on the beat, and an evaluator that checks a transition before anyone trusts it.",
+    // Repository is private, so no source link is shown.
+    caseStudy: {
+      problem:
+        "Letting a language model operate a live system is easy to demo and hard to trust. In a DJ set the cost of a wrong action is immediate and audible: a deck that loads, pauses or seeks while it is playing to a room. The agent has to plan and execute multi-step work, and the system has to make the dangerous actions hard to take by accident.",
+      sections: [
+        {
+          heading: "Many narrow tools, not one generic one",
+          body: [
+            "The server exposes 33 tools grouped by job: deck control, library and loading, analysis and matching, mashup and set planning, stems and lyrics, performance, audition and rating, and a single cancel.",
+            "A generic 'send a MIDI message' tool would have been smaller. Narrow tools make every call inspectable and every failure legible, which is what lets a person supervise an agent in real time.",
+          ],
+        },
+        {
+          heading: "A beat-timed job queue",
+          body: [
+            "The agent sends commands over a virtual MIDI port to a custom Mixxx controller mapping. Mixxx runs the resulting jobs against the deck playhead, so a transition lands on the beat rather than whenever the model's response happens to arrive.",
+            "The hardware controller keeps its stock mapping alongside, so the human never loses manual control.",
+          ],
+        },
+        {
+          heading: "Evaluate a plan before trusting it",
+          body: [
+            "A record-and-evaluate tool captures a transition and flags clipping, level jumps, silence, misaligned kicks, stacked bass, mud and harmonic smear.",
+            "Operating rules sit in the tool contract: never load, pause or seek an audible deck unless asked, and audition only on request.",
+          ],
+        },
+        {
+          heading: "Tested without the real application",
+          body: [
+            "Scheduler and bridge tests run against a fake Mixxx engine, and the evaluator is tested on synthetic audio, so the timing logic is verified without a DJ setup attached.",
+          ],
+        },
+      ],
+      outcome: [
+        "33 MCP tools covering deck control, analysis, mashup planning, stems, performance and evaluation.",
+        "Beat-timed job queue that executes multi-step transitions against the live playhead.",
+        "Automated recording evaluation for clipping, level jumps, kick alignment and harmonic clashes.",
+        "Test suite against a fake Mixxx engine and synthetic audio.",
+      ],
+    },
+  },
+  {
     slug: "vibequeue",
     name: "VibeQueue",
     tier: "listed",
@@ -132,6 +249,7 @@ export const projects: Project[] = [
     summary:
       "Bar patrons queue songs to a venue's Spotify from their own phone. No app install.",
     tags: ["Next.js", "Firebase", "Spotify API"],
+    href: "https://vibequeue-one.vercel.app",
     repo: "https://github.com/DixitSA/VibeQueue",
   },
   {
@@ -142,6 +260,7 @@ export const projects: Project[] = [
     summary:
       "Fleet management with real-time vehicle tracking and driver compliance monitoring.",
     tags: ["Next.js", "Fastify", "PostgreSQL", "WebSocket"],
+    href: "https://manifest-omega-eight.vercel.app",
     repo: "https://github.com/DixitSA/MANIFEST",
   },
   {
@@ -155,13 +274,20 @@ export const projects: Project[] = [
   },
 ];
 
-export const featuredProjects: Project[] = projects.filter(
-  (project) => project.tier === "featured"
-);
+const FEATURED_ORDER = ["vazaar", "kaal", "mixxx-mcp"];
 
-export const listedProjects: Project[] = projects.filter(
-  (project) => project.tier === "listed"
-);
+export const featuredProjects: Project[] = projects
+  .filter((project) => project.tier === "featured")
+  .sort((a, b) => FEATURED_ORDER.indexOf(a.slug) - FEATURED_ORDER.indexOf(b.slug));
+
+/** Projects that have a case study page under /work/[slug]. */
+export const caseStudyProjects: Project[] = projects.filter((project) => project.caseStudy);
+
+const LISTED_ORDER = ["axira", "vibequeue", "manifest", "polymarket-copytrader"];
+
+export const listedProjects: Project[] = projects
+  .filter((project) => project.tier === "listed")
+  .sort((a, b) => LISTED_ORDER.indexOf(a.slug) - LISTED_ORDER.indexOf(b.slug));
 
 export function getProject(slug: string): Project | undefined {
   return projects.find((project) => project.slug === slug);

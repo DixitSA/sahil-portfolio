@@ -19,12 +19,12 @@ import { useState } from "react";
 const K = {
   ground: "#f5f0e8",
   ink: "#2c2418",
-  muted: "#7a7469",
-  faint: "#9c9488",
+  muted: "#6a6358",
+  faint: "#6b655a",
   rule: "rgba(140, 134, 122, 0.35)",
-  accent: "#b5563e",
+  accent: "#9e4630",
   accentDeep: "#8b3620",
-  green: "#5e7a5e",
+  green: "#566f56",
   tint: "rgba(184, 168, 120, 0.14)",
   serif: "var(--font-kaal-serif), 'Times New Roman', serif",
   sans: "var(--font-kaal-sans), system-ui, sans-serif",
@@ -105,7 +105,7 @@ export default function KaalApp() {
 
   return (
     <div style={{ background: K.ground, color: K.ink, minHeight: "100%" }}>
-      <div className="mx-auto w-full max-w-xl px-8 py-10">
+      <div className="mx-auto w-full max-w-xl px-5 py-8 sm:px-8 sm:py-10">
         {/* Wordmark */}
         <p
           className="mb-10 uppercase"
@@ -114,13 +114,12 @@ export default function KaalApp() {
           Kaal
         </p>
 
-        <Label>Your chart</Label>
-        <h1
-          className="mt-2 mb-1"
+        <h2
+          className="mb-1"
           style={{ fontFamily: K.serif, fontSize: 40, lineHeight: 1.1, color: K.ink }}
         >
           {chart.moonSign ?? "—"} moon
-        </h1>
+        </h2>
         <p
           style={{ fontFamily: K.serif, fontStyle: "italic", fontSize: 19, color: K.muted }}
         >
@@ -140,7 +139,7 @@ export default function KaalApp() {
           <Line k="Ayanamsha" v={chart.ayanamsha} />
         </dl>
 
-        <p className="mt-3" style={{ fontFamily: K.sans, fontSize: 12, color: K.faint }}>
+        <p className="mt-3" style={{ fontFamily: K.sans, fontSize: 14, color: K.faint }}>
           {resolved}
         </p>
 
@@ -148,7 +147,7 @@ export default function KaalApp() {
 
         <Label>Compute another</Label>
         <form onSubmit={compute} className="mt-3">
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <Field label="Date of birth" type="date" value={date} onChange={setDate} />
             <Field label="Time" type="time" value={time} onChange={setTime} />
           </div>
@@ -159,10 +158,10 @@ export default function KaalApp() {
           <button
             type="submit"
             disabled={busy}
-            className="mt-4 px-5 py-2"
+            className="mt-4 min-h-11 px-5 py-2"
             style={{
               fontFamily: K.sans,
-              fontSize: 13,
+              fontSize: 15,
               color: K.ground,
               background: busy ? K.faint : K.accent,
               border: "none",
@@ -174,7 +173,7 @@ export default function KaalApp() {
         </form>
 
         {error && (
-          <p className="mt-3" style={{ fontFamily: K.sans, fontSize: 13, color: K.accentDeep }}>
+          <p className="mt-3" style={{ fontFamily: K.sans, fontSize: 14, color: K.accentDeep }}>
             {error}
           </p>
         )}
@@ -192,7 +191,7 @@ export default function KaalApp() {
           className="mt-3 inline-block"
           style={{
             fontFamily: K.sans,
-            fontSize: 13,
+            fontSize: 14,
             color: K.accent,
             borderBottom: `1px solid ${K.accent}`,
             paddingBottom: 1,
@@ -203,7 +202,7 @@ export default function KaalApp() {
 
         <p
           className="mt-6"
-          style={{ fontFamily: K.sans, fontSize: 11, lineHeight: 1.6, color: K.faint }}
+          style={{ fontFamily: K.sans, fontSize: 14, lineHeight: 1.6, color: K.faint }}
         >
           Birth details are sent to the Kaal engine to compute the chart and are not
           stored by this site.
@@ -217,12 +216,9 @@ export default function KaalApp() {
 
 function Label({ children }: { children: React.ReactNode }) {
   return (
-    <p
-      className="uppercase"
-      style={{ fontFamily: K.sans, fontSize: 10, letterSpacing: "0.18em", color: K.faint }}
-    >
+    <h3 style={{ fontFamily: K.sans, fontSize: 14, fontWeight: 600, letterSpacing: 0, color: K.ink }}>
       {children}
-    </p>
+    </h3>
   );
 }
 
@@ -236,10 +232,7 @@ function Line({ k, v }: { k: string; v?: string | number }) {
       className="flex items-baseline justify-between gap-4 py-2"
       style={{ borderBottom: `1px solid ${K.rule}` }}
     >
-      <dt
-        className="uppercase"
-        style={{ fontFamily: K.sans, fontSize: 10, letterSpacing: "0.14em", color: K.accent }}
-      >
+      <dt style={{ fontFamily: K.sans, fontSize: 14, color: K.accent }}>
         {k}
       </dt>
       <dd style={{ fontFamily: K.serif, fontSize: 17, color: K.ink }}>{v ?? "—"}</dd>
@@ -261,8 +254,8 @@ function Field({
   return (
     <label className="block">
       <span
-        className="mb-1 block uppercase"
-        style={{ fontFamily: K.sans, fontSize: 10, letterSpacing: "0.14em", color: K.faint }}
+        className="mb-1 block"
+        style={{ fontFamily: K.sans, fontSize: 14, color: K.faint }}
       >
         {label}
       </span>
@@ -270,10 +263,10 @@ function Field({
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full px-2 py-1.5"
+        className="w-full min-w-0 px-2 py-2"
         style={{
           fontFamily: K.sans,
-          fontSize: 13,
+          fontSize: 14,
           color: K.ink,
           background: K.tint,
           border: `1px solid ${K.rule}`,

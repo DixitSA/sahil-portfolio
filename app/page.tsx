@@ -1,14 +1,31 @@
+import Hero from "@/components/site/Hero";
+import Thesis from "@/components/site/Thesis";
+import { profile } from "@/content";
+import Work from "@/components/site/Work";
+import Evidence from "@/components/site/Evidence";
+import About from "@/components/site/About";
+import Contact from "@/components/site/Contact";
+
 /**
- * "/" is the bare desktop. Nothing renders on the wallpaper.
- *
- * macOS does not show a document on login, and the profile panel that used to
- * sit here was the single thing keeping this from reading as an operating
- * system. The content it carried lives on /about, which is one click away in
- * the dock, the menu bar, and the desktop icons.
- *
- * Crawlability is handled by the hidden navigation in Desktop.tsx plus
- * sitemap.ts and the JSON-LD graph, since this route now emits no prose.
+ * One page, ordered as an argument: claim (hero), thesis, proof of building (work),
+ * proof of results at work (evidence), the person (about), the ask (contact).
  */
 export default function Page() {
-  return null;
+  return (
+    <>
+      <Hero />
+      <section id="thesis" aria-labelledby="thesis-title" className="py-[96px] lg:py-[18svh]">
+        <div className="wrap">
+          <h2 id="thesis-title" className="sr-only">
+            What I do
+          </h2>
+          <Thesis text={profile.bio[0]} />
+        </div>
+      </section>
+      <Work />
+      <Evidence />
+      <About />
+      <Contact />
+    </>
+  );
 }

@@ -2,10 +2,11 @@ import type { Profile } from "./types";
 
 export const profile: Profile = {
   name: "Sahil Dixit",
-  title: "Strategy & Management Consultant",
+  title: "Strategy & Management Analyst",
   location: "Charlotte, NC",
   email: "sahild1230@gmail.com",
   github: "https://github.com/DixitSA",
+  linkedin: "https://www.linkedin.com/in/sahildixit1230",
   available: true,
   /**
    * A thesis, not a second copy of the resume.
@@ -16,103 +17,72 @@ export const profile: Profile = {
    * resume, so the two never contradict each other.
    */
   bio: [
-    "Most AI programs die in the gap between what a model can do and what an institution can defend. I work in that gap.",
-    "At Bank of America I sit between Consumer & Small Business strategy and AI/ML model-risk governance: helping shape a 3-year plan for a bank of roughly 69 million clients, and carrying AI complaint-handling models through active model risk review. The hard part is rarely the model. It is getting the people who own the math and the people who own the liability to describe the same system the same way, fast enough to matter.",
-    "I build at night because I do not think you can govern systems you have never shipped. Kaal is a decision engine live on web and iOS that is deliberately deterministic rather than generative, because a product people return to cannot contradict itself. Axira runs three LLM agents through an outreach pipeline behind a human approval gate, on a home server costing close to nothing.",
-    "I am most useful where finance, regulation, and working software all have to agree with each other.",
+    "I get real work out of AI models, and I build the controls that make that work trustworthy: calibration, evaluation, review gates and governance.",
+    "At Bank of America I re-engineered the accuracy calibration for an AI call-summarization model, designed a governed Copilot workflow the whole team adopted, and work in AI model risk review. My own products follow the same rule: in Vazaar a second model judges every AI draft and a deterministic gate decides what ships; Mixxx MCP gives an LLM agent 33 narrow tools and an evaluator; Axira's three agents send nothing without a person's approval.",
+    "I came to AI through analysis and experiments: A/B tests at Capital One and 10,000+ complaint logs mined in SQL. Next I want an AI strategy role at a startup, where the person who decides how to use AI also builds it.",
   ],
-  /**
-   * The "What I'm working on" tile.
-   *
-   * Named themes first, evidence second. A recruiter scanning a desktop tile
-   * is pattern-matching for a discipline, not reading prose, so each line
-   * leads with the thing being practised and then earns it with something
-   * specific from the resume.
-   *
-   * Deliberately not a second copy of `stats` or of `bio`. The numbers those
-   * four tiles own (~80% ahead of deadline, ~15 minute slide turnaround) are
-   * left to them, and the Axira line is angled at the handoff between agents
-   * rather than at the home server, which the bio already covers. One line of
-   * the site should never read as a paraphrase of another.
-   */
   now: {
-    updated: "September 2026",
+    updated: "November 2026",
     items: [
-      "Multi-agent orchestration. Three LLM agents handing research to drafting to follow-up in one Axira pipeline, with a human gate before anything sends.",
-      "Applied AI strategy. A governed Copilot prompt framework that turns rough inputs into source-backed executive slides, adopted teamwide.",
-      "AI/ML model-risk governance. Carrying AI complaint-handling models through active model risk review across 3 workstreams.",
+      "AI model evaluation. Calibration and reconciliation controls for an AI call-summarization model, and the business logic behind its daily Tableau performance report.",
+      "Agent tooling. MCP servers that let an LLM agent run multi-step work with job queuing, evaluation and automated tests.",
+      "Fraud signal testing. Taking 2 of 6 profiled fraud schemes into proof-of-concept signal testing at Bank of America.",
     ],
   },
-  /**
-   * Sources for the "What I'm watching" tile. Curated on purpose: a live
-   * feed of arbitrary trending video would eventually surface something you
-   * would not choose to put in front of a recruiter. Picking the channels
-   * keeps the freshness without the surprise.
-   *
-   * Verified against each feed. Note these are the AI and tech channels the
-   * author selected, not a claim about what the owner watches. Swap them.
-   */
-  watching: [
-    { channelId: "UCbfYPyITQ-7l4upoX8nvctg" }, // Two Minute Papers
-    { channelId: "UCJIfeSCssxSC_Dhc5s7woww" }, // Lex Clips
-    { channelId: "UCxIJaCMEptJjxmmQgGFsnCg" }, // YC Root Access
-    { channelId: "UCQ1VQj-37kl2yS_VUhfQHsw" }, // a16z Deep Dives
-  ],
   education: {
     school: "Virginia Commonwealth University",
     degree: "B.S. Financial Technology, Minor in Statistics",
     detail: "GPA 3.7. Dean's List every semester.",
     graduated: "May 2025",
   },
-  stats: [
+  evidence: [
     {
-      label: "CONSUMER BANK SCALE",
-      value: "~69MM",
-      sub: "clients covered by the 3-year strategic plan",
+      result: "Slide turnaround from hours to about 15 minutes",
+      answer: "about 15 minutes",
+      method: "Designed a governed Copilot workflow. The whole team adopted it, and it grew into a department prompt library.",
+      where: "Bank of America",
+      group: "ai",
     },
     {
-      label: "REGULATORY DELIVERY",
-      value: "~80%",
-      sub: "ahead of deadline across ~30 model-level submissions",
+      result: "Weekly completion from 45% to nearly 100%",
+      answer: "nearly 100%",
+      method: "Re-engineered the accuracy calibration process for an AI call-summarization model, adding data and reconciliation controls.",
+      where: "Bank of America",
+      group: "ai",
     },
     {
-      label: "SLIDE TURNAROUND",
-      value: "~15 min",
-      sub: "down from hours. Governed AI prompt framework, adopted teamwide",
+      result: "30 model submissions and 8 regulatory responses, 80% ahead of deadline",
+      answer: "80% ahead",
+      method: "AI model risk review, plus the business logic for a daily Tableau report that evaluates AI model performance.",
+      where: "Bank of America",
+      group: "ai",
     },
     {
-      label: "PREMIUM REDUCTION",
-      value: "~10%",
-      sub: "average across 7 employer clients",
+      result: "A/B tests with a measurable effect on retention",
+      answer: "measurable effect",
+      method: "Ran the tests on account-linking flows with the Retail Bank Fraud team, comparing specific linking policies.",
+      where: "Capital One, 2024",
+      group: "analysis",
+    },
+    {
+      result: "10,000+ complaint logs and call records mined in SQL",
+      answer: "10,000+",
+      method: "Pinpointed the friction in external account linking, working in SQL and Excel.",
+      where: "Capital One, 2024",
+      group: "analysis",
+    },
+    {
+      result: "22 detection gaps found across 12 signals and 10 fraud types",
+      answer: "22 detection gaps",
+      method: "Built a fraud signal inventory from expert interviews across 9 product groups. The team adopted it to widen fraud visibility.",
+      where: "Bank of America",
+      group: "analysis",
     },
   ],
   skills: [
-    {
-      group: "AI & ANALYTICS",
-      items: [
-        "Generative AI tools (ChatGPT, Copilot, Claude)",
-        "Prompt engineering",
-        "LLM-assisted workflow automation",
-        "AI/ML model governance & risk",
-        "Applied analytics",
-      ],
-    },
-    {
-      group: "TECHNICAL",
-      items: [
-        "SQL",
-        "Python",
-        "R",
-        "SAS",
-        "Tableau",
-        "Power BI",
-        "Advanced Excel",
-      ],
-    },
-    {
-      group: "LANGUAGES",
-      items: ["Hindi", "Gujarati"],
-    },
+    { group: "Analysis", items: ["SQL", "Python", "R", "SAS", "Advanced Excel", "Tableau", "Power BI"] },
+    { group: "Experiments and strategy", items: ["A/B testing", "Fraud analytics", "Financial modeling", "Strategic planning"] },
+    { group: "Building", items: ["TypeScript", "Next.js", "Astro", "Supabase", "Stripe", "Capacitor", "Git", "MCP", "LLM workflows", "Microsoft Copilot"] },
   ],
 };
 
@@ -131,3 +101,6 @@ export const githubUrl: string = profile.github.startsWith("http")
 
 /** Same value without the scheme, for display. */
 export const githubHandle: string = githubUrl.replace(/^https?:\/\//, "");
+
+/** LinkedIn without scheme or "www.", for display. */
+export const linkedinHandle: string = profile.linkedin.replace(/^https?:\/\/(www\.)?/, "");
