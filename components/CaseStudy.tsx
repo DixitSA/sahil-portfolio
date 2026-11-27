@@ -124,10 +124,8 @@ export default function CaseStudy({ project }: { project: Project }) {
         </header>
 
         {!project.preview && project.slug === "mixxx-mcp" && (
-          <div className="stage mt-16 p-6 md:p-12">
-            <div className="mx-auto max-w-[420px]">
-              <AgentPipeline />
-            </div>
+          <div className="stage mt-16 flex items-center justify-center p-8 lg:p-12">
+            <AgentPipeline />
           </div>
         )}
 
@@ -195,7 +193,7 @@ export default function CaseStudy({ project }: { project: Project }) {
                       </p>
                     ))}
                     {project.slug === "vazaar" && s.heading.startsWith("AI drafts.") && (
-                      <div className="mt-8 max-w-[420px]">
+                      <div className="mt-8 flex items-center justify-center">
                         <VazaarPipeline />
                       </div>
                     )}

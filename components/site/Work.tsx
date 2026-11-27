@@ -159,12 +159,12 @@ export default function Work() {
   const mixxx = bySlug("mixxx-mcp");
   if (!vazaar.aiNote) throw new Error("Project vazaar: aiNote is required");
 
-  const center = "flex h-full w-full items-center justify-center p-8";
+  const center = "flex h-full w-full items-center justify-center p-8 lg:p-12";
   const layers = [
     <VazaarVisual key="vz" fill />,
     <div key="vp" className={center}>
       <PipelineSizeProvider size="lg">
-        <VazaarPipeline className="max-w-[540px]" />
+        <VazaarPipeline />
       </PipelineSizeProvider>
     </div>,
     <KaalVisual key="kl" fill />,
@@ -202,8 +202,8 @@ export default function Work() {
           <div data-chapter={1} className="work-chapter flex flex-col justify-center py-12">
             <h4 className="t-result max-w-[24ch]">AI drafts. A deterministic gate publishes.</h4>
             <Inline>
-              <div className={`stage p-6 sm:p-10 ${BLEED}`}>
-                <VazaarPipeline className="mx-auto max-w-[420px]" />
+              <div className={`stage flex items-center justify-center p-8 lg:p-12 ${BLEED}`}>
+                <VazaarPipeline />
               </div>
             </Inline>
             <p className="mt-5 max-w-[46ch] text-ink-2">{vazaar.aiNote}</p>
@@ -225,8 +225,8 @@ export default function Work() {
             <Title project={mixxx} />
             <Status project={mixxx} />
             <Inline>
-              <div className={`stage p-6 sm:p-10 ${BLEED}`}>
-                <AgentPipeline className="mx-auto" />
+              <div className={`stage flex items-center justify-center p-8 lg:p-12 ${BLEED}`}>
+                <AgentPipeline />
               </div>
             </Inline>
             <Summary project={mixxx} />

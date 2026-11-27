@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useRef, useState } from "react";
-import { RotateCw, ShieldCheck } from "lucide-react";
+import { RotateCw } from "lucide-react";
 
 export interface PipelineNode {
   name: string;
@@ -65,52 +65,58 @@ export default function Pipeline({ nodes, sequence, loop, label, size }: Pipelin
     return () => { io.disconnect(); mo?.disconnect(); clearTimeout(timer); };
   }, [sequence]);
 
+  const railLeft = lg ? "left-[10.5px]" : "left-[9.5px]";
+  const railFirst = lg ? "top-[30px] bottom-0" : "top-[24px] bottom-0";
+  const railLast = lg ? "top-0 h-[30px]" : "top-0 h-[24px]";
+  const railMid = "top-0 bottom-0";
+  const bracketEnd = lg ? "h-[30px]" : "h-6";
+  const bracketStart = lg ? "top-[30px]" : "top-6";
   return (
-    <ol ref={ref} aria-label={label} className="relative w-full">
+    <ol ref={ref} aria-label={label} className="relative w-fit max-w-full">
       {nodes.map((node, i) => {
         const on = active === i;
         const inLoop = !!loop && i >= loop.from && i <= loop.to;
         const isFirst = !!loop && i === loop.from;
         const isLast = !!loop && i === loop.to;
+        const railSegment = i === 0 ? railFirst : i === nodes.length - 1 ? railLast : railMid;
         return (
           <li
             key={node.name}
-            className={`relative ${lg ? "py-5 pl-10" : "py-3 pl-8"} transition-colors duration-200 ${inLoop ? "pr-8" : ""} ${
-              on && node.gate ? "bg-[rgba(184,54,15,.06)]" : ""
+            className={`relative grid ${lg ? "grid-cols-[22px_1fr] gap-x-5 py-4" : "grid-cols-[20px_1fr] gap-x-4 py-3"} ${
+              inLoop ? "pr-7" : ""
             }`}
           >
-            <span
-              aria-hidden
-              className={`absolute ${lg ? "left-[6.5px]" : "left-[5.5px]"} w-px bg-rule-strong ${
-                i === 0 ? (lg ? "top-[34px]" : "top-[22px]") : "top-0"
-              } ${i === nodes.length - 1 ? (lg ? "h-[34px] top-0" : "h-[22px] top-0") : "bottom-0"}`}
-            />
-            <span
-              aria-hidden
-              className={`absolute left-0 ${lg ? "top-[27px] h-3.5 w-3.5" : "top-[16px] h-3 w-3"} border-[1.5px] transition-colors duration-200 ${
-                node.gate ? "border-mark" : "border-ink-3"
-              } ${on ? (node.gate ? "bg-mark" : "bg-ink border-ink") : "bg-sheet"}`}
-            />
-            <div className="flex items-start gap-2">
-              <div className="min-w-0 flex-1">
-                <p className={`${lg ? "text-[20px]" : "text-[16px]"} font-semibold leading-snug text-ink`}>{node.name}</p>
-                <p className={`t-meta ${lg ? "text-[16px]!" : ""}`}>{node.sub}</p>
-              </div>
-              {node.gate && <ShieldCheck aria-hidden className="mt-0.5 h-5 w-5 shrink-0 text-mark" />}
-            </div>
-            {isLast && loop && (
-              <p className="t-meta mt-1 flex items-center gap-1.5">
-                <RotateCw aria-hidden className="h-3.5 w-3.5 shrink-0" />
-                {loop.label}
-              </p>
+            {nodes.length > 1 && (
+              <span aria-hidden className={`absolute w-px bg-rule-strong ${railLeft} ${railSegment}`} />
             )}
+            {on && node.gate && (
+              <span aria-hidden className="absolute -inset-x-3 inset-y-0 rounded-[6px] bg-[rgba(184,54,15,.06)]" />
+            )}
+            <div className={`relative z-10 flex items-center justify-center ${lg ? "h-7" : "h-6"}`}>
+              <span
+                aria-hidden
+                className={`block ${lg ? "h-3 w-3" : "h-2.5 w-2.5"} border-[1.5px] transition-colors duration-200 ${
+                  node.gate ? "border-mark" : "border-ink-3"
+                } ${on ? (node.gate ? "bg-mark" : "bg-ink border-ink") : "bg-sheet"}`}
+              />
+            </div>
+            <div className="relative min-w-0 max-w-[520px]">
+              <p className={`${lg ? "text-[20px] leading-7" : "text-[17px] leading-6"} font-semibold text-ink`}>{node.name}</p>
+              <p className={`mt-0.5 ${lg ? "text-[16px] leading-6" : "text-[15px] leading-[22px]"} text-ink-2`}>{node.sub}</p>
+              {isLast && loop && (
+                <p className="t-meta mt-1 flex items-center gap-1.5 text-ink-2">
+                  <RotateCw aria-hidden className="h-3.5 w-3.5 shrink-0" />
+                  {loop.label}
+                </p>
+              )}
+            </div>
             {inLoop && (
               <span
                 aria-hidden
-                className={`absolute right-2 w-3 border-r-[1.5px] transition-colors duration-200 ${
+                className={`absolute right-1 w-3 border-r-[1.5px] transition-colors duration-200 ${
                   backward ? "border-ink" : "border-ink-3"
-                } ${isFirst ? `${lg ? "top-[34px]" : "top-[22px]"} border-t-[1.5px] rounded-tr-[4px]` : "top-0"} ${
-                  isLast ? `${lg ? "bottom-[34px]" : "bottom-[22px]"} border-b-[1.5px] rounded-br-[4px]` : "bottom-0"
+                } ${isFirst ? `${bracketStart} bottom-0 border-t-[1.5px] rounded-tr-[4px]` : "top-0"} ${
+                  isLast ? `${bracketEnd} border-b-[1.5px] rounded-br-[4px]` : isFirst ? "" : "bottom-0"
                 }`}
               />
             )}
